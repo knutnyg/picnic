@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22F8DBEB1A98A23200CA6287 /* Settings.bundle */; };
 		72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */; };
 		72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C80A1A9895B600AF7BC3 /* ViewController.swift */; };
 		72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72E0C80C1A9895B600AF7BC3 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		72E0C8031A9895B600AF7BC3 /* currencyolini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = currencyolini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E0C8071A9895B600AF7BC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				72E0C80F1A9895B600AF7BC3 /* Images.xcassets */,
 				72E0C8111A9895B600AF7BC3 /* LaunchScreen.xib */,
 				72E0C8061A9895B600AF7BC3 /* Supporting Files */,
+				22F8DBEB1A98A23200CA6287 /* Settings.bundle */,
 			);
 			path = currencyolini;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */,
 				72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */,
 				72E0C8131A9895B600AF7BC3 /* LaunchScreen.xib in Resources */,
 				72E0C8101A9895B600AF7BC3 /* Images.xcassets in Resources */,
@@ -407,6 +411,7 @@
 				72E0C8241A9895B600AF7BC3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		72E0C8251A9895B600AF7BC3 /* Build configuration list for PBXNativeTarget "currencyoliniTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +420,7 @@
 				72E0C8271A9895B600AF7BC3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
