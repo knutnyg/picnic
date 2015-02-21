@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22F8DBEB1A98A23200CA6287 /* Settings.bundle */; };
 		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
+		7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */; };
 		72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */; };
 		72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C80A1A9895B600AF7BC3 /* ViewController.swift */; };
 		72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72E0C80C1A9895B600AF7BC3 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapper.swift; sourceTree = "<group>"; };
 		72E0C8031A9895B600AF7BC3 /* currencyolini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = currencyolini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E0C8071A9895B600AF7BC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				72E0C8111A9895B600AF7BC3 /* LaunchScreen.xib */,
 				72E0C8061A9895B600AF7BC3 /* Supporting Files */,
 				22F8DBEB1A98A23200CA6287 /* Settings.bundle */,
+				7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */,
 			);
 			path = currencyolini;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */,
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
 				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
