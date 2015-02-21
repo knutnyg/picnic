@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var fromAmount: UITextField!
     @IBOutlet weak var toAmount: UITextField!
+    @IBOutlet weak var fromLabel: UILabel!
+    @IBOutlet weak var toLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -30,6 +32,10 @@ class ViewController: UIViewController {
 //        var conversionRate = test.integerForKey("slider_preference");
         let fromCurrency = test.stringForKey("from_country")!
         let toCurrency = test.stringForKey("to_country")!
+        
+        fromLabel.text = fromCurrency
+        toLabel.text = toCurrency
+        
         println("http://rate-exchange.appspot.com/currency?from=\(fromCurrency)&to=\(toCurrency)")
         let url = NSURL(string: "http://rate-exchange.appspot.com/currency?from=\(fromCurrency)&to=\(toCurrency)" )
         let request = NSURLRequest(URL: url!)
