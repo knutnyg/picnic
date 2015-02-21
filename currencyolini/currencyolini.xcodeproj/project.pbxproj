@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22F8DBEB1A98A23200CA6287 /* Settings.bundle */; };
+		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
 		72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */; };
 		72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C80A1A9895B600AF7BC3 /* ViewController.swift */; };
 		72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72E0C80C1A9895B600AF7BC3 /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		72E0C8031A9895B600AF7BC3 /* currencyolini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = currencyolini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E0C8071A9895B600AF7BC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,6 +60,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7262F6931A98CA2A00C5E3BE /* models */ = {
+			isa = PBXGroup;
+			children = (
+				7262F6941A98CA6B00C5E3BE /* UserModel.swift */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
 		72E0C7FA1A9895B600AF7BC3 = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +89,7 @@
 		72E0C8051A9895B600AF7BC3 /* currencyolini */ = {
 			isa = PBXGroup;
 			children = (
+				7262F6931A98CA2A00C5E3BE /* models */,
 				72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */,
 				72E0C80A1A9895B600AF7BC3 /* ViewController.swift */,
 				72E0C80C1A9895B600AF7BC3 /* Main.storyboard */,
@@ -217,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
+				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
