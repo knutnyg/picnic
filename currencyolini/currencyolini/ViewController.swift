@@ -15,9 +15,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var fromAmount: UITextField!
     @IBOutlet weak var toAmount: UITextField!
 
+    @IBOutlet weak var fromLabel: UILabel!
+    @IBOutlet weak var toLabel: UILabel!
+
+
     let locationManager = CLLocationManager()
     let userModel = UserModel()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,12 +39,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     }
 
     @IBAction func convertButtonClicked(sender: UIButton) {
-        label.text = "Hello World";
         // Get user preference
         var test = NSUserDefaults.standardUserDefaults();
-        var conversionRate = test.integerForKey("slider_preference");
-        if let number = self.fromAmount.text?.toInt() {
-            self.toAmount.text = "\(number * conversionRate)"
+//        var conversionRate = test.integerForKey("slider_preference");
+        let fromCurrency = test.stringForKey("from_country")!
+        let toCurrency = test.stringForKey("to_country")!
+        
+        fromLabel.text = fromCurrency
+        toLabel.text = toCurrency
+        
+        println("http://rate-exchange.appspot.com/currency?from=\(fromCurrency)&to=\(toCurrency)")
+        let url = NSURL(string: "http://rate-exchange.appspot.com/currency?from=\(fromCurrency)&to=\(toCurrency)" )
+        let request = NSURLRequest(URL: url!)
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            var error: NSError?
+            var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
+            var conversionRate : Double = boardsDictionary.objectForKey("rate") as Double;
+            println(conversionRate)
+                    if let number = self.fromAmount.text?.toInt() {
+                      self.toAmount.text = "\(Double(number) * conversionRate)"
+                }
         }
     }
 
@@ -69,7 +87,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         println(placemark.administrativeArea)
         println(placemark.country)
         
-        userModel.c
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {

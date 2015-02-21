@@ -8,9 +8,17 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string></string>
+			<string>To Country Code</string>
 			<key>Key</key>
-			<string></string>
+			<string>to_country</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>From Country Code</string>
+			<key>Key</key>
+			<string>from_country</string>
 		</dict>
 		<dict>
 			<key>Title</key>

@@ -43,20 +43,36 @@
                                     <action selector="convertButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GMd-Ze-Reu"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="71S-Vm-VYj">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRw-Io-yo5">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="IRw-Io-yo5" firstAttribute="leading" secondItem="Yzg-40-w19" secondAttribute="trailing" constant="8" id="05K-xV-cvn"/>
+                            <constraint firstItem="71S-Vm-VYj" firstAttribute="centerY" secondItem="Tb5-GL-hq1" secondAttribute="centerY" id="5b0-Ev-GSm"/>
                             <constraint firstAttribute="centerY" secondItem="Yzg-40-w19" secondAttribute="centerY" constant="19" id="6V3-5p-PON"/>
                             <constraint firstAttribute="centerY" secondItem="Tb5-GL-hq1" secondAttribute="centerY" constant="-19" id="B2z-yP-ufe"/>
                             <constraint firstAttribute="centerX" secondItem="YY0-N1-JIU" secondAttribute="centerX" id="JzC-DW-kP4"/>
+                            <constraint firstItem="71S-Vm-VYj" firstAttribute="leading" secondItem="Tb5-GL-hq1" secondAttribute="trailing" constant="8" id="Tio-sX-za0"/>
                             <constraint firstItem="YY0-N1-JIU" firstAttribute="top" secondItem="Tb5-GL-hq1" secondAttribute="bottom" constant="8" id="fyn-zd-dYt"/>
                             <constraint firstAttribute="centerX" secondItem="Tb5-GL-hq1" secondAttribute="centerX" id="nrR-MJ-yEc"/>
                             <constraint firstAttribute="centerX" secondItem="Yzg-40-w19" secondAttribute="centerX" id="wm7-nQ-BiG"/>
+                            <constraint firstItem="Yzg-40-w19" firstAttribute="centerY" secondItem="IRw-Io-yo5" secondAttribute="centerY" id="y6f-9e-S7h"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="fromAmount" destination="Yzg-40-w19" id="PM4-jc-KoU"/>
+                        <outlet property="fromLabel" destination="IRw-Io-yo5" id="yKb-01-PlO"/>
                         <outlet property="toAmount" destination="Tb5-GL-hq1" id="m2h-Zq-Vlr"/>
+                        <outlet property="toLabel" destination="71S-Vm-VYj" id="Nut-bz-aaJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
