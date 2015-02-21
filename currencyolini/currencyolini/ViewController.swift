@@ -9,13 +9,23 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var fromAmount: UITextField!
     @IBOutlet weak var toAmount: UITextField!
+
+    let locationManager = CLLocationManager()
+    let userModel = UserModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -34,5 +44,38 @@ class ViewController: UIViewController {
         }
     }
 
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
+            
+            if (error != nil) {
+                println("Error: " + error.localizedDescription)
+                return
+            }
+            
+            if placemarks.count > 0 {
+                let pm = placemarks[0] as CLPlacemark
+                self.displayLocationInfo(pm)
+            } else {
+                println("Error with the data.")
+            }
+        })
+    }
+    
+    func displayLocationInfo(placemark: CLPlacemark) {
+                println("in locaitonmanager")
+        self.locationManager.stopUpdatingLocation()
+        println(placemark.locality)
+        println(placemark.postalCode)
+        println(placemark.administrativeArea)
+        println(placemark.country)
+        
+        userModel.c
+    }
+    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        println("Error: " + error.localizedDescription)
+    }
+
+    
 }
 
