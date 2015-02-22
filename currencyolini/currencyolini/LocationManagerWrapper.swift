@@ -3,6 +3,7 @@ import Foundation
 import CoreLocation
 import BrightFutures
 
+
 class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
@@ -34,6 +35,7 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
             println("Error with the data.")
         } else {
             let pm:CLPlacemark = placemarks.first as CLPlacemark
+            println(pm.ISOcountryCode)
             promise.success(pm.country)
             locationManager.stopUpdatingLocation()
             println("Received country by gps: \(pm.country)")
