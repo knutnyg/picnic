@@ -11,16 +11,26 @@ class ViewController: UIViewController {
     @IBOutlet weak var fromLabel: UILabel!
     @IBOutlet weak var toLabel: UILabel!
 
-
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
+    
+    func updateCountry(country:String){
+        println("updating country")
+        self.userModel.country = country
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        locationManager.start()
-        
-        // Do any additional setup after loading the view, typically from a nib.
+
+        println("asking for country")
+        locationManager.getCountry()
+            .onSuccess { country in
+                self.updateCountry(country)}
+            .onFailure {error in
+                println("failed getting country")
+        }
+        println("waiting for future")
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,6 +61,8 @@ class ViewController: UIViewController {
                 }
         }
     }
+    
+   
 
 
 

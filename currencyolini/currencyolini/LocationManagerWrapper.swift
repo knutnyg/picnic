@@ -1,58 +1,61 @@
 
 import Foundation
 import CoreLocation
+import BrightFutures
 
 class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
-    var country: String?
+    let promise = Promise<String>()
     
     override init() {
         super.init()
         setup()
-        
     }
     
     func setup(){
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
-    }
-    
-    func start() {
-        self.locationManager.startUpdatingLocation()
+       
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
             
-            if (error != nil) {
-                println("Error: " + error.localizedDescription)
-                return
-            }
+            self.handleError(error)
+            self.handleLocation(placemarks)
             
-            if placemarks.count > 0 {
-                let pm : CLPlacemark = placemarks[0] as CLPlacemark
-                
-                println("Received country by gps: \(pm.country)")
-                self.country = pm.country
-                self.locationManager.stopUpdatingLocation()
-                
-                
-            } else {
-                println("Error with the data.")
-            }
-        })
+            })
     }
     
-    func displayLocationInfo(placemark: CLPlacemark) {
+    func handleLocation(placemarks: [AnyObject]) {
+        if placemarks.isEmpty {
+            println("Error with the data.")
+        } else {
+            let pm:CLPlacemark = placemarks.first as CLPlacemark
+            promise.success(pm.country)
+            locationManager.stopUpdatingLocation()
+            println("Received country by gps: \(pm.country)")
+        }
 
-
-
-        
+    }
+    
+    func getCountry() -> Future<String> {
+        self.locationManager.startUpdatingLocation()
+        return promise.future
+    }
+    
+    func handleError(error : NSError!) {
+        if (error != nil) {
+            println("Error: " + error.localizedDescription)
+            return
+        }
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error: " + error.localizedDescription)
     }
+    
+    
 }
