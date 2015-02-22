@@ -15,22 +15,18 @@ class ViewController: UIViewController {
     var locationManager = LocationManagerWrapper()
     
     func updateCountry(country:String){
-        println("updating country")
         self.userModel.country = country
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        println("asking for country")
         locationManager.getCountry()
             .onSuccess { country in
                 self.updateCountry(country)}
             .onFailure {error in
                 println("failed getting country")
         }
-        println("waiting for future")
-
     }
 
     override func didReceiveMemoryWarning() {
