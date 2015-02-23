@@ -11,10 +11,7 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     
     override init() {
         super.init()
-        setup()
-    }
-    
-    func setup(){
+        
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
@@ -22,9 +19,10 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
-            
+
             self.handleError(error)
             self.handleLocation(placemarks)
+            
             })
     }
     
@@ -46,9 +44,16 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
         return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: countryCode, forKey: NSLocaleCountryCode)))
     }
     
-    func getLocale() -> Future<NSLocale> {
+
+    func getUserCurrentLocale() -> Future<NSLocale> {
         self.locationManager.startUpdatingLocation()
         return promise.future
+    }
+    
+    func getUserHomeLocale() -> NSLocale {
+        let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as String
+        
+        return self.createLocaleFromCountryCode(countryCode)
     }
     
     func handleError(error : NSError!) {
