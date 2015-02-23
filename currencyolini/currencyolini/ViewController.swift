@@ -14,17 +14,13 @@ class ViewController: UIViewController {
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
     
-    func updateCountry(country:String){
-        self.userModel.country = country
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        locationManager.getCountry()
-            .onSuccess { country in
-                self.updateCountry(country)}
-            .onFailure {error in
+        locationManager.getLocale()
+            .onSuccess { locale in
+                self.updateUserCurrentLocale(locale) }
+            .onFailure { error in
                 println("failed getting country")
         }
     }
@@ -38,7 +34,7 @@ class ViewController: UIViewController {
         // Get user preference
         var test = NSUserDefaults.standardUserDefaults();
 //        var conversionRate = test.integerForKey("slider_preference");
-        let fromCurrency = test.stringForKey("from_country")!
+        let fromCurrency = userModel.currentLocale.objectForKey(NSLocaleCurrencyCode) as String
         let toCurrency = test.stringForKey("to_country")!
         
         fromLabel.text = fromCurrency
@@ -59,7 +55,9 @@ class ViewController: UIViewController {
     }
     
    
-
+    func updateUserCurrentLocale(locale:NSLocale){
+        self.userModel.currentLocale = locale
+    }
 
 
     

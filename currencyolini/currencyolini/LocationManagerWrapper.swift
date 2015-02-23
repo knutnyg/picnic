@@ -7,7 +7,7 @@ import BrightFutures
 class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
-    let promise = Promise<String>()
+    let promise = Promise<NSLocale>()
     
     override init() {
         super.init()
@@ -18,7 +18,6 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
-       
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -26,7 +25,6 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
             
             self.handleError(error)
             self.handleLocation(placemarks)
-            
             })
     }
     
@@ -35,15 +33,20 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
             println("Error with the data.")
         } else {
             let pm:CLPlacemark = placemarks.first as CLPlacemark
-            println(pm.ISOcountryCode)
-            promise.success(pm.country)
+            let locale:NSLocale = self.createLocaleFromCountryCode(pm.ISOcountryCode)
+            promise.success(locale)
             locationManager.stopUpdatingLocation()
             println("Received country by gps: \(pm.country)")
+
         }
 
     }
     
-    func getCountry() -> Future<String> {
+    func createLocaleFromCountryCode(countryCode:NSString) -> NSLocale {
+        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: countryCode, forKey: NSLocaleCountryCode)))
+    }
+    
+    func getLocale() -> Future<NSLocale> {
         self.locationManager.startUpdatingLocation()
         return promise.future
     }
