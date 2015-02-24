@@ -2,7 +2,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UserModelObserver {
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var fromAmount: UITextField!
@@ -17,8 +17,16 @@ class ViewController: UIViewController {
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
     
+    let userDefaults = NSUserDefaults.standardUserDefaults();
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        userModel.addObserver(self)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         self.updateUserHomeLocale()
         
@@ -55,27 +63,56 @@ class ViewController: UIViewController {
             }
         }
     }
-    
    
-    func updateUserCurrentLocale(locale:NSLocale){
-        self.userModel.currentLocale = locale
-        fromLabel.text = locale.objectForKey(NSLocaleCurrencyCode) as? String
+    func updateUserCurrentLocale(locale:NSLocale){       
         
-        let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
-        var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-        
-        fromCountry.text = country
+        if((userDefaults.stringForKey("to_country")) != nil){
+            self.userModel.setCurrentLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("to_country")!))
+            return
+        }
+        self.userModel.setCurrentLocale(locale)
     }
     
     func updateUserHomeLocale() {
-        let locale:NSLocale = locationManager.getUserHomeLocale()
-        self.userModel.homeLocale = locale
-        toLabel.text = locale.objectForKey(NSLocaleCurrencyCode) as? String
         
+        if((userDefaults.stringForKey("from_country")) != nil){
+            self.userModel.setHomeLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("from_country")!))
+            return
+        }
+        let locale:NSLocale = locationManager.getUserHomeLocale()
+        self.userModel.setHomeLocale(locale)
+    }
+    
+    func homeLocaleHasChanged() {
+        setToCountyText()
+        setToCurrencyLabel()
+    }
+    
+    func currentLocaleHasChanged() {
+        setFromCountryText()
+        setFromCurrencyLabel()
+    }
+    
+    func setToCountyText(){
+        let locale:NSLocale = self.userModel.homeLocale
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
         var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-        
         toCountry.text = country
+    }
+    
+    func setFromCountryText() {
+        let locale:NSLocale = self.userModel.currentLocale
+        let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
+        var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        fromCountry.text = country
+    }
+    
+    func setToCurrencyLabel() {
+        toLabel.text = self.userModel.homeLocale.objectForKey(NSLocaleCurrencyCode) as? String
+    }
+    
+    func setFromCurrencyLabel() {
+        fromLabel.text = self.userModel.currentLocale.objectForKey(NSLocaleCurrencyCode) as? String
     }
 
 

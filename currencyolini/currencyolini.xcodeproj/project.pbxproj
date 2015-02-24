@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22F8DBEB1A98A23200CA6287 /* Settings.bundle */; };
 		43B51F9F495BEC523594A3D3 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D23532B61FCF0FBACDC0280F /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720810B11A9CFE11009A2A2E /* UserModelObserver.swift */; };
 		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
 		7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */; };
 		72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C8081A9895B600AF7BC3 /* AppDelegate.swift */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		720810B11A9CFE11009A2A2E /* UserModelObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModelObserver.swift; sourceTree = "<group>"; };
 		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapper.swift; sourceTree = "<group>"; };
 		72E0C8031A9895B600AF7BC3 /* currencyolini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = currencyolini.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				7262F6941A98CA6B00C5E3BE /* UserModel.swift */,
+				720810B11A9CFE11009A2A2E /* UserModelObserver.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
 				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
+				720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
