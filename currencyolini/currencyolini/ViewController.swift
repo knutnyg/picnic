@@ -14,6 +14,8 @@ class ViewController: UIViewController, UserModelObserver {
     @IBOutlet weak var fromCountry: UILabel!
     @IBOutlet weak var toCountry: UILabel!
     
+    @IBOutlet weak var swapButton: UIButton!
+    
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
     
@@ -63,10 +65,18 @@ class ViewController: UIViewController, UserModelObserver {
             }
         }
     }
+    
+    
+    @IBAction func swapButtonPressed(){
+        var temp:NSLocale = self.userModel.currentLocale
+        
+        self.userModel.setCurrentLocale(self.userModel.homeLocale)
+        self.userModel.setHomeLocale(temp)
+    }
    
     func updateUserCurrentLocale(locale:NSLocale){       
         
-        if((userDefaults.stringForKey("to_country")) != nil){
+        if((userDefaults.stringForKey("to_country")) != ""){
             self.userModel.setCurrentLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("to_country")!))
             return
         }
@@ -75,7 +85,7 @@ class ViewController: UIViewController, UserModelObserver {
     
     func updateUserHomeLocale() {
         
-        if((userDefaults.stringForKey("from_country")) != nil){
+        if((userDefaults.stringForKey("from_country")) != ""){
             self.userModel.setHomeLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("from_country")!))
             return
         }
