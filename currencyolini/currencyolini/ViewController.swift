@@ -68,10 +68,14 @@ class ViewController: UIViewController, UserModelObserver {
     
     
     @IBAction func swapButtonPressed(){
-        var temp:NSLocale = self.userModel.currentLocale
+        var tempLocale:NSLocale = self.userModel.currentLocale
+        var tempCurrencyValue:String = self.toAmount.text
         
         self.userModel.setCurrentLocale(self.userModel.homeLocale)
-        self.userModel.setHomeLocale(temp)
+        self.userModel.setHomeLocale(tempLocale)
+        
+        self.toAmount.text = self.fromAmount.text
+        self.fromAmount.text = tempCurrencyValue
     }
    
     func updateUserCurrentLocale(locale:NSLocale){       
