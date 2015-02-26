@@ -3,14 +3,13 @@ import Foundation
 
 class UserModel : NSObject {
     
-    var observers:[ViewController]
+    var observers:[UserModelObserver]
     
-    var homeLocale:NSLocale
-    var currentLocale:NSLocale
+    var homeLocale:NSLocale?
+    var currentLocale:NSLocale?
+    var convertionRate:Double?
     
     override init(){
-        self.homeLocale = NSLocale()
-        self.currentLocale = NSLocale()
         self.observers = []
         super.init()
     }
@@ -27,6 +26,17 @@ class UserModel : NSObject {
     func setCurrentLocale(locale:NSLocale){
         self.currentLocale = locale
         currentLocaleHasChanged()
+    }
+    
+    func setConvertionRate(convertionRate:Double){
+        self.convertionRate = convertionRate
+        convertionRateHasChanged()
+    }
+    
+    func convertionRateHasChanged(){
+        for observer in self.observers {
+            observer.convertionRateHasChanged()
+        }
     }
     
     

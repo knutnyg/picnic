@@ -64,6 +64,7 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        promise.failure(error)
         println("Error: " + error.localizedDescription)
     }
     
