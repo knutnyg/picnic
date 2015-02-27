@@ -15,8 +15,6 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
     @IBOutlet weak var toCountry: UILabel!
     
     @IBOutlet weak var swapButton: UIButton!
-
-    
     
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
@@ -27,28 +25,33 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         userModel.addObserver(self)
-        
+
         fromAmount.delegate = self
         toAmount.delegate = self
+//
+//        swapButton.setTitle("\u{f0ec}", forState: .Normal)
+//        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
+//        
+//        fromAmount.addTarget(self, action: Selector("fromAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+//        
+//        toAmount.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
-        swapButton.setTitle("\u{f0ec}", forState: .Normal)
-        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.updateUserHomeLocale()
-        
-        locationManager.getUserCurrentLocale()
-            .onSuccess { locale in
-                self.updateUserCurrentLocale(locale)
-                self.fetchCurrency()}
-            .onFailure { error in
-                println("failed getting country, using system locale")
-                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_Us"))
-                self.fetchCurrency()
-        }
+//        super.viewDidAppear(animated)
+//        
+//        self.updateUserHomeLocale()
+//        
+//        locationManager.getUserCurrentLocale()
+//            .onSuccess { locale in
+//                self.updateUserCurrentLocale(locale)
+//                self.fetchCurrency()}
+//            .onFailure { error in
+//                println("failed getting country, using system locale")
+//                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_Us"))
+//                self.fetchCurrency()
+//        }
     }
     
     func fetchCurrency() {
@@ -98,23 +101,10 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    @IBAction func convertButtonClicked(sender: UIButton) {
-        let normalizedNumber = self.normalizeText(self.fromAmount.text)
-        
-            if self.isValid(normalizedNumber) {
-                println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
-                self.toAmount.text = "\(normalizedNumber.doubleValue * self.userModel.convertionRate!)"
-            } else {
-                self.displayErrorMessage()
-            }        
-    }
-    
     
     @IBAction func swapButtonPressed(){
         
         var tempLocale:NSLocale = self.userModel.currentLocale!
-        var tempCurrencyValue:String = self.toAmount.text
         
         self.userModel.setCurrentLocale(self.userModel.homeLocale!)
         self.userModel.setHomeLocale(tempLocale)
@@ -123,8 +113,8 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
 
         }
         
-        self.toAmount.text = self.fromAmount.text
-        self.fromAmount.text = tempCurrencyValue
+        self.toAmount.text = ""
+        self.fromAmount.text = ""
     }
    
     func updateUserCurrentLocale(locale:NSLocale){       
@@ -207,5 +197,41 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
         setFromCurrencyLabel()
     }
     
+    func fromAmountEdited(theTextField:UITextField) -> Void {
+        let normalizedNumber = self.normalizeText(self.fromAmount.text)
+        
+        if self.isValid(normalizedNumber) {
+            println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
+            var num = (normalizedNumber.doubleValue * self.userModel.convertionRate!)
+            self.toAmount.text = NSString(format: "%.2f", num)
+        } else {
+            self.displayErrorMessage()
+        }
+    }
+    
+    func toAmountEdited(theTextField:UITextField) -> Void {
+        let normalizedNumber = self.normalizeText(self.toAmount.text)
+        
+        println(theTextField.text)
+        
+        if self.isValid(normalizedNumber) {
+            println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
+            var num = normalizedNumber.doubleValue * (1 / self.userModel.convertionRate!)
+            
+            self.fromAmount.text = NSString(format: "%.2f", num)
+        } else {
+            self.displayErrorMessage()
+        }
+    }
+    
+    
+    
+
+    
+    
+    
+    
 }
+
+
 

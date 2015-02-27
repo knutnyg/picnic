@@ -17,5 +17,6 @@ class TopBannerViewController : UIViewController {
     override func viewDidLoad() {
         settingsButton.setTitle("\u{f021}", forState: .Normal)
         refreshButton.setTitle("\u{f013}", forState: .Normal)
+        
     }
    }
