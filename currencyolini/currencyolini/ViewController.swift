@@ -45,7 +45,7 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
                 self.fetchCurrency()}
             .onFailure { error in
                 println("failed getting country, using system locale")
-                self.updateUserCurrentLocale(NSLocale.systemLocale())
+                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_Us"))
                 self.fetchCurrency()
         }
     }
