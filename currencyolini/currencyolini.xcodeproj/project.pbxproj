@@ -12,6 +12,8 @@
 		720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720810B11A9CFE11009A2A2E /* UserModelObserver.swift */; };
 		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
 		7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */; };
+		72D06A2E1AA0D30100A51E1D /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */; };
+		72D06A311AA0DC4600A51E1D /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */; };
 		72D9D8CF1A9E5AF5001211F7 /* ViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D9D8CE1A9E5AF5001211F7 /* ViewControllerTest.swift */; };
 		72D9D8D01A9E5F15001211F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C80A1A9895B600AF7BC3 /* ViewController.swift */; };
 		72D9D8D11A9E6009001211F7 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
@@ -23,8 +25,6 @@
 		72E0C8101A9895B600AF7BC3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72E0C80F1A9895B600AF7BC3 /* Images.xcassets */; };
 		72E0C8131A9895B600AF7BC3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72E0C8111A9895B600AF7BC3 /* LaunchScreen.xib */; };
 		72E0C81F1A9895B600AF7BC3 /* currencyoliniTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E0C81E1A9895B600AF7BC3 /* currencyoliniTests.swift */; };
-		72F8FC681A9FB9BB00C0400C /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72F8FC671A9FB9BB00C0400C /* fontawesome-webfont.ttf */; };
-		72F8FC691A9FB9BB00C0400C /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72F8FC671A9FB9BB00C0400C /* fontawesome-webfont.ttf */; };
 		C82378CC201D80D14C797C0D /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D23532B61FCF0FBACDC0280F /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -43,6 +43,8 @@
 		720810B11A9CFE11009A2A2E /* UserModelObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModelObserver.swift; sourceTree = "<group>"; };
 		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapper.swift; sourceTree = "<group>"; };
+		72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Resources/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
+		72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
 		72D9D8CE1A9E5AF5001211F7 /* ViewControllerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerTest.swift; sourceTree = "<group>"; };
 		72E0C8031A9895B600AF7BC3 /* currencyolini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = currencyolini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E0C8071A9895B600AF7BC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -54,7 +56,6 @@
 		72E0C8181A9895B600AF7BC3 /* currencyoliniTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = currencyoliniTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72E0C81D1A9895B600AF7BC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72E0C81E1A9895B600AF7BC3 /* currencyoliniTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = currencyoliniTests.swift; sourceTree = "<group>"; };
-		72F8FC671A9FB9BB00C0400C /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../../../../Downloads/font-awesome-4.3-2.0/fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		86DE7895A7ED9D04AB1DFD14 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8E15038B88855076D9D34D99 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D23532B61FCF0FBACDC0280F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,9 +106,18 @@
 			name = models;
 			sourceTree = "<group>";
 		};
+		72D06A2F1AA0D30800A51E1D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		72E0C7FA1A9895B600AF7BC3 = {
 			isa = PBXGroup;
 			children = (
+				72D06A2F1AA0D30800A51E1D /* Resources */,
 				72E0C8051A9895B600AF7BC3 /* currencyolini */,
 				72E0C81B1A9895B600AF7BC3 /* currencyoliniTests */,
 				72E0C8041A9895B600AF7BC3 /* Products */,
@@ -137,6 +147,7 @@
 				72E0C8111A9895B600AF7BC3 /* LaunchScreen.xib */,
 				72E0C8061A9895B600AF7BC3 /* Supporting Files */,
 				22F8DBEB1A98A23200CA6287 /* Settings.bundle */,
+				72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */,
 			);
 			path = currencyolini;
 			sourceTree = "<group>";
@@ -144,7 +155,6 @@
 		72E0C8061A9895B600AF7BC3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				72F8FC671A9FB9BB00C0400C /* fontawesome-webfont.ttf */,
 				72E0C8071A9895B600AF7BC3 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -264,9 +274,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D06A2E1AA0D30100A51E1D /* fontawesome-webfont.ttf in Resources */,
 				22F8DBEC1A98A23200CA6287 /* Settings.bundle in Resources */,
 				72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */,
-				72F8FC681A9FB9BB00C0400C /* fontawesome-webfont.ttf in Resources */,
 				72E0C8131A9895B600AF7BC3 /* LaunchScreen.xib in Resources */,
 				72E0C8101A9895B600AF7BC3 /* Images.xcassets in Resources */,
 			);
@@ -276,7 +286,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72F8FC691A9FB9BB00C0400C /* fontawesome-webfont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +393,7 @@
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
 				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
+				72D06A311AA0DC4600A51E1D /* TopBannerViewController.swift in Sources */,
 				720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

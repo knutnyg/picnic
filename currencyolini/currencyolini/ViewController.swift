@@ -15,6 +15,7 @@ class ViewController: UIViewController, UserModelObserver, UITextFieldDelegate{
     @IBOutlet weak var toCountry: UILabel!
     
     @IBOutlet weak var swapButton: UIButton!
+
     
     
     var userModel = UserModel()
