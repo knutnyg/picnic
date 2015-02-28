@@ -11,6 +11,8 @@
 		43B51F9F495BEC523594A3D3 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D23532B61FCF0FBACDC0280F /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720810B11A9CFE11009A2A2E /* UserModelObserver.swift */; };
 		7231FB811AA1F7C30069A91A /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728815671AA141170084BCC6 /* ConverterViewController.swift */; };
+		7250E6B91AA21DE500EF32F2 /* ConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */; };
+		7250E6BA1AA21EA300EF32F2 /* ConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */; };
 		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
 		7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */; };
 		728815681AA141170084BCC6 /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728815671AA141170084BCC6 /* ConverterViewController.swift */; };
@@ -44,6 +46,7 @@
 /* Begin PBXFileReference section */
 		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		720810B11A9CFE11009A2A2E /* UserModelObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModelObserver.swift; sourceTree = "<group>"; };
+		7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintsModel.swift; sourceTree = "<group>"; };
 		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapper.swift; sourceTree = "<group>"; };
 		728815671AA141170084BCC6 /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConverterViewController.swift; path = ../ConverterViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +109,7 @@
 			children = (
 				7262F6941A98CA6B00C5E3BE /* UserModel.swift */,
 				720810B11A9CFE11009A2A2E /* UserModelObserver.swift */,
+				7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -396,6 +400,7 @@
 			files = (
 				7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */,
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
+				7250E6B91AA21DE500EF32F2 /* ConstraintsModel.swift in Sources */,
 				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
 				72D06A311AA0DC4600A51E1D /* TopBannerViewController.swift in Sources */,
@@ -410,6 +415,7 @@
 			files = (
 				72D9D8D31A9E600F001211F7 /* UserModelObserver.swift in Sources */,
 				72D9D8D01A9E5F15001211F7 /* ViewController.swift in Sources */,
+				7250E6BA1AA21EA300EF32F2 /* ConstraintsModel.swift in Sources */,
 				728A9AED1AA1DCE3001C417A /* TopBannerViewController.swift in Sources */,
 				72D9D8CF1A9E5AF5001211F7 /* ViewControllerTest.swift in Sources */,
 				72D9D8D11A9E6009001211F7 /* UserModel.swift in Sources */,

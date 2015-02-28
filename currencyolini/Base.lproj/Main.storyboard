@@ -22,22 +22,5 @@
             </objects>
             <point key="canvasLocation" x="-249" y="-406.5"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="uDv-87-Din">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="az3-j5-UDB" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="XQf-KT-G6C"/>
-                        <viewControllerLayoutGuide type="bottom" id="aMQ-BA-jAt"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="5fl-5A-Hrw">
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="m4E-9W-Mmd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
     </scenes>
 </document>

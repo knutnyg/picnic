@@ -73,12 +73,73 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func setConstraintsBasedOnScreenSize(views: [NSObject:AnyObject]){
         let screenHeight = view.frame.height
+        println(screenHeight)
         
         switch screenHeight {
-        case 480: setConstraintsForiPhoneFour(views)
+        case 480: setupForiPhoneFour(views)
+        case 568: setupForiPhoneFive(views)
+        case 667: setupForiPhoneSix(views)
         default: println("default")
         }
         
+    }
+    
+    func setupForiPhoneFour(views: [NSObject:AnyObject]){
+
+        let textFieldFontSize = 22 as CGFloat
+        let swapButtonFontSize = 40 as CGFloat
+        
+        let constraintsModel = ConstraintsModel(
+            textFieldHeight: 46,
+            topTextFieldMarginTop: 25,
+            swapButtonMarginTopAndBottom: 20,
+            countryLabelDistanceFromTextField: 2,
+            distanceFromEdge: 8
+        )
+        
+        self.topTextField.font = UIFont(name: "Verdana", size: 23)
+        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForiPhoneFive(views: [NSObject:AnyObject]){
+        let textFieldFontSize = 22 as CGFloat
+        let swapButtonFontSize = 55 as CGFloat
+        
+        self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
+        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        
+        let constraintsModel = ConstraintsModel(
+            textFieldHeight: 70,
+            topTextFieldMarginTop: 38,
+            swapButtonMarginTopAndBottom: 26,
+            countryLabelDistanceFromTextField: 2,
+            distanceFromEdge: 8
+        )
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForiPhoneSix(views: [NSObject:AnyObject]){
+        let textFieldFontSize = 22 as CGFloat
+        let swapButtonFontSize = 55 as CGFloat
+        
+        self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
+        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        
+        let constraintsModel = ConstraintsModel(
+            textFieldHeight: 80,
+            topTextFieldMarginTop: 109,
+            swapButtonMarginTopAndBottom: 30,
+            countryLabelDistanceFromTextField: 2,
+            distanceFromEdge: 8
+        )
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
     }
     
     func setConstraintsForiPhoneFour(views: [NSObject:AnyObject]){
@@ -113,10 +174,74 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         self.view.addConstraints(bottomTextFieldWidthConst)
         
+    }
+    
+    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:ConstraintsModel){
         
+        var visualFormat = String(format: "V:|-%d-[topTextField(%d)]-%d-[swapButton]-%d-[bottomTextField(%d)]",
+            constraintsModel.topTextFieldMarginTop,
+            constraintsModel.textFieldHeight,
+            constraintsModel.swapButtonMarginTopAndBottom,
+            constraintsModel.swapButtonMarginTopAndBottom,
+            constraintsModel.textFieldHeight)
         
+        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
+        visualFormat = String(format: "V:[topCountryLabel]-%d-[topTextField]",
+            constraintsModel.countryLabelDistanceFromTextField)
         
+        let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "H:|-%d-[topCountryLabel]",
+            constraintsModel.distanceFromEdge)
+        
+        let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "H:|-%d-[topTextField]-%d-|",
+            constraintsModel.distanceFromEdge,
+            constraintsModel.distanceFromEdge)
+        
+        let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "H:|-%d-[swapButton]-%d-|",
+            constraintsModel.distanceFromEdge,
+            constraintsModel.distanceFromEdge)
+        
+        let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+
+        visualFormat = String(format: "H:|-%d-[bottomCountryLabel]",
+            constraintsModel.distanceFromEdge)
+        
+        let bottomContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "V:[bottomCountryLabel]-%d-[bottomTextField]",
+            constraintsModel.countryLabelDistanceFromTextField)
+        
+        let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+    
+        visualFormat = String(format: "H:|-%d-[bottomTextField]-%d-|",
+            constraintsModel.distanceFromEdge,
+            constraintsModel.distanceFromEdge)
+        
+        let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        self.view.addConstraints(verticalLayout)
+        self.view.addConstraints(topCountrylabelSpaceToTextField)
+        self.view.addConstraints(topContryLabelLeftConst)
+        self.view.addConstraints(topTextFieldWidthConst)
+        self.view.addConstraints(swapButtonWidthConst)
+        self.view.addConstraints(bottomContryLabelLeftConst)
+        self.view.addConstraints(bottomCountrylabelbottomConst)
+        self.view.addConstraints(bottomTextFieldWidthConst)
+
     }
     
     override func viewDidAppear(animated: Bool) {
