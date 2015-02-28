@@ -18,7 +18,6 @@ class TopBannerViewController : UIViewController {
     
     override func viewDidLoad() {
         
-        
         self.view.backgroundColor = UIColor(netHex: 0x19B5FE)
         
         let screenWidth = self.view.frame.width
@@ -29,40 +28,120 @@ class TopBannerViewController : UIViewController {
         refreshButton = createfontAwesomeButton("\u{f021}")
         refreshButton.addTarget(self, action: "refreshPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        nameLabel = UILabel()
-        nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        nameLabel.text = "Picnic Currency"
-        nameLabel.font = UIFont(name: "verdana", size: 25)
-        nameLabel.textColor = UIColor.whiteColor()
-        
+        nameLabel = createNameLabel()
+
         self.view.addSubview(settingButton)
         self.view.addSubview(refreshButton)
         self.view.addSubview(nameLabel)
         
         let views: [NSObject : AnyObject] = ["refresh" : refreshButton, "settings":settingButton, "name":nameLabel]
         
-        let left = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[refresh]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let right = NSLayoutConstraint.constraintsWithVisualFormat("H:[settings]-15-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let top = NSLayoutConstraint.constraintsWithVisualFormat("V:|-17-[settings]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let top2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-17-[refresh]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(left)
-        self.view.addConstraints(right)
-        self.view.addConstraints(top)
-        self.view.addConstraints(top2)
-        
-        let lableCenter = NSLayoutConstraint(item: nameLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-        let lableTop = NSLayoutConstraint.constraintsWithVisualFormat("V:|-17-[name]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraint(lableCenter)
-        self.view.addConstraints(lableTop)
-        
+        self.setupGUIBasedOnScreenSize(views)
     }
     
+    func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]) {
+        let screenHeight = view.frame.height
+        
+        switch screenHeight {
+        case 480: setupForiPhoneFour(views)
+        case 568: setupForiPhoneFive(views)
+        case 667: setupForiPhoneSix(views)
+        case 736: setupForiPhoneSix(views)
+        default: println("default")
+        }
+    }
+    
+    func setupForiPhoneFour(views: [NSObject:AnyObject]){
+        
+        let constraintsModel = TopBannerConstraintsModel(
+            refreshButtonLeftMargin: 15,
+            settingsButtonRightMargin: 15,
+            buttonsMarginTop: 17,
+            nameLabelMarginTop: 17)
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForiPhoneFive(views: [NSObject:AnyObject]){
+        
+        let constraintsModel = TopBannerConstraintsModel(
+            refreshButtonLeftMargin: 15,
+            settingsButtonRightMargin: 15,
+            buttonsMarginTop: 19,
+            nameLabelMarginTop: 19)
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForiPhoneSix(views: [NSObject:AnyObject]){
+        
+        let constraintsModel = TopBannerConstraintsModel(
+            refreshButtonLeftMargin: 15,
+            settingsButtonRightMargin: 15,
+            buttonsMarginTop: 19,
+            nameLabelMarginTop: 19)
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:TopBannerConstraintsModel){
+        
+        var visualFormat = String(format: "H:|-%d-[refresh]",
+            constraintsModel.refreshButtonLeftMargin)
+        
+        let refreshLeftMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "H:[settings]-%d-|",
+            constraintsModel.settingsButtonRightMargin)
+        
+        let settingsRightMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+
+        visualFormat = String(format: "V:|-%d-[settings]",
+            constraintsModel.buttonsMarginTop)
+        
+        let settingsButtonTopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "V:|-%d-[refresh]",
+            constraintsModel.buttonsMarginTop)
+        
+        let refreshButtonTopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "V:|-%d-[name]",
+            constraintsModel.nameLabelMarginTop)
+        
+        let lableTop = NSLayoutConstraint.constraintsWithVisualFormat(visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        let lableCenter = NSLayoutConstraint(item: nameLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
+
+        
+        self.view.addConstraints(refreshLeftMarginConstraint)
+        self.view.addConstraints(settingsRightMarginConstraint)
+        self.view.addConstraints(settingsButtonTopMargin)
+        self.view.addConstraints(refreshButtonTopMargin)
+        self.view.addConstraint(lableCenter)
+        self.view.addConstraints(lableTop)
+    }
+    
+    func createNameLabel() -> UILabel{
+        nameLabel = UILabel()
+        nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        nameLabel.text = "Picnic Currency"
+        nameLabel.font = UIFont(name: "verdana", size: 25)
+        nameLabel.textColor = UIColor.whiteColor()
+        return nameLabel
+    }
     
     func createfontAwesomeButton(unicode:String) -> UIButton{
         var button = UIButton()
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.setTitle(unicode, forState: .Normal)
         button.titleLabel!.font = UIFont(name: "FontAwesome", size: 22)
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
         return button
     }
     
@@ -71,9 +150,9 @@ class TopBannerViewController : UIViewController {
     }
     
     func refreshPressed(sender:UIButton!) {
-        println("refreshPressed")
-        
+        NSNotificationCenter.defaultCenter().postNotificationName("refreshPressed", object: nil)
     }
+    
     
 
 }

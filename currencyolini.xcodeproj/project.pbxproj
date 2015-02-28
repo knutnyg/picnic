@@ -11,10 +11,14 @@
 		43B51F9F495BEC523594A3D3 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D23532B61FCF0FBACDC0280F /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		720810B21A9CFE11009A2A2E /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720810B11A9CFE11009A2A2E /* UserModelObserver.swift */; };
 		7231FB811AA1F7C30069A91A /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728815671AA141170084BCC6 /* ConverterViewController.swift */; };
-		7250E6B91AA21DE500EF32F2 /* ConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */; };
-		7250E6BA1AA21EA300EF32F2 /* ConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */; };
+		7250E6B91AA21DE500EF32F2 /* ConverterConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConverterConstraintsModel.swift */; };
+		7250E6BA1AA21EA300EF32F2 /* ConverterConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250E6B81AA21DE500EF32F2 /* ConverterConstraintsModel.swift */; };
 		7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6941A98CA6B00C5E3BE /* UserModel.swift */; };
 		7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */; };
+		727A03211AA23D04007D2661 /* TopBannerConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A03201AA23D04007D2661 /* TopBannerConstraintsModel.swift */; };
+		727A03221AA23D04007D2661 /* TopBannerConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A03201AA23D04007D2661 /* TopBannerConstraintsModel.swift */; };
+		727A03241AA25526007D2661 /* ParentConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A03231AA25526007D2661 /* ParentConstraintsModel.swift */; };
+		727A03251AA25526007D2661 /* ParentConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A03231AA25526007D2661 /* ParentConstraintsModel.swift */; };
 		728815681AA141170084BCC6 /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728815671AA141170084BCC6 /* ConverterViewController.swift */; };
 		728A9AED1AA1DCE3001C417A /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */; };
 		72D06A2E1AA0D30100A51E1D /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */; };
@@ -46,9 +50,11 @@
 /* Begin PBXFileReference section */
 		22F8DBEB1A98A23200CA6287 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		720810B11A9CFE11009A2A2E /* UserModelObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModelObserver.swift; sourceTree = "<group>"; };
-		7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintsModel.swift; sourceTree = "<group>"; };
+		7250E6B81AA21DE500EF32F2 /* ConverterConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterConstraintsModel.swift; sourceTree = "<group>"; };
 		7262F6941A98CA6B00C5E3BE /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		7262F6961A98CDF500C5E3BE /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapper.swift; sourceTree = "<group>"; };
+		727A03201AA23D04007D2661 /* TopBannerConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerConstraintsModel.swift; sourceTree = "<group>"; };
+		727A03231AA25526007D2661 /* ParentConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentConstraintsModel.swift; sourceTree = "<group>"; };
 		728815671AA141170084BCC6 /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConverterViewController.swift; path = ../ConverterViewController.swift; sourceTree = "<group>"; };
 		72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Resources/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
@@ -109,7 +115,9 @@
 			children = (
 				7262F6941A98CA6B00C5E3BE /* UserModel.swift */,
 				720810B11A9CFE11009A2A2E /* UserModelObserver.swift */,
-				7250E6B81AA21DE500EF32F2 /* ConstraintsModel.swift */,
+				7250E6B81AA21DE500EF32F2 /* ConverterConstraintsModel.swift */,
+				727A03201AA23D04007D2661 /* TopBannerConstraintsModel.swift */,
+				727A03231AA25526007D2661 /* ParentConstraintsModel.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -398,9 +406,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				727A03211AA23D04007D2661 /* TopBannerConstraintsModel.swift in Sources */,
 				7262F6971A98CDF500C5E3BE /* LocationManagerWrapper.swift in Sources */,
+				727A03241AA25526007D2661 /* ParentConstraintsModel.swift in Sources */,
 				72E0C80B1A9895B600AF7BC3 /* ViewController.swift in Sources */,
-				7250E6B91AA21DE500EF32F2 /* ConstraintsModel.swift in Sources */,
+				7250E6B91AA21DE500EF32F2 /* ConverterConstraintsModel.swift in Sources */,
 				7262F6951A98CA6B00C5E3BE /* UserModel.swift in Sources */,
 				72E0C8091A9895B600AF7BC3 /* AppDelegate.swift in Sources */,
 				72D06A311AA0DC4600A51E1D /* TopBannerViewController.swift in Sources */,
@@ -413,9 +423,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				727A03221AA23D04007D2661 /* TopBannerConstraintsModel.swift in Sources */,
 				72D9D8D31A9E600F001211F7 /* UserModelObserver.swift in Sources */,
+				727A03251AA25526007D2661 /* ParentConstraintsModel.swift in Sources */,
 				72D9D8D01A9E5F15001211F7 /* ViewController.swift in Sources */,
-				7250E6BA1AA21EA300EF32F2 /* ConstraintsModel.swift in Sources */,
+				7250E6BA1AA21EA300EF32F2 /* ConverterConstraintsModel.swift in Sources */,
 				728A9AED1AA1DCE3001C417A /* TopBannerViewController.swift in Sources */,
 				72D9D8CF1A9E5AF5001211F7 /* ViewControllerTest.swift in Sources */,
 				72D9D8D11A9E6009001211F7 /* UserModel.swift in Sources */,
@@ -539,6 +551,7 @@
 			baseConfigurationReference = 86DE7895A7ED9D04AB1DFD14 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = currencyolini/Info.plist;
@@ -554,6 +567,7 @@
 			baseConfigurationReference = 8E15038B88855076D9D34D99 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

@@ -28,7 +28,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         userModel.addObserver(self)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
         
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -75,7 +77,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let textFieldFontSize = 22 as CGFloat
         let swapButtonFontSize = 40 as CGFloat
         
-        let constraintsModel = ConstraintsModel(
+        let constraintsModel = ConverterConstraintsModel(
             textFieldHeight: 46,
             topTextFieldMarginTop: 25,
             swapButtonMarginTopAndBottom: 20,
@@ -98,9 +100,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
         self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         
-        let constraintsModel = ConstraintsModel(
+        let constraintsModel = ConverterConstraintsModel(
             textFieldHeight: 70,
-            topTextFieldMarginTop: 38,
+            topTextFieldMarginTop: 23,
             swapButtonMarginTopAndBottom: 26,
             countryLabelDistanceFromTextField: 2,
             distanceFromEdge: 8
@@ -117,9 +119,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
         self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         
-        let constraintsModel = ConstraintsModel(
+        let constraintsModel = ConverterConstraintsModel(
             textFieldHeight: 80,
-            topTextFieldMarginTop: 109,
+            topTextFieldMarginTop: 94,
             swapButtonMarginTopAndBottom: 30,
             countryLabelDistanceFromTextField: 2,
             distanceFromEdge: 8
@@ -128,7 +130,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         setConstraintsForiPhone(views, constraintsModel: constraintsModel)
     }
     
-    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:ConstraintsModel){
+    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:ConverterConstraintsModel){
         
         var visualFormat = String(format: "V:|-%d-[topTextField(%d)]-%d-[swapButton]-%d-[bottomTextField(%d)]",
             constraintsModel.topTextFieldMarginTop,
@@ -165,11 +167,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-
-//        visualFormat = String(format: "V:[swapButton(%d)]",55)
-//        
-//        let swapButtonHeightConst = NSLayoutConstraint.constraintsWithVisualFormat(
-//            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         let swapButtonHorizontalAlign = NSLayoutConstraint(item: swapButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
         
@@ -416,6 +413,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         swapButton.addTarget(self, action: "swapButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         
         return swapButton
+    }
+    
+    func refreshButtonPressed(notification: NSNotification){
+        self.fetchCurrency()
     }
 
     

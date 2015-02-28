@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConstraintsModel : NSObject{
+class ConverterConstraintsModel : NSObject{
     let textFieldHeight:Int
     
     let topTextFieldMarginTop:Int

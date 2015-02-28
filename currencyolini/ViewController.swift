@@ -9,15 +9,13 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        let screenWidth = Int(view.frame.width)
-        let screenHeight = Int(view.frame.height)
-        let topPanelHeight = 55
-        let keyboardHeight = 216
-        let converterPanelHeight = (screenHeight - topPanelHeight - keyboardHeight)
-        
         topBannerView = TopBannerViewController()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+
+
         converterView = ConverterViewController()
+        
         converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
@@ -26,23 +24,84 @@ class ViewController: UIViewController {
         view.addSubview(converterView.view)
         
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "converter":converterView.view, "superView":self.view]
-
-        var topBannerWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat("[topBanner(\(screenWidth))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        var topBannerHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[topBanner(\(topPanelHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        view.addConstraints(topBannerWidthConstraints)
-        view.addConstraints(topBannerHeightConstraints)
-        
-        var converterMarginTop = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[topBanner]-0-[converter]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        var converterWidthconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[converter(\(screenWidth))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        var converterHeightconstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[converter(\(converterPanelHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        var converterMarginBottom = NSLayoutConstraint.constraintsWithVisualFormat("V:[converter]-216-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        
-        view.addConstraints(converterMarginTop)
-        view.addConstraints(converterWidthconstraints)
-        view.addConstraints(converterHeightconstraints)
-        view.addConstraints(converterMarginBottom)
+        setupGUIBasedOnScreenSize(views)
     }
+    
+    func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]){
+        let screenHeight = view.frame.height
+        println(screenHeight)
+        
+        
+        
+        switch screenHeight {
+        case 480: setupForiPhoneFour(views)
+        case 568: setupForiPhoneFive(views)
+        case 667: setupForiPhoneSix(views)
+        case 736: setupForiPhoneSix(views)
+        default: println("default")
+        }
+    }
+    
+    func setupForiPhoneFour(views: [NSObject:AnyObject]){
+        
+        let constraintModel = ParentConstraintsModel(
+            bannerHeight: 55,
+            keyboardHeight: 216,
+            screenHeight: Int(view.frame.height)
+        )
+        
+        setConstraintsForiPhone(views, constraintModel: constraintModel)
+    }
+    
+    func setupForiPhoneFive(views: [NSObject:AnyObject]){
+        
+        let constraintModel = ParentConstraintsModel(
+            bannerHeight: 70,
+            keyboardHeight: 216,
+            screenHeight: Int(view.frame.height)
+        )
+        
+        setConstraintsForiPhone(views, constraintModel: constraintModel)
+    }
+    
+    func setupForiPhoneSix(views: [NSObject:AnyObject]){
+        
+        let constraintModel = ParentConstraintsModel(
+            bannerHeight: 70,
+            keyboardHeight: 216,
+            screenHeight: Int(view.frame.height)
+        )
+        
+        setConstraintsForiPhone(views, constraintModel: constraintModel)
+    }
+    
+    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintModel:ParentConstraintsModel){
+        
+        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-0-[converter(%d)]-%d-|",
+            constraintModel.bannerHeight,
+            constraintModel.converterHeight,
+            constraintModel.keyboardHeight)
+        
+        var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = "H:|-0-[topBanner]-0-|"
+
+        var topBannerWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = "H:|-0-[converter]-0-|"
+        
+        var converterWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        view.addConstraints(verticalLayout)
+        view.addConstraints(topBannerWidthConstraints)
+        view.addConstraints(converterWidthConstraints)
+        
+    }
+
     
     
 }
