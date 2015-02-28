@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9B162D17-6454-4443-97E3-ED79D4B96FA2</string>
+	<key>IDESourceControlProjectName</key>
+	<string>currencyolini</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2E1486CF8CECC2B0B836F7AA8B1C7A2BBAD6193F</key>
+		<string>https://github.com/knudix/workshop.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>currencyolini.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2E1486CF8CECC2B0B836F7AA8B1C7A2BBAD6193F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/knudix/workshop.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2E1486CF8CECC2B0B836F7AA8B1C7A2BBAD6193F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2E1486CF8CECC2B0B836F7AA8B1C7A2BBAD6193F</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2E1486CF8CECC2B0B836F7AA8B1C7A2BBAD6193F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>currencyolini</string>
+		</dict>
+	</array>
+</dict>
+</plist>
