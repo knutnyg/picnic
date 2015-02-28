@@ -9,35 +9,39 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        let screenWidth = view.frame.width
-        let screenHeight = view.frame.height
+        let screenWidth = Int(view.frame.width)
+        let screenHeight = Int(view.frame.height)
+        let topPanelHeight = 55
+        let keyboardHeight = 216
+        let converterPanelHeight = (screenHeight - topPanelHeight - keyboardHeight)
         
         topBannerView = TopBannerViewController()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-//        converterView = ConverterViewController()
+        converterView = ConverterViewController()
+        converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
-//        self.addChildViewController(converterView)
-        self.view.addSubview(topBannerView.view)
-//        self.view.addSubview(converterView.view)
+        self.addChildViewController(converterView)
+        view.addSubview(topBannerView.view)
+        view.addSubview(converterView.view)
         
-        let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "superView":self.view]
-        
-//        var topBannerWidthConstraint = NSLayoutConstraint(item: topBannerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-//        var topBannerHeightConstraint = NSLayoutConstraint(item: topBannerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 60)
-        
+        let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "converter":converterView.view, "superView":self.view]
+
         var topBannerWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat("[topBanner(\(screenWidth))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        var topBannerHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[topBanner(70)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        var topBannerHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[topBanner(\(topPanelHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        self.view.addConstraints(topBannerWidthConstraints)
-        self.view.addConstraints(topBannerHeightConstraints)
+        view.addConstraints(topBannerWidthConstraints)
+        view.addConstraints(topBannerHeightConstraints)
         
-//        var converterWidthconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[converterView(\(screenWidth))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-//        var converterHeightconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[converterView(\(screenHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-//        var converterMarginBottom = NSLayoutConstraint.constraintsWithVisualFormat("V:[converterView]-216-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        var converterMarginTop = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[topBanner]-0-[converter]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        var converterWidthconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[converter(\(screenWidth))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        var converterHeightconstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[converter(\(converterPanelHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        var converterMarginBottom = NSLayoutConstraint.constraintsWithVisualFormat("V:[converter]-216-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        
-        
+        view.addConstraints(converterMarginTop)
+        view.addConstraints(converterWidthconstraints)
+        view.addConstraints(converterHeightconstraints)
+        view.addConstraints(converterMarginBottom)
     }
     
     
