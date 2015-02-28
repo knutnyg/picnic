@@ -166,6 +166,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
 
+//        visualFormat = String(format: "V:[swapButton(%d)]",55)
+//        
+//        let swapButtonHeightConst = NSLayoutConstraint.constraintsWithVisualFormat(
+//            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        let swapButtonHorizontalAlign = NSLayoutConstraint(item: swapButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
+        
         visualFormat = String(format: "H:|-%d-[bottomCountryLabel]",
             constraintsModel.distanceFromEdge)
         
@@ -189,7 +196,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.view.addConstraints(topCountrylabelSpaceToTextField)
         self.view.addConstraints(topContryLabelLeftConst)
         self.view.addConstraints(topTextFieldWidthConst)
-        self.view.addConstraints(swapButtonWidthConst)
+        self.view.addConstraint(swapButtonHorizontalAlign)
+//        self.view.addConstraints(swapButtonHeightConst)
         self.view.addConstraints(bottomContryLabelLeftConst)
         self.view.addConstraints(bottomCountrylabelbottomConst)
         self.view.addConstraints(bottomTextFieldWidthConst)
