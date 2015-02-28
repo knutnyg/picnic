@@ -22,6 +22,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     var swapButton:UIButton!
     
+
     // -- App Elements -- //
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
@@ -33,15 +34,39 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.addObserver(self)
         
         topCountryLabel = UILabel()
+        topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topCountryLabel.text = "placeholderTopLabel"
+        
         topTextField = UITextField()
         topTextField.delegate = self
+        topTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topTextField.borderStyle = UITextBorderStyle.RoundedRect
+
+        topTextField.placeholder = "USD"
+        topTextField.keyboardType = UIKeyboardType.DecimalPad
+        topTextField.returnKeyType = UIReturnKeyType.Done
+        
+//        textField.autocorrectionType = UITextAutocorrectionTypeNo;
+//
+//        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//        textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//        textField.delegate = self;
+//        [self.view addSubview:textField];
+//        [textField release];
         
         bottomCountryLabel = UILabel()
+        bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        bottomCountryLabel.text = "placeholderBottomLabel"
         bottomTextField = UITextField()
         bottomTextField.delegate = self
+        bottomTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         
         swapButton = UIButton()
+        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         swapButton.setTitle("\u{f0ec}", forState: .Normal)
+        swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
         swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
         
         view.addSubview(topCountryLabel)
@@ -53,14 +78,55 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         topTextField.addTarget(self, action: Selector("fromAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         bottomTextField.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
-        self.setConstraintsBasedOnScreenSize()
+        let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
+            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton]
+        
+        
+        self.setConstraintsBasedOnScreenSize(views)
         
         
         
     }
     
-    func setConstraintsBasedOnScreenSize(){
-  
+    func setConstraintsBasedOnScreenSize(views: [NSObject:AnyObject]){
+        let screenHeight = view.frame.height
+        
+        switch screenHeight {
+        case 480: setConstraintsForiPhoneFour(views)
+        default: println("default")
+        }
+        
+    }
+    
+    func setConstraintsForiPhoneFour(views: [NSObject:AnyObject]){
+        
+     
+        let textFieldHeight = 40 as CGFloat
+        let textFieldFontSize = 22 as CGFloat
+        let swapButtonFontSize = 40 as CGFloat
+        
+
+        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[topCountryLabel]-8-[topTextField(\(textFieldHeight))]-20-[swapButton]-20-[bottomTextField(\(textFieldHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(verticalLayout)
+        
+        let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topCountryLabel]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(topContryLabelLeftConst)
+
+        self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(topTextFieldWidthConst)
+        
+        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
+        let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[swapButton]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(swapButtonWidthConst)
+        
+        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(bottomTextFieldWidthConst)
+        
+        
+        
+        
         
     }
     
@@ -177,7 +243,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let locale:NSLocale = self.userModel.currentLocale!
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
         var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-        topTextField.text = country
+        topCountryLabel.text = country
     }
     
     func setToCurrencyLabel() {
@@ -251,6 +317,19 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         } else {
             self.displayErrorMessage()
         }
+    }
+    
+    func createTextField() -> UITextField{
+        var textField = UITextField()
+        topTextField = UITextField()
+        topTextField.delegate = self
+        topTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topTextField.borderStyle = UITextBorderStyle.RoundedRect
+        
+        topTextField.placeholder = "USD"
+        topTextField.keyboardType = UIKeyboardType.DecimalPad
+        topTextField.returnKeyType = UIReturnKeyType.Done
+
     }
 
     
