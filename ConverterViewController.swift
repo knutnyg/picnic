@@ -37,30 +37,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         topCountryLabel.text = "placeholderTopLabel"
         
-        topTextField = UITextField()
-        topTextField.delegate = self
-        topTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
-        topTextField.borderStyle = UITextBorderStyle.RoundedRect
-
-        topTextField.placeholder = "USD"
-        topTextField.keyboardType = UIKeyboardType.DecimalPad
-        topTextField.returnKeyType = UIReturnKeyType.Done
-        
-//        textField.autocorrectionType = UITextAutocorrectionTypeNo;
-//
-//        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-//        textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//        textField.delegate = self;
-//        [self.view addSubview:textField];
-//        [textField release];
+        topTextField = createTextField()
         
         bottomCountryLabel = UILabel()
         bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         bottomCountryLabel.text = "placeholderBottomLabel"
-        bottomTextField = UITextField()
-        bottomTextField.delegate = self
-        bottomTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
+
+        bottomTextField = createTextField()
         
         swapButton = UIButton()
         swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -100,17 +83,18 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func setConstraintsForiPhoneFour(views: [NSObject:AnyObject]){
         
-     
-        let textFieldHeight = 40 as CGFloat
+        let textFieldHeight = 46 as CGFloat
         let textFieldFontSize = 22 as CGFloat
         let swapButtonFontSize = 40 as CGFloat
         
 
-        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[topCountryLabel]-8-[topTextField(\(textFieldHeight))]-20-[swapButton]-20-[bottomTextField(\(textFieldHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat("V:|-25-[topTextField(\(textFieldHeight))]-20-[swapButton]-20-[bottomTextField(\(textFieldHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         self.view.addConstraints(verticalLayout)
         
+        let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-2-[topTextField]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topCountryLabel]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         self.view.addConstraints(topContryLabelLeftConst)
+        self.view.addConstraints(topCountrylabelSpaceToTextField)
 
         self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
@@ -119,6 +103,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
         let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[swapButton]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         self.view.addConstraints(swapButtonWidthConst)
+        
+        let bottomContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomCountryLabel]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-2-[bottomTextField]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        self.view.addConstraints(bottomContryLabelLeftConst)
+        self.view.addConstraints(bottomCountrylabelbottomConst)
         
         self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
@@ -321,15 +310,15 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func createTextField() -> UITextField{
         var textField = UITextField()
-        topTextField = UITextField()
-        topTextField.delegate = self
-        topTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
-        topTextField.borderStyle = UITextBorderStyle.RoundedRect
         
-        topTextField.placeholder = "USD"
-        topTextField.keyboardType = UIKeyboardType.DecimalPad
-        topTextField.returnKeyType = UIReturnKeyType.Done
+        textField.delegate = self
+        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        textField.borderStyle = UITextBorderStyle.RoundedRect
+        textField.placeholder = "USD"
+        textField.keyboardType = UIKeyboardType.DecimalPad
+        textField.returnKeyType = UIReturnKeyType.Done
 
+        return textField
     }
 
     
