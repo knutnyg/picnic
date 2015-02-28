@@ -21,6 +21,7 @@
 		727A03251AA25526007D2661 /* ParentConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A03231AA25526007D2661 /* ParentConstraintsModel.swift */; };
 		728815681AA141170084BCC6 /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728815671AA141170084BCC6 /* ConverterViewController.swift */; };
 		728A9AED1AA1DCE3001C417A /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */; };
+		72B2DF8C1AA2830D0044B38E /* childs-transparant.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B2DF8B1AA2830D0044B38E /* childs-transparant.png */; };
 		72D06A2E1AA0D30100A51E1D /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */; };
 		72D06A311AA0DC4600A51E1D /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */; };
 		72D9D8CF1A9E5AF5001211F7 /* ViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D9D8CE1A9E5AF5001211F7 /* ViewControllerTest.swift */; };
@@ -56,6 +57,7 @@
 		727A03201AA23D04007D2661 /* TopBannerConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerConstraintsModel.swift; sourceTree = "<group>"; };
 		727A03231AA25526007D2661 /* ParentConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentConstraintsModel.swift; sourceTree = "<group>"; };
 		728815671AA141170084BCC6 /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConverterViewController.swift; path = ../ConverterViewController.swift; sourceTree = "<group>"; };
+		72B2DF8B1AA2830D0044B38E /* childs-transparant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "childs-transparant.png"; path = "Resources/childs-transparant.png"; sourceTree = "<group>"; };
 		72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "Resources/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		72D06A301AA0DC4600A51E1D /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
 		72D9D8CE1A9E5AF5001211F7 /* ViewControllerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerTest.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		72D06A2F1AA0D30800A51E1D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				72B2DF8B1AA2830D0044B38E /* childs-transparant.png */,
 				72D06A2D1AA0D30100A51E1D /* fontawesome-webfont.ttf */,
 			);
 			name = Resources;
@@ -296,6 +299,7 @@
 				72E0C80E1A9895B600AF7BC3 /* Main.storyboard in Resources */,
 				72E0C8131A9895B600AF7BC3 /* LaunchScreen.xib in Resources */,
 				72E0C8101A9895B600AF7BC3 /* Images.xcassets in Resources */,
+				72B2DF8C1AA2830D0044B38E /* childs-transparant.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
