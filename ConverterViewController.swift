@@ -16,17 +16,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     // -- UI Elements -- //
     var topCountryLabel:UILabel!
     var bottomCountryLabel:UILabel!
-    
     var topTextField:UITextField!
     var bottomTextField:UITextField!
-    
     var swapButton:UIButton!
     
 
     // -- App Elements -- //
     var userModel = UserModel()
     var locationManager = LocationManagerWrapper()
-    
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
     override func viewDidLoad() {
@@ -35,22 +32,17 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        topCountryLabel.text = "placeholderTopLabel"
         
         topTextField = createTextField()
+        topTextField.addTarget(self, action: Selector("fromAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         bottomCountryLabel = UILabel()
         bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        bottomCountryLabel.text = "placeholderBottomLabel"
 
         bottomTextField = createTextField()
+        bottomTextField.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
-        swapButton = UIButton()
-        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        swapButton.setTitle("\u{f0ec}", forState: .Normal)
-        swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
+        swapButton = createSwapButton()
         
         view.addSubview(topCountryLabel)
         view.addSubview(topTextField)
@@ -58,30 +50,24 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(bottomCountryLabel)
         view.addSubview(bottomTextField)
         
-        topTextField.addTarget(self, action: Selector("fromAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
-        bottomTextField.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
-        
         let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton]
         
-        
-        self.setConstraintsBasedOnScreenSize(views)
-        
-        
-        
+        self.setupGUIBasedOnScreenSize(views)
     }
     
-    func setConstraintsBasedOnScreenSize(views: [NSObject:AnyObject]){
+   
+    
+    func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]){
         let screenHeight = view.frame.height
-        println(screenHeight)
         
         switch screenHeight {
-        case 480: setupForiPhoneFour(views)
-        case 568: setupForiPhoneFive(views)
-        case 667: setupForiPhoneSix(views)
-        default: println("default")
+            case 480: setupForiPhoneFour(views)
+            case 568: setupForiPhoneFive(views)
+            case 667: setupForiPhoneSix(views)
+            case 736: setupForiPhoneSix(views)
+            default: println("default")
         }
-        
     }
     
     func setupForiPhoneFour(views: [NSObject:AnyObject]){
@@ -140,40 +126,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         )
         
         setConstraintsForiPhone(views, constraintsModel: constraintsModel)
-    }
-    
-    func setConstraintsForiPhoneFour(views: [NSObject:AnyObject]){
-        
-        let textFieldHeight = 46 as CGFloat
-        let textFieldFontSize = 22 as CGFloat
-        let swapButtonFontSize = 40 as CGFloat
-        
-
-        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat("V:|-25-[topTextField(\(textFieldHeight))]-20-[swapButton]-20-[bottomTextField(\(textFieldHeight))]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(verticalLayout)
-        
-        let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-2-[topTextField]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topCountryLabel]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(topContryLabelLeftConst)
-        self.view.addConstraints(topCountrylabelSpaceToTextField)
-
-        self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
-        let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[topTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(topTextFieldWidthConst)
-        
-        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
-        let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[swapButton]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(swapButtonWidthConst)
-        
-        let bottomContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomCountryLabel]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-2-[bottomTextField]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(bottomContryLabelLeftConst)
-        self.view.addConstraints(bottomCountrylabelbottomConst)
-        
-        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
-        let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[bottomTextField]-8-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        self.view.addConstraints(bottomTextFieldWidthConst)
-        
     }
     
     func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:ConstraintsModel){
@@ -311,7 +263,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func swapButtonPressed(){
+    func swapButtonPressed(sender:UIButton!){
         
         var tempLocale:NSLocale = self.userModel.currentLocale!
         
@@ -444,6 +396,18 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         textField.returnKeyType = UIReturnKeyType.Done
 
         return textField
+    }
+    
+    func createSwapButton() -> UIButton{
+        var swapButton = UIButton()
+        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        swapButton.setTitle("\u{f0ec}", forState: .Normal)
+        swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
+        swapButton.addTarget(self, action: "swapButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        return swapButton
     }
 
     
