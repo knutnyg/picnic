@@ -157,10 +157,10 @@
 			isa = PBXGroup;
 			children = (
 				721CFFC61AA2F6E400484BAA /* picnic */,
-				721CFFDC1AA2F6E400484BAA /* picnicTests */,
 				721CFFC51AA2F6E400484BAA /* Products */,
 				3A470421041C2E81A4F39A54 /* Pods */,
 				A2265EA50607EF73DB222C36 /* Frameworks */,
+				721CFFDC1AA2F6E400484BAA /* picnicTests */,
 			);
 			sourceTree = "<group>";
 		};
