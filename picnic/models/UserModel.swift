@@ -20,6 +20,7 @@ class UserModel : NSObject {
     
     func setHomeLocale(locale:NSLocale){
         self.homeLocale = locale
+        println(self.homeLocale?.description)
         homeLocaleHasChanged()
     }
     

@@ -207,11 +207,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         locationManager.getUserCurrentLocale()
             .onSuccess { locale in
+                println("got success")
                 self.updateUserCurrentLocale(locale)
                 self.fetchCurrency()}
             .onFailure { error in
-                println("failed getting country, using system locale")
-                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "no_NO"))
+                println("got failure getting current locale")
+                self.displayFailedToCurrentLocation()
+                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
                 self.fetchCurrency()
         }
     }
@@ -234,14 +236,16 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 .onSuccess { conv in
                     self.userModel.setConvertionRate(conv) }
                 .onFailure { error in
-                    println("failed to get currency")}
+                    println("failed to get conv rate")
+                    self.displayFailedToResolveCurrencyError()
+                    self.userModel.setConvertionRate(1.0)}
         }
         
     }
     
     func getConvertionRate(homeCurrency:String, currentCurrency:String) -> Future<Double> {
         
-        let promise = Promise<Double>()
+        let promisee = Promise<Double>()
         
         let url = NSURL(string: "http://rate-exchange.appspot.com/currency?from=\(currentCurrency)&to=\(homeCurrency)" )
         
@@ -251,22 +255,22 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             println(response)
             var castedResponse = response as NSHTTPURLResponse
             if error != nil {
-                promise.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
+                promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
             } else {
                 if(castedResponse.statusCode == 200){
                     var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
 
                     var conversionRate : Double = boardsDictionary.objectForKey("rate") as Double;
-                    promise.success(conversionRate)
+                    promisee.success(conversionRate)
                 } else {
-                    promise.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
+                    promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
                 }
                 
                 
                 
             }
         }
-        return promise.future
+        return promisee.future
     }
     
     override func didReceiveMemoryWarning() {
@@ -310,16 +314,26 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     
     func setToCountyText(){
+        var userLanguage = NSBundle.mainBundle().preferredLocalizations.first as String
+        
+        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
+        
+        
         let locale:NSLocale = self.userModel.homeLocale!
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
-        var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         bottomCountryLabel.text = country
     }
     
     func setFromCountryText() {
+        
+        var userLanguage = NSBundle.mainBundle().preferredLocalizations.first as String
+        
+        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
+        
         let locale:NSLocale = self.userModel.currentLocale!
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
-        var country: String = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         topCountryLabel.text = country
     }
     
@@ -354,14 +368,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func displayFailedToResolveCurrencyError(){
-        var alert = UIAlertController(title: "Error", message: "Unable to access current convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        var alert2 = UIAlertController(title: "Error", message: "Unable to access current convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+        alert2.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert2, animated: true, completion: nil)
     }
     
     func displayFailedToCurrentLocation(){
         var alert = UIAlertController(title: "Error", message: "Unable to verify your location. Please make sure that the app is allowed to use GPS under general settings, and that your GPS works.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
