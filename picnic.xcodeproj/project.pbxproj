@@ -22,7 +22,6 @@
 		721C001A1AA2FA6900484BAA /* childs_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 721C000D1AA2FA6900484BAA /* childs_87.png */; };
 		721C001C1AA2FA7000484BAA /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 721C001B1AA2FA7000484BAA /* Podfile */; };
 		721C00201AA2FA7B00484BAA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 721C001E1AA2FA7B00484BAA /* LaunchScreen.xib */; };
-		721C00221AA2FA8B00484BAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 721C00211AA2FA8B00484BAA /* Images.xcassets */; };
 		721C00291AA2FABE00484BAA /* ConverterConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00241AA2FABE00484BAA /* ConverterConstraintsModel.swift */; };
 		721C002A1AA2FABE00484BAA /* ParentConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00251AA2FABE00484BAA /* ParentConstraintsModel.swift */; };
 		721C002B1AA2FABE00484BAA /* TopBannerConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */; };
@@ -37,6 +36,7 @@
 		721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
 		721CFFFD1AA2FA6000484BAA /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */; };
 		721CFFFE1AA2FA6000484BAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFB1AA2FA6000484BAA /* ViewController.swift */; };
+		72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72F307551AA3A3D00066F2A1 /* Images.xcassets */; };
 		C911461DB27EE6A9012FF850 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBCC4D1C4542B1A6DF6713BE /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -66,7 +66,6 @@
 		721C000D1AA2FA6900484BAA /* childs_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = childs_87.png; sourceTree = "<group>"; };
 		721C001B1AA2FA7000484BAA /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		721C001F1AA2FA7B00484BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		721C00211AA2FA8B00484BAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		721C00241AA2FABE00484BAA /* ConverterConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterConstraintsModel.swift; sourceTree = "<group>"; };
 		721C00251AA2FABE00484BAA /* ParentConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentConstraintsModel.swift; sourceTree = "<group>"; };
 		721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerConstraintsModel.swift; sourceTree = "<group>"; };
@@ -85,6 +84,7 @@
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
 		721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
 		721CFFFB1AA2FA6000484BAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		72F307551AA3A3D00066F2A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7CA11D7FE31BC8B9FD6CF361 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		AA2C4F57070B7F2E4215F56D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CBCC4D1C4542B1A6DF6713BE /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -186,6 +186,7 @@
 				721CFFC91AA2F6E400484BAA /* AppDelegate.swift */,
 				721CFFD21AA2F6E400484BAA /* LaunchScreen.xib */,
 				721CFFFF1AA2FA6900484BAA /* Resources */,
+				72F307551AA3A3D00066F2A1 /* Images.xcassets */,
 				721CFFC71AA2F6E400484BAA /* Supporting Files */,
 			);
 			path = picnic;
@@ -195,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				721C00311AA3366400484BAA /* Settings.bundle */,
-				721C00211AA2FA8B00484BAA /* Images.xcassets */,
 				721CFFC81AA2F6E400484BAA /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -342,12 +342,12 @@
 				721C001A1AA2FA6900484BAA /* childs_87.png in Resources */,
 				721C00141AA2FA6900484BAA /* childs_120.png in Resources */,
 				721C00161AA2FA6900484BAA /* childs_29.png in Resources */,
-				721C00221AA2FA8B00484BAA /* Images.xcassets in Resources */,
 				721C00111AA2FA6900484BAA /* fontawesome-webfont.ttf in Resources */,
 				721C00181AA2FA6900484BAA /* childs_58.png in Resources */,
 				721C00121AA2FA6900484BAA /* childs.png in Resources */,
 				721C000E1AA2FA6900484BAA /* childs-transparant.png in Resources */,
 				721C00101AA2FA6900484BAA /* childs.xcf in Resources */,
+				72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */,
 				721C00201AA2FA7B00484BAA /* LaunchScreen.xib in Resources */,
 				721C00301AA2FB2B00484BAA /* Main.storyboard in Resources */,
 				721C000F1AA2FA6900484BAA /* childs.png in Resources */,
