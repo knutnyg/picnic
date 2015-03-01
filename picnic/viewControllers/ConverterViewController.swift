@@ -294,30 +294,44 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
-        if((userDefaults.stringForKey("to_country")) != nil && userDefaults.stringForKey("to_country") != ""){
-            self.userModel.setCurrentLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("to_country")!))
-            return
+        
+        if((userDefaults.stringForKey("from_country")) != nil && userDefaults.stringForKey("from_country") != ""){
+            
+            
+            var filteredList = NSLocale.availableLocaleIdentifiers().filter { ($0 as String) == self.userDefaults.stringForKey("from_country") &&  self.userDefaults.stringForKey("from_country")!.contains("_")}
+
+            if(filteredList.count > 0) {
+                let locale = NSLocale(localeIdentifier: (filteredList.first as String))
+                self.userModel.setCurrentLocale(locale)
+            } else {
+                self.displayFailedToParseOverride()
+            }
         }
         self.userModel.setCurrentLocale(locale)
     }
     
     func updateUserHomeLocale() {
-        
-        if((userDefaults.stringForKey("from_country")) != nil && userDefaults.stringForKey("from_country") != ""){
-            self.userModel.setHomeLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("from_country")!))
+
+        if((userDefaults.stringForKey("to_country")) != nil && userDefaults.stringForKey("to_country") != ""){
+            
+            var filteredList = NSLocale.availableLocaleIdentifiers().filter { ($0 as String) == self.userDefaults.stringForKey("to_country") &&  self.userDefaults.stringForKey("to_country")!.contains("_")}
+            
+            
+            if(filteredList.count > 0) {
+                self.userModel.setHomeLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("to_country")!))
+            } else {
+                self.displayFailedToParseOverride()
+            }
             return
         }
         let locale:NSLocale = locationManager.getUserHomeLocale()
         self.userModel.setHomeLocale(locale)
     }
     
-    
-    
     func setToCountyText(){
-        var userLanguage = NSBundle.mainBundle().preferredLocalizations.first as String
+        var userLanguage = NSLocale.preferredLanguages().description
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
-        
         
         let locale:NSLocale = self.userModel.homeLocale!
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
@@ -327,7 +341,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func setFromCountryText() {
         
-        var userLanguage = NSBundle.mainBundle().preferredLocalizations.first as String
+        var userLanguage = NSLocale.preferredLanguages().description
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
         
@@ -358,7 +372,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return input.stringByReplacingOccurrencesOfString(",", withString: ".", options: NSStringCompareOptions.LiteralSearch, range: nil) as NSString
     }
     
-    
     func isValid(input:String) -> Bool{
         return true
     }
@@ -379,7 +392,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    
+    func displayFailedToParseOverride(){
+        var alert = UIAlertController(title: "Error", message: "Error in format of override locale. Should be on format: ab_CD", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
     
     func convertionRateHasChanged(){
         println(self.userModel.convertionRate)
@@ -408,8 +425,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func toAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber = self.normalizeText(bottomTextField.text)
-        
-        println(theTextField.text)
         
         if self.isValid(normalizedNumber) {
             println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
@@ -460,4 +475,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     
+}
+
+extension String {
+    
+    func contains(find: String) -> Bool{
+        return self.rangeOfString(find) != nil
+    }
 }
