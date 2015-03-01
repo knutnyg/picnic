@@ -414,6 +414,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         textField.setTranslatesAutoresizingMaskIntoConstraints(false)
         textField.borderStyle = UITextBorderStyle.RoundedRect
         textField.placeholder = "USD"
+        textField.textAlignment = NSTextAlignment.Center
         textField.keyboardType = UIKeyboardType.DecimalPad
         textField.returnKeyType = UIReturnKeyType.Done
 
