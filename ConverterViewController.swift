@@ -249,14 +249,20 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let request = NSURLRequest(URL: url!)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
-            println(response)
-            
+            var castedResponse = response as NSHTTPURLResponse
             if error != nil {
                 promise.failure(error!)
             } else {
-                promise.success(1.0)
-                //                var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
-                //                var conversionRate : Double = boardsDictionary.objectForKey("rate") as Double;
+                var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+
+                if(castedResponse.statusCode == 200){
+                    var conversionRate : Double = boardsDictionary.objectForKey("rate") as Double;
+                    promise.success(conversionRate)
+                } else {
+                    promise.failure(error!)
+                }
+                
+                
                 
             }
         }
@@ -347,6 +353,18 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         topTextField.text = "0082384928"
     }
     
+    func displayFailedToResolveCurrencyError(){
+        var alert = UIAlertController(title: "Error", message: "Unable to access current convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func displayFailedToCurrentLocation(){
+        var alert = UIAlertController(title: "Error", message: "Unable to verify your location. Please make sure that the app is allowed to use GPS under general settings, and that your GPS works.", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     
     
     func convertionRateHasChanged(){
@@ -367,7 +385,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let normalizedNumber = self.normalizeText(topTextField.text)
         
         if self.isValid(normalizedNumber) {
-            println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
             var num = (normalizedNumber.doubleValue * self.userModel.convertionRate!)
             bottomTextField.text = NSString(format: "%.2f", num)
         } else {
@@ -416,7 +433,15 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func refreshButtonPressed(notification: NSNotification){
-        self.fetchCurrency()
+        self.updateUserHomeLocale()
+        
+        locationManager.getUserCurrentLocale()
+            .onSuccess { locale in
+                self.updateUserCurrentLocale(locale)
+                self.fetchCurrency()}
+            .onFailure { error in
+                self.displayFailedToCurrentLocation()
+        }
     }
 
     

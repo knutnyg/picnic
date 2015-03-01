@@ -12,8 +12,6 @@ class ViewController: UIViewController {
         topBannerView = TopBannerViewController()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-
-
         converterView = ConverterViewController()
         
         converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)

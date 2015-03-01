@@ -146,7 +146,9 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        println("settingsPressed")
+        var alert = UIAlertController(title: "Soon TM", message: "Not implemented yet...", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     func refreshPressed(sender:UIButton!) {
