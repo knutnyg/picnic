@@ -146,7 +146,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        var alert = UIAlertController(title: "Soon TM", message: "Not implemented yet...", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert = UIAlertController(title: "Soon TM", message: "Not implemented yet, however you can override the automatic detection of locale in your settings preferences. Use the standard locale format i.e: no_NO or en_US", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
