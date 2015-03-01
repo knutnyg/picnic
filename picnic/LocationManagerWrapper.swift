@@ -41,7 +41,10 @@ class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
     }
     
     func createLocaleFromCountryCode(countryCode:NSString) -> NSLocale {
-        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: countryCode, forKey: NSLocaleCountryCode)))
+        var locale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: countryCode, forKey: NSLocaleCountryCode)))
+        println(NSBundle.mainBundle().preferredLocalizations.first as String)
+        
+        return locale
     }
     
 
