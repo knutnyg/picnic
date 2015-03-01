@@ -55,13 +55,15 @@
       "scale" : "3x"
     },
     {
-      "idiom" : "ipad",
       "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "childs_29-1.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "childs_58-1.png",
       "scale" : "2x"
     },
     {
@@ -70,8 +72,9 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "40x40",
+      "idiom" : "ipad",
+      "filename" : "childs_80-1.png",
       "scale" : "2x"
     },
     {
@@ -105,8 +108,9 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "car",
       "size" : "120x120",
+      "idiom" : "car",
+      "filename" : "childs_120-2.png",
       "scale" : "1x"
     }
   ],
