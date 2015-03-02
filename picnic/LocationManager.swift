@@ -4,7 +4,7 @@ import CoreLocation
 import BrightFutures
 
 
-class LocationManagerWrapper : NSObject, CLLocationManagerDelegate {
+class LocationManager : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
     let promise = Promise<NSLocale>()

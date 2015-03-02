@@ -23,7 +23,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     // -- App Elements -- //
     var userModel = UserModel()
-    var locationManager = LocationManagerWrapper()
+    var locationManager = LocationManager()
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
     override func viewDidLoad() {
@@ -219,28 +219,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func fetchCurrency() {
-        var homeCurrency:String = ""
-        var currentCurrency:String = ""
-        
-        if let home = self.userModel.homeLocale {
-            homeCurrency = home.objectForKey(NSLocaleCurrencyCode) as String
-        }
-        
-        if let current = self.userModel.currentLocale {
-            currentCurrency = current.objectForKey(NSLocaleCurrencyCode) as String
-        }
-        
-        if(homeCurrency != "" && currentCurrency != ""){
-            
-            self.getConvertionRate(homeCurrency, currentCurrency: currentCurrency)
+        ConvertsionRateManager().getConvertionRate(self.userModel)
                 .onSuccess { conv in
                     self.userModel.setConvertionRate(conv) }
                 .onFailure { error in
                     println("failed to get conv rate")
                     self.displayFailedToResolveCurrencyError()
                     self.userModel.setConvertionRate(1.0)}
-        }
-        
     }
     
     func getConvertionRate(homeCurrency:String, currentCurrency:String) -> Future<Double> {
