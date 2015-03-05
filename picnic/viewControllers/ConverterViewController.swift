@@ -68,6 +68,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             case 568: setupForiPhoneFive(views)
             case 667: setupForiPhoneSix(views)
             case 736: setupForiPhoneSix(views)
+            case 1024: setupForiPadTwo(views)
             default: println("default")
         }
     }
@@ -128,6 +129,30 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         )
         
         setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForiPadTwo(views: [NSObject:AnyObject]){
+        let textFieldFontSize = 30 as CGFloat
+        let swapButtonFontSize = 55 as CGFloat
+        let countryLabelFontSize = 20 as CGFloat
+        
+        
+        self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
+        self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
+        self.topCountryLabel.font = UIFont(name: "Verdana", size: countryLabelFontSize)
+        self.bottomCountryLabel.font = UIFont(name: "Verdana", size: countryLabelFontSize)
+        
+        let constraintsModel = ConverterConstraintsModel(
+            textFieldHeight: 100,
+            topTextFieldMarginTop: 140,
+            swapButtonMarginTopAndBottom: 30,
+            countryLabelDistanceFromTextField: 2,
+            distanceFromEdge: 8
+        )
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+
     }
     
     func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintsModel:ConverterConstraintsModel){

@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         case 568: setupForiPhoneFive(views)
         case 667: setupForiPhoneSix(views)
         case 736: setupForiPhoneSix(views)
+        case 1024: setupForiPadTwo(views)
         default: println("default")
         }
     }
@@ -65,6 +66,16 @@ class ViewController: UIViewController {
     
     func setupForiPhoneSix(views: [NSObject:AnyObject]){
         
+        let constraintModel = ParentConstraintsModel(
+            bannerHeight: 70,
+            keyboardHeight: 216,
+            screenHeight: Int(view.frame.height)
+        )
+        
+        setConstraintsForiPhone(views, constraintModel: constraintModel)
+    }
+    
+    func setupForiPadTwo(views: [NSObject:AnyObject]){
         let constraintModel = ParentConstraintsModel(
             bannerHeight: 70,
             keyboardHeight: 216,

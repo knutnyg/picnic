@@ -47,6 +47,8 @@ class TopBannerViewController : UIViewController {
         case 568: setupForiPhoneFive(views)
         case 667: setupForiPhoneSix(views)
         case 736: setupForiPhoneSix(views)
+        case 1024: setupForIpadTwo(views)
+
         default: println("default")
         }
     }
@@ -75,6 +77,16 @@ class TopBannerViewController : UIViewController {
     
     func setupForiPhoneSix(views: [NSObject:AnyObject]){
         
+        let constraintsModel = TopBannerConstraintsModel(
+            refreshButtonLeftMargin: 15,
+            settingsButtonRightMargin: 15,
+            buttonsMarginTop: 19,
+            nameLabelMarginTop: 19)
+        
+        setConstraintsForiPhone(views, constraintsModel: constraintsModel)
+    }
+    
+    func setupForIpadTwo(views: [NSObject:AnyObject]){
         let constraintsModel = TopBannerConstraintsModel(
             refreshButtonLeftMargin: 15,
             settingsButtonRightMargin: 15,
