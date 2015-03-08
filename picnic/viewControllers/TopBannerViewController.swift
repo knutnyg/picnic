@@ -24,6 +24,7 @@ class TopBannerViewController : UIViewController {
         
         settingButton = createfontAwesomeButton("\u{f013}")
         settingButton.addTarget(self, action: "settingsPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingButton.hidden = true
         
         refreshButton = createfontAwesomeButton("\u{f021}")
         refreshButton.addTarget(self, action: "refreshPressed:", forControlEvents: UIControlEvents.TouchUpInside)
