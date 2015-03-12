@@ -307,7 +307,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         if((userDefaults.stringForKey("from_country")) != nil && userDefaults.stringForKey("from_country") != ""){
             
-            
             var filteredList = NSLocale.availableLocaleIdentifiers().filter { ($0 as String) == self.userDefaults.stringForKey("from_country") &&  self.userDefaults.stringForKey("from_country")!.contains("_")}
 
             if(filteredList.count > 0) {
@@ -316,6 +315,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             } else {
                 self.displayFailedToParseOverride()
             }
+            return
         }
         self.userModel.setCurrentLocale(locale)
     }
