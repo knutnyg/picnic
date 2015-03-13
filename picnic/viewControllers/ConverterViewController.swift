@@ -19,7 +19,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var topTextField:UITextField!
     var bottomTextField:UITextField!
     var swapButton:UIButton!
-    
+
+    var pointLabel:UILabel!
+    var homeLabel:UILabel!
 
     // -- App Elements -- //
     var userModel = UserModel()
@@ -44,6 +46,16 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
+        pointLabel = UILabel()
+        pointLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        pointLabel.font = UIFont(name: "FontAwesome", size: 30)
+        pointLabel.text = "\u{f124}"
+        
+        homeLabel = UILabel()
+        homeLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        homeLabel.font = UIFont(name: "FontAwesome", size: 30)
+        homeLabel.text = "\u{f015}"
+        
         swapButton = createSwapButton()
         
         view.addSubview(topCountryLabel)
@@ -51,9 +63,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(swapButton)
         view.addSubview(bottomCountryLabel)
         view.addSubview(bottomTextField)
+        view.addSubview(pointLabel)
+        view.addSubview(homeLabel)
         
         let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
-            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton]
+            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "point":pointLabel, "home":homeLabel]
         
         self.setupGUIBasedOnScreenSize(views)
     }
@@ -173,17 +187,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
+        let homeConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[point]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let pointConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[home]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
         visualFormat = String(format: "H:|-%d-[topCountryLabel]",
             constraintsModel.distanceFromEdge)
         
         let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        
-        visualFormat = String(format: "H:|-%d-[topTextField]-%d-|",
-            constraintsModel.distanceFromEdge,
-            constraintsModel.distanceFromEdge)
-        
-        let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         visualFormat = String(format: "H:|-%d-[swapButton]-%d-|",
@@ -207,7 +217,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
     
-        visualFormat = String(format: "H:|-%d-[bottomTextField]-%d-|",
+        visualFormat = String(format: "H:|-%d-[point(28)]-8-[topTextField]-%d-|",
+            constraintsModel.distanceFromEdge,
+            constraintsModel.distanceFromEdge)
+        
+        let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        visualFormat = String(format: "H:|-%d-[home(28)]-8-[bottomTextField]-%d-|",
             constraintsModel.distanceFromEdge,
             constraintsModel.distanceFromEdge)
         
@@ -222,6 +239,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.view.addConstraints(bottomContryLabelLeftConst)
         self.view.addConstraints(bottomCountrylabelbottomConst)
         self.view.addConstraints(bottomTextFieldWidthConst)
+        self.view.addConstraints(pointConstraint)
+        self.view.addConstraints(homeConstraint)
 
     }
     
@@ -291,6 +310,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func swapButtonPressed(sender:UIButton!){
         
         var tempLocale:NSLocale = self.userModel.currentLocale!
+        var tempLabelText:NSString = self.homeLabel.text!
+        
+        self.homeLabel.text = self.pointLabel.text
+        self.pointLabel.text = tempLabelText
         
         self.userModel.setCurrentLocale(self.userModel.homeLocale!)
         self.userModel.setHomeLocale(tempLocale)
