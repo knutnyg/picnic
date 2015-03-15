@@ -311,11 +311,19 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton!){
         
-        self.userModel.swap()
-
         var tempLabelText:NSString = self.homeLabel.text!
         self.homeLabel.text = self.pointLabel.text
         self.pointLabel.text = tempLabelText
+        
+        homeIsAtTop = !homeIsAtTop
+        
+        setToCountyText()
+        setToCurrencyLabel()
+        setFromCountryText()
+        setFromCurrencyLabel()
+        
+        userModel.setHomeAmount(0)
+        
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
@@ -357,8 +365,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var userLanguage = NSLocale.preferredLanguages().description
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
-        
-        let locale:NSLocale = self.userModel.homeLocale!
+        var locale:NSLocale
+        if (homeIsAtTop) {
+            locale = self.userModel.currentLocale!
+        } else {
+            locale = self.userModel.homeLocale!
+        }
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
         var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         bottomCountryLabel.text = country
@@ -370,18 +382,35 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
         
-        let locale:NSLocale = self.userModel.currentLocale!
+        var locale:NSLocale
+        if (homeIsAtTop) {
+            locale = self.userModel.homeLocale!
+        } else {
+            locale = self.userModel.currentLocale!
+        }
         let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
         var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         topCountryLabel.text = country
     }
     
     func setToCurrencyLabel() {
-        bottomTextField.placeholder = self.userModel.homeLocale!.objectForKey(NSLocaleCurrencyCode) as? String
+        var locale:NSLocale!
+        if(homeIsAtTop) {
+            locale = userModel.currentLocale
+        } else {
+            locale = userModel.homeLocale
+        }
+        bottomTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
     }
     
     func setFromCurrencyLabel() {
-        topTextField.placeholder = self.userModel.currentLocale!.objectForKey(NSLocaleCurrencyCode) as? String
+        var locale:NSLocale!
+        if(homeIsAtTop) {
+            locale = userModel.homeLocale
+        } else {
+            locale = userModel.currentLocale
+        }
+        topTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -502,25 +531,33 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func homeAmountChanged() {
+        var text = NSString(format: "%.2f", userModel.homeAmount)
+        if (userModel.homeAmount == 0) {
+            text = ""
+        }
         if(homeIsAtTop) {
             if (!topTextField.isFirstResponder()) {
-                self.topTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+                self.topTextField.text = text
             }
         } else {
             if (!bottomTextField.isFirstResponder()) {
-                self.bottomTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+                self.bottomTextField.text = text
             }
         }
     }
     
     func currentAmountChanged() {
+        var text = NSString(format: "%.2f", userModel.currentAmount)
+        if (userModel.currentAmount == 0) {
+            text = ""
+        }
         if (homeIsAtTop) {
             if (!bottomTextField.isFirstResponder()) {
-                self.bottomTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+                self.bottomTextField.text = text
             }
         } else {
             if (!topTextField.isFirstResponder()) {
-                self.topTextField.text = NSString(format: "%f", userModel.currentAmount)
+                self.topTextField.text = text
             }
         }
     }

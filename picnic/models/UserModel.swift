@@ -54,20 +54,6 @@ class UserModel : NSObject {
         }
     }
     
-    func swap(){
-        var tempLocale:NSLocale = self.currentLocale!
-        
-        setCurrentLocale(homeLocale!)
-        setHomeLocale(tempLocale)
-        
-        if self.convertionRate != 0 {
-            self.setConvertionRate(1.0/self.convertionRate!)
-        }
-        
-        setHomeAmount(0.0)
-        setCurrentAmount(0.0)
-    }
-    
     func convertionRateHasChanged(){
         for observer in self.observers {
             observer.convertionRateHasChanged()
