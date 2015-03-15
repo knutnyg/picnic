@@ -8,6 +8,8 @@ class UserModel : NSObject {
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
     var convertionRate:Double?
+    var homeAmount:Double = 0.0;
+    var currentAmount:Double = 0.0;
     
     override init(){
         self.observers = []
@@ -32,6 +34,38 @@ class UserModel : NSObject {
     func setConvertionRate(convertionRate:Double){
         self.convertionRate = convertionRate
         convertionRateHasChanged()
+    }
+    
+    func setHomeAmount(amount:Double) {
+        self.homeAmount = amount;
+        self.currentAmount = amount*self.convertionRate!
+        for observer in self.observers {
+            observer.homeAmountChanged();
+            observer.currentAmountChanged();
+        }
+    }
+    
+    func setCurrentAmount(amount:Double) {
+        self.currentAmount = amount;
+        self.homeAmount = amount*(1/self.convertionRate!)
+        for observer in self.observers {
+            observer.currentAmountChanged();
+            observer.homeAmountChanged();
+        }
+    }
+    
+    func swap(){
+        var tempLocale:NSLocale = self.currentLocale!
+        
+        setCurrentLocale(homeLocale!)
+        setHomeLocale(tempLocale)
+        
+        if self.convertionRate != 0 {
+            self.setConvertionRate(1.0/self.convertionRate!)
+        }
+        
+        setHomeAmount(0.0)
+        setCurrentAmount(0.0)
     }
     
     func convertionRateHasChanged(){

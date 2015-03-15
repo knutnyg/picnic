@@ -2,5 +2,6 @@
 Pods
 *xcuserdata*
 *Podfile.lock
+.DS_Store
 
 

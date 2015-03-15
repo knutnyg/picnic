@@ -22,6 +22,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     var pointLabel:UILabel!
     var homeLabel:UILabel!
+    
+    var homeIsAtTop = false;
 
     // -- App Elements -- //
     var userModel = UserModel()
@@ -309,21 +311,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton!){
         
-        var tempLocale:NSLocale = self.userModel.currentLocale!
+        self.userModel.swap()
+
         var tempLabelText:NSString = self.homeLabel.text!
-        
         self.homeLabel.text = self.pointLabel.text
         self.pointLabel.text = tempLabelText
-        
-        self.userModel.setCurrentLocale(self.userModel.homeLocale!)
-        self.userModel.setHomeLocale(tempLocale)
-        if self.userModel.convertionRate != 0 {
-            self.userModel.setConvertionRate(1.0/self.userModel.convertionRate!)
-            
-        }
-        
-        bottomTextField.text = ""
-        topTextField.text = ""
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
@@ -447,10 +439,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func fromAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber = self.normalizeText(topTextField.text)
-        
         if self.isValid(normalizedNumber) {
-            var num = (normalizedNumber.doubleValue * self.userModel.convertionRate!)
-            bottomTextField.text = NSString(format: "%.2f", num)
+            if (homeIsAtTop) {
+                userModel.setHomeAmount(normalizedNumber.doubleValue)
+            } else {
+                userModel.setCurrentAmount(normalizedNumber.doubleValue)
+            }
         } else {
             self.displayErrorMessage()
         }
@@ -458,12 +452,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func toAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber = self.normalizeText(bottomTextField.text)
-        
         if self.isValid(normalizedNumber) {
-            println("from: \(normalizedNumber) cur: \(self.userModel.convertionRate)")
-            var num = normalizedNumber.doubleValue * (1 / self.userModel.convertionRate!)
-            
-            self.topTextField.text = NSString(format: "%.2f", num)
+            if (homeIsAtTop) {
+                userModel.setCurrentAmount(normalizedNumber.doubleValue)
+            } else {
+                userModel.setHomeAmount(normalizedNumber.doubleValue)
+            }
         } else {
             self.displayErrorMessage()
         }
@@ -506,7 +500,22 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.displayFailedToCurrentLocation()
         }
     }
-
+    
+    func homeAmountChanged() {
+        if(homeIsAtTop) {
+            self.topTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+        } else {
+            self.bottomTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+        }
+    }
+    
+    func currentAmountChanged() {
+        if (homeIsAtTop) {
+            self.bottomTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+        } else {
+            self.topTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+        }
+    }
     
 }
 

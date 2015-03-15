@@ -14,7 +14,7 @@ class ConvertsionRateManager {
                 let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as String
                 let currentCurrency = currentLocale.objectForKey(NSLocaleCurrencyCode) as String
                 
-                let urlString = "http://rate-exchange.appspot.com/currency?from=\(homeCurrency)&to=\(currentCurrency)"
+                let urlString = "http://rate-exchange.appspot.com/currency?from=\(currentCurrency)&to=\(homeCurrency)"
                 let request = NSURLRequest(URL: NSURL(string: urlString)!)
                 
                 NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
