@@ -503,17 +503,25 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func homeAmountChanged() {
         if(homeIsAtTop) {
-            self.topTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+            if (!topTextField.isFirstResponder()) {
+                self.topTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+            }
         } else {
-            self.bottomTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+            if (!bottomTextField.isFirstResponder()) {
+                self.bottomTextField.text = NSString(format: "%.2f", userModel.homeAmount)
+            }
         }
     }
     
     func currentAmountChanged() {
         if (homeIsAtTop) {
-            self.bottomTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+            if (!bottomTextField.isFirstResponder()) {
+                self.bottomTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+            }
         } else {
-            self.topTextField.text = NSString(format: "%.2f", userModel.currentAmount)
+            if (!topTextField.isFirstResponder()) {
+                self.topTextField.text = NSString(format: "%f", userModel.currentAmount)
+            }
         }
     }
     
