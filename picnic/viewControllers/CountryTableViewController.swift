@@ -48,6 +48,8 @@ class CountryTableViewController: UITableViewController {
             locale = NSLocale(localeIdentifier: homeSettingsString!)
         }
         
+        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 20, inSection: 0), atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
+        
 
 //        currentLocale = NSLocale(localeIdentifier: NSUserDefaults.standardUserDefaults().objectForKey("to_country") as NSString)
 //        homeLocale = NSLocale(localeIdentifier: "nb_NO")

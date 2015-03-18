@@ -532,6 +532,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var text = NSString(format: "%.2f", userModel.homeAmount)
         if (userModel.homeAmount == 0) {
             text = ""
+            self.topTextField.text = ""
+            self.bottomTextField.text = ""
         }
         if(homeIsAtTop) {
             if (!topTextField.isFirstResponder()) {
@@ -548,6 +550,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var text = NSString(format: "%.2f", userModel.currentAmount)
         if (userModel.currentAmount == 0) {
             text = ""
+            self.topTextField.text = ""
+            self.bottomTextField.text = ""
         }
         if (homeIsAtTop) {
             if (!bottomTextField.isFirstResponder()) {
