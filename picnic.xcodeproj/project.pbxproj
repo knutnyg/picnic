@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */; };
+		39E4C1161AB9D893001B310D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1151AB9D893001B310D /* SettingsViewController.swift */; };
 		721C000E1AA2FA6900484BAA /* childs-transparant.png in Resources */ = {isa = PBXBuildFile; fileRef = 721C00001AA2FA6900484BAA /* childs-transparant.png */; };
 		721C00101AA2FA6900484BAA /* childs.xcf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00021AA2FA6900484BAA /* childs.xcf */; };
 		721C00111AA2FA6900484BAA /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00031AA2FA6900484BAA /* fontawesome-webfont.ttf */; };
@@ -56,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryTableViewController.swift; sourceTree = "<group>"; };
+		39E4C1151AB9D893001B310D /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		721C00001AA2FA6900484BAA /* childs-transparant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "childs-transparant.png"; sourceTree = "<group>"; };
 		721C00011AA2FA6900484BAA /* childs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = childs.png; sourceTree = "<group>"; };
 		721C00021AA2FA6900484BAA /* childs.xcf */ = {isa = PBXFileReference; lastKnownFileType = file; path = childs.xcf; sourceTree = "<group>"; };
@@ -188,8 +192,8 @@
 				721C00231AA2FABE00484BAA /* models */,
 				721C001D1AA2FA7B00484BAA /* Base.lproj */,
 				721CFFF81AA2FA6000484BAA /* viewControllers */,
-				721CFFF61AA2FA4D00484BAA /* LocationManager.swift */,
 				72A9D4C71AA5246800A15E70 /* ConversionManager.swift */,
+				721CFFF61AA2FA4D00484BAA /* LocationManager.swift */,
 				721CFFC91AA2F6E400484BAA /* AppDelegate.swift */,
 				721CFFD21AA2F6E400484BAA /* LaunchScreen.xib */,
 				721CFFFF1AA2FA6900484BAA /* Resources */,
@@ -230,8 +234,10 @@
 			isa = PBXGroup;
 			children = (
 				721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */,
+				39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */,
 				721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */,
 				721CFFFB1AA2FA6000484BAA /* ViewController.swift */,
+				39E4C1151AB9D893001B310D /* SettingsViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -478,7 +484,9 @@
 				721C002B1AA2FABE00484BAA /* TopBannerConstraintsModel.swift in Sources */,
 				721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */,
 				72A9D4C81AA5246800A15E70 /* ConversionManager.swift in Sources */,
+				39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */,
 				721C00291AA2FABE00484BAA /* ConverterConstraintsModel.swift in Sources */,
+				39E4C1161AB9D893001B310D /* SettingsViewController.swift in Sources */,
 				721C002C1AA2FABE00484BAA /* UserModel.swift in Sources */,
 				721C002A1AA2FABE00484BAA /* ParentConstraintsModel.swift in Sources */,
 			);
