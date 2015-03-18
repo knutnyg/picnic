@@ -192,7 +192,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let homeConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[point]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         let pointConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[home]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        visualFormat = String(format: "H:|-%d-[topCountryLabel]",
+        visualFormat = String(format: "H:|-42-[topCountryLabel]",
             constraintsModel.distanceFromEdge)
         
         let topContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat(
@@ -206,8 +206,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         let swapButtonHorizontalAlign = NSLayoutConstraint(item: swapButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-        
-        visualFormat = String(format: "H:|-%d-[bottomCountryLabel]",
+    
+        visualFormat = String(format: "H:|-42-[bottomCountryLabel]",
             constraintsModel.distanceFromEdge)
         
         let bottomContryLabelLeftConst = NSLayoutConstraint.constraintsWithVisualFormat(
@@ -219,15 +219,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
     
-        visualFormat = String(format: "H:|-%d-[point(28)]-8-[topTextField]-%d-|",
-            constraintsModel.distanceFromEdge,
+        visualFormat = String(format: "H:|-%d-[point(28)]-8-[topTextField]-36-|",
             constraintsModel.distanceFromEdge)
         
         let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        visualFormat = String(format: "H:|-%d-[home(28)]-8-[bottomTextField]-%d-|",
-            constraintsModel.distanceFromEdge,
+        visualFormat = String(format: "H:|-%d-[home(28)]-8-[bottomTextField]-36-|",
             constraintsModel.distanceFromEdge)
         
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
