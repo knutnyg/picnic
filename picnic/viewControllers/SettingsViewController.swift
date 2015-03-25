@@ -13,12 +13,16 @@ class SettingsViewController: UIViewController {
     var topBannerView:TopBannerViewController!
     var homeCountryView:UIViewController!
     var currentCountryView:UIViewController!
+    var delegate:TopBannerViewController!=nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blueColor()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
+        
         topBannerView = TopBannerViewController()
+            .withBackButton()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         homeCountryView = CountryTableViewController(test: "from_country")
@@ -37,15 +41,15 @@ class SettingsViewController: UIViewController {
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "home":homeCountryView.view, "current":currentCountryView.view, "superView":self.view]
         
         let constraintModel = ParentConstraintsModel(
-            bannerHeight: 55,
+            bannerHeight: 70,
             keyboardHeight: 216,
             screenHeight: Int(view.frame.height)
         )
         
-        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-0-[home(%d)]-0-[current(%d)]-0-|",
+        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-0-[home(%d)]-15-[current(%d)]",
             constraintModel.bannerHeight,
-            constraintModel.converterHeight,
-            constraintModel.converterHeight)
+            200,
+            200)
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
@@ -75,6 +79,10 @@ class SettingsViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func backButtonPressed(notification: NSNotification){
+        delegate.dismissViewControllerAnimated(true, completion: nil)
     }
     
 

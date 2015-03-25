@@ -10,6 +10,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         topBannerView = TopBannerViewController()
+            .withRefreshButton()
+            .withSettingsButton()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         converterView = ConverterViewController()
