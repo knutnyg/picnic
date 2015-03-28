@@ -13,6 +13,7 @@ class CountryTableViewController: UITableViewController {
     var locale:NSLocale?
     var country:NSString?
     var countryNameList:[String]!
+    var rawCountryNameList:[String]?
     
     init(test: NSString?) {
         super.init()
@@ -39,6 +40,11 @@ class CountryTableViewController: UITableViewController {
     }
     
     func createCountryNameList() -> [String]{
+        //Returning stored value to prevent redoing static work
+        if self.rawCountryNameList != nil {
+            return self.rawCountryNameList!
+        }
+        
         let countryCodeList = NSLocale.ISOCountryCodes() as [String]
         var countryLocaleList = countryCodeList.map({countryCode in self.createLocaleFromCountryCode(countryCode)})
         var countryNames:[String] = countryLocaleList.map({
@@ -48,7 +54,9 @@ class CountryTableViewController: UITableViewController {
             }
             return ""
         })
-        return countryNames.sorted { $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedAscending }
+        var result = countryNames.sorted { $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedAscending }
+        self.rawCountryNameList = result
+        return result
     }
     
     func createLocaleFromCountryCode(countryCode:NSString)->NSLocale {
