@@ -7,13 +7,17 @@
 //
 
 import UIKit
+import Foundation
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITextFieldDelegate {
 
     var topBannerView:TopBannerViewController!
-    var homeCountryView:UIViewController!
-    var currentCountryView:UIViewController!
+    var homeCountryView:CountryTableViewController!
+    var currentCountryView:CountryTableViewController!
+    var topFilterField:UITextField!
+    var bottomFilterField:UITextField!
     var delegate:TopBannerViewController!=nil
+    var moved = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +29,12 @@ class SettingsViewController: UIViewController {
             .withBackButton()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
+        topFilterField = createTextField()
+        topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        bottomFilterField = createTextField()
+        bottomFilterField.addTarget(self, action: Selector("bottomFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        bottomFilterField.addTarget(self, action: Selector("moveForKeyboard:"), forControlEvents: UIControlEvents.EditingDidBegin)
+        
         homeCountryView = CountryTableViewController(test: "from_country")
         homeCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -35,10 +45,13 @@ class SettingsViewController: UIViewController {
         self.addChildViewController(homeCountryView)
         self.addChildViewController(currentCountryView)
         view.addSubview(topBannerView.view)
+        view.addSubview(topFilterField)
         view.addSubview(homeCountryView.view)
+        view.addSubview(bottomFilterField)
         view.addSubview(currentCountryView.view)
         
-        let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "home":homeCountryView.view, "current":currentCountryView.view, "superView":self.view]
+        let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "home":homeCountryView.view, "current":currentCountryView.view,
+            "superView":self.view, "topFilter":topFilterField, "bottomFilter":bottomFilterField]
         
         let constraintModel = ParentConstraintsModel(
             bannerHeight: 70,
@@ -46,7 +59,12 @@ class SettingsViewController: UIViewController {
             screenHeight: Int(view.frame.height)
         )
         
-        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-0-[home(%d)]-15-[current(%d)]",
+        func textFieldShouldReturn(textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            return true;
+        }
+        
+        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[topFilter]-[home(%d)]-15-[bottomFilter]-[current(%d)]",
             constraintModel.bannerHeight,
             200,
             200)
@@ -70,12 +88,49 @@ class SettingsViewController: UIViewController {
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         view.addConstraints(verticalLayout)
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[bottomFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraints(topBannerWidthConstraints)
         view.addConstraints(homeWidthConstraints)
         view.addConstraints(currentWidthConstraints)
         
     }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        self.view.endEditing(true)
+        if (moved) {
+            moveBackAfterKeyboard()
+            moved = false
+        }
+    }
+    
+    func topFilterTextEdited(theTextField:UITextField) -> Void {
+        homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+    }
+    
+    func bottomFilterTextEdited(theTextField:UITextField) -> Void {
+        currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if(moved) {
+            moveBackAfterKeyboard()
+            moved = false
+        }
+        
+        textField.resignFirstResponder()
+        return true;
+    }
 
+    
+    func moveForKeyboard(sender: NSNotification) {
+        moved = true
+        UIView.animateWithDuration(0.3, animations: {self.view.frame.origin.y -= 150})
+    }
+    func moveBackAfterKeyboard() {
+        UIView.animateWithDuration(0.3, animations: {self.view.frame.origin.y += 150})
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -85,15 +140,18 @@ class SettingsViewController: UIViewController {
         delegate.dismissViewControllerAnimated(true, completion: nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func createTextField() -> UITextField{
+        var textField = UITextField()
+        
+        textField.delegate = self
+        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        textField.borderStyle = UITextBorderStyle.RoundedRect
+        textField.placeholder = "Filter"
+        textField.autocorrectionType = UITextAutocorrectionType.No
+        textField.textAlignment = NSTextAlignment.Center
+        textField.keyboardType = UIKeyboardType.Default
+        textField.returnKeyType = UIReturnKeyType.Done
+        
+        return textField
     }
-    */
-
 }

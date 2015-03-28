@@ -294,9 +294,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 } else {
                     promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
                 }
-                
-                
-                
             }
         }
         return promisee.future
@@ -563,7 +560,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             }
         }
     }
-    
 }
 
 extension String {
