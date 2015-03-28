@@ -105,11 +105,21 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func topFilterTextEdited(theTextField:UITextField) -> Void {
-        homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+        if(theTextField.text.isEmpty){
+            homeCountryView.setCountryArray(homeCountryView.createCountryNameList())
+        } else {
+            homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+        }
+
     }
     
     func bottomFilterTextEdited(theTextField:UITextField) -> Void {
-        currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+        if(theTextField.text.isEmpty){
+            currentCountryView.setCountryArray(homeCountryView.createCountryNameList())
+        } else {
+            currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+        }
+        
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
