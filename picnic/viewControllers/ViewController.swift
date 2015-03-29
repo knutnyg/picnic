@@ -9,12 +9,17 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         
+        var userModel:UserModel = UserModel()
+        
         topBannerView = TopBannerViewController()
+            .withUserModel(userModel)
             .withRefreshButton()
             .withSettingsButton()
+        
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         converterView = ConverterViewController()
+            .withUserModel(userModel)
         
         converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -30,9 +35,6 @@ class ViewController: UIViewController {
     
     func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]){
         let screenHeight = view.frame.height
-        println(screenHeight)
-        
-        
         
         switch screenHeight {
         case 480: setupForiPhoneFour(views)

@@ -12,63 +12,52 @@ class CountryTableViewController: UITableViewController {
     
     var locale:NSLocale?
     var country:NSString?
-    var countryNameList:[String]!
-    var rawCountryNameList:[String]?
+    var localeCountryNameTupleList:[LocaleCountryNameTuple]!
+    var rawCountryNameList:[LocaleCountryNameTuple]?
     
-    init(test: NSString?) {
-        super.init()
-        self.country = test
-    }
+    var hasScrolled = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
-        self.countryNameList = createCountryNameList()
-        
-        if country == nil {
-            country = ""
-        }
-        
-        var homeSettingsString:NSString? = NSUserDefaults.standardUserDefaults().objectForKey(country!) as? NSString
-        
-        if (homeSettingsString != nil) {
-            locale = NSLocale(localeIdentifier: homeSettingsString!)
-        }
-        
-        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 20, inSection: 0), atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
+        self.localeCountryNameTupleList = createCountryNameList()
     }
     
-    func createCountryNameList() -> [String]{
+    
+    func scrollToCurrentLocaleIfSet() {
+        if let loc = self.locale {
+            var calculatedLocaleCountryName = LocaleUtils.createCountryNameFromLocale(loc)
+            
+            var counter = 0
+            for tuple in localeCountryNameTupleList {
+                if  tuple.countryName == calculatedLocaleCountryName {
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: counter, inSection: 0), atScrollPosition: UITableViewScrollPosition.Middle, animated: false)
+                }
+                counter++
+            }
+        }
+    }
+    
+    func createCountryNameList() -> [LocaleCountryNameTuple]{
+        
         //Returning stored value to prevent redoing static work
         if self.rawCountryNameList != nil {
             return self.rawCountryNameList!
         }
         
+        var localeCountryNameTupleList:[LocaleCountryNameTuple] = []
+        
         let countryCodeList = NSLocale.ISOCountryCodes() as [String]
-        var countryLocaleList = countryCodeList.map({countryCode in self.createLocaleFromCountryCode(countryCode)})
-        var countryNames:[String] = countryLocaleList.map({
-            locale in
-            if let name = self.createCountryNameFromLocale(locale) {
-                return name
-            }
-            return ""
-        })
-        var result = countryNames.sorted { $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedAscending }
+        var countryLocaleList = countryCodeList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
+        
+        for locale in countryLocaleList {
+            localeCountryNameTupleList += [LocaleCountryNameTuple(locale: locale)]
+        }
+        
+        let result = localeCountryNameTupleList.sorted { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
         self.rawCountryNameList = result
         return result
-    }
-    
-    func createLocaleFromCountryCode(countryCode:NSString)->NSLocale {
-        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCountryCode:countryCode]))
-    }
-    
-    func createCountryNameFromLocale(locale:NSLocale) -> String? {
-        let countryCode: String? = locale.objectForKey(NSLocaleCountryCode) as? String
-        if let cc = countryCode {
-            return locale.displayNameForKey(NSLocaleCountryCode, value: cc)
-        }
-        return nil
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -76,33 +65,51 @@ class CountryTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.countryNameList.count
+        return self.localeCountryNameTupleList.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.None
-        var countryName:String = countryNameList[indexPath.row]
+
+        let countryName = localeCountryNameTupleList[indexPath.row].countryName
         
         cell.textLabel?.text = countryName
         
         if let locale = self.locale {
-            if let countryName = createCountryNameFromLocale(locale){
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            if let logicalLocaleCountryName = LocaleUtils.createCountryNameFromLocale(locale){
+                if logicalLocaleCountryName == countryName {
+                    cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                }
             }
         }
         return cell
     }
-    
-    func setCountryArray(countryNameList:[String]) {
-        self.countryNameList = countryNameList
+
+    func setCountryArray(localeCountryNameTuple:[LocaleCountryNameTuple]) {
+        self.localeCountryNameTupleList = localeCountryNameTuple
         self.tableView.reloadData()
     }
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    func withLocale(locale:NSLocale?) -> CountryTableViewController{
+        self.locale = locale
+        return self
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        if(!hasScrolled) {
+          scrollToCurrentLocaleIfSet()
+            hasScrolled = true
+        }
+    }
+    
+    /* ----   Initializers   ---- */
+    
+    init(locale: NSLocale?) {
+        super.init()
+        self.locale = locale
+    }
+    
     override init(style: UITableViewStyle) {
         super.init(style: style)
     }
@@ -112,6 +119,11 @@ class CountryTableViewController: UITableViewController {
     }
     
     convenience override init() {
-        self.init(test: nil)
+        self.init(locale: nil)
     }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }

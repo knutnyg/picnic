@@ -9,6 +9,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
     let promise = Promise<NSLocale>()
     
+    
     override init() {
         super.init()
         
@@ -18,12 +19,18 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
+        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
+            {
+                (placemarks, error)->Void in
 
-            self.handleError(error)
-            self.handleLocation(placemarks)
-            
-            })
+                if error != nil {
+                    self.handleError(error)
+                } else {
+                    self.handleLocation(placemarks)
+                }
+
+            }
+        )
     }
     
     func handleLocation(placemarks: [AnyObject]) {
@@ -31,24 +38,14 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
             println("Error with the data.")
         } else {
             let pm:CLPlacemark = placemarks.first as CLPlacemark
-            let locale:NSLocale = self.createLocaleFromCountryCode(pm.ISOcountryCode)
+            let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
             promise.success(locale)
             locationManager.stopUpdatingLocation()
             println("Received country by gps: \(pm.country)")
 
         }
 
-    }
-    
-    func createLocaleFromCountryCode(countryCode:NSString) -> NSLocale {
-        let userLanguageCode = NSBundle.mainBundle().preferredLocalizations.first as String
-        println(userLanguageCode)
-        
-        var locale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: countryCode, forKey: NSLocaleCountryCode)))
-        
-        return locale
-    }
-    
+    }    
 
     func getUserCurrentLocale() -> Future<NSLocale> {
         self.locationManager.startUpdatingLocation()
@@ -58,7 +55,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     func getUserHomeLocale() -> NSLocale {
         let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as String
         
-        return self.createLocaleFromCountryCode(countryCode)
+        return LocaleUtils.createLocaleFromCountryCode(countryCode)
     }
     
     func handleError(error : NSError!) {

@@ -4,6 +4,7 @@ import UIKit
 
 class TopBannerViewController : UIViewController {
     var contraintModel:TopBannerConstraintsModel!
+    var userModel:UserModel!
 
     override func viewDidLoad() {
         
@@ -149,7 +150,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        let vc = SettingsViewController()
+        let vc = SettingsViewController(topLocale: self.userModel.homeLocale, bottomLocale: self.userModel.currentLocale)
         vc.delegate = self
         vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
 
@@ -162,6 +163,11 @@ class TopBannerViewController : UIViewController {
     
     func backPressed(sender:UIButton!) {
         NSNotificationCenter.defaultCenter().postNotificationName("backPressed", object: nil)
+    }
+    
+    func withUserModel(userModel:UserModel) -> TopBannerViewController{
+        self.userModel = userModel
+        return self
     }
 }
 

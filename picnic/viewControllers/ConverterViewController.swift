@@ -26,7 +26,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var homeIsAtTop = false;
 
     // -- App Elements -- //
-    var userModel = UserModel()
+    var userModel:UserModel!
     var locationManager = LocationManager()
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
@@ -74,6 +74,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.setupGUIBasedOnScreenSize(views)
     }
     
+    func withUserModel(userModel:UserModel) -> ConverterViewController{
+        self.userModel = userModel
+        return self
+    }
    
     
     func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]){

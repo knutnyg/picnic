@@ -19,6 +19,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var delegate:TopBannerViewController!=nil
     var moved = false
     
+    var topLocale:NSLocale?
+    var bottomLocale:NSLocale?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.blueColor()
@@ -31,14 +34,15 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         topFilterField = createTextField()
         topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        
         bottomFilterField = createTextField()
         bottomFilterField.addTarget(self, action: Selector("bottomFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         bottomFilterField.addTarget(self, action: Selector("moveForKeyboard:"), forControlEvents: UIControlEvents.EditingDidBegin)
         
-        homeCountryView = CountryTableViewController(test: "from_country")
+        homeCountryView = CountryTableViewController(locale: topLocale)
         homeCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        currentCountryView = CountryTableViewController(test: "to_country")
+        currentCountryView = CountryTableViewController(locale: bottomLocale)
         currentCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
@@ -58,11 +62,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             keyboardHeight: 216,
             screenHeight: Int(view.frame.height)
         )
-        
-        func textFieldShouldReturn(textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true;
-        }
         
         var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[topFilter]-[home(%d)]-15-[bottomFilter]-[current(%d)]",
             constraintModel.bannerHeight,
@@ -108,7 +107,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         if(theTextField.text.isEmpty){
             homeCountryView.setCountryArray(homeCountryView.createCountryNameList())
         } else {
-            homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+            homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
         }
 
     }
@@ -117,7 +116,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         if(theTextField.text.isEmpty){
             currentCountryView.setCountryArray(homeCountryView.createCountryNameList())
         } else {
-            currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.lowercaseString.contains(theTextField.text.lowercaseString)} )
+            currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
         }
         
     }
@@ -127,7 +126,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             moveBackAfterKeyboard()
             moved = false
         }
-        
         textField.resignFirstResponder()
         return true;
     }
@@ -163,5 +161,35 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         textField.returnKeyType = UIReturnKeyType.Done
         
         return textField
+    }
+    
+    func withTopLocale(locale:NSLocale?) -> SettingsViewController {
+        self.topLocale = locale
+        return self
+    }
+    
+    func withBottomLocale(locale:NSLocale?) -> SettingsViewController {
+        self.topLocale = locale
+        return self
+    }
+    
+    /* ----   Initializers   ----  */
+    
+    init(topLocale: NSLocale?, bottomLocale:NSLocale?) {
+        super.init()
+        self.topLocale = topLocale
+        self.bottomLocale = bottomLocale
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience override init() {
+        self.init(topLocale: nil, bottomLocale: nil)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
