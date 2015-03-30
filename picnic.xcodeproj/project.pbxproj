@@ -36,6 +36,7 @@
 		721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
 		721CFFFD1AA2FA6000484BAA /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */; };
 		721CFFFE1AA2FA6000484BAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFB1AA2FA6000484BAA /* ViewController.swift */; };
+		725DDD9D1AC81BC900FA6ED5 /* PanelConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725DDD9C1AC81BC900FA6ED5 /* PanelConnection.swift */; };
 		7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */; };
 		726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */; };
 		72A9D4C51AA5219C00A15E70 /* LoctionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */; };
@@ -92,6 +93,7 @@
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
 		721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
 		721CFFFB1AA2FA6000484BAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		725DDD9C1AC81BC900FA6ED5 /* PanelConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelConnection.swift; sourceTree = "<group>"; };
 		7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleUtils.swift; sourceTree = "<group>"; };
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
 		72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoctionManagerTests.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */,
 				721C00271AA2FABE00484BAA /* UserModel.swift */,
 				721C00281AA2FABE00484BAA /* UserModelObserver.swift */,
+				725DDD9C1AC81BC900FA6ED5 /* PanelConnection.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				721CFFFE1AA2FA6000484BAA /* ViewController.swift in Sources */,
 				721CFFFD1AA2FA6000484BAA /* TopBannerViewController.swift in Sources */,
 				721CFFF71AA2FA4D00484BAA /* LocationManager.swift in Sources */,
+				725DDD9D1AC81BC900FA6ED5 /* PanelConnection.swift in Sources */,
 				721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */,
 				721C002D1AA2FABE00484BAA /* UserModelObserver.swift in Sources */,
 				721C002B1AA2FABE00484BAA /* TopBannerConstraintsModel.swift in Sources */,

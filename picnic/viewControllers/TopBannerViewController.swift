@@ -150,7 +150,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        let vc = SettingsViewController(topLocale: self.userModel.homeLocale, bottomLocale: self.userModel.currentLocale)
+        let vc = SettingsViewController(topLocale: self.userModel.currentLocale, bottomLocale: self.userModel.homeLocale)
         vc.delegate = self
         vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
 

@@ -27,7 +27,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     // -- App Elements -- //
     var userModel:UserModel!
-    var locationManager = LocationManager()
+    var locationManager:LocationManager!
+
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
     override func viewDidLoad() {
@@ -36,6 +37,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
         
+        locationManager = LocationManager()
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -252,16 +254,17 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         super.viewDidAppear(animated)
         
         self.updateUserHomeLocale()
-        
+        println(LocaleUtils.createCountryNameFromLocale(self.userModel.homeLocale!))
         locationManager.getUserCurrentLocale()
             .onSuccess { locale in
-                println("got success")
+                println("got success from GPS:")
+                println(LocaleUtils.createCountryNameFromLocale(locale))
                 self.updateUserCurrentLocale(locale)
                 self.fetchCurrency()}
             .onFailure { error in
                 println("got failure getting current locale")
                 self.displayFailedToCurrentLocation()
-                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
+//                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
                 self.fetchCurrency()
         }
     }
@@ -326,36 +329,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
-        
-        if((userDefaults.stringForKey("from_country")) != nil && userDefaults.stringForKey("from_country") != ""){
-            
-            var filteredList = NSLocale.availableLocaleIdentifiers().filter { ($0 as String) == self.userDefaults.stringForKey("from_country") &&  self.userDefaults.stringForKey("from_country")!.contains("_")}
-
-            if(filteredList.count > 0) {
-                let locale = NSLocale(localeIdentifier: (filteredList.first as String))
-                self.userModel.setCurrentLocale(locale)
-            } else {
-                self.displayFailedToParseOverride()
-            }
-            return
-        }
         self.userModel.setCurrentLocale(locale)
     }
     
     func updateUserHomeLocale() {
-
-        if((userDefaults.stringForKey("to_country")) != nil && userDefaults.stringForKey("to_country") != ""){
-            
-            var filteredList = NSLocale.availableLocaleIdentifiers().filter { ($0 as String) == self.userDefaults.stringForKey("to_country") &&  self.userDefaults.stringForKey("to_country")!.contains("_")}
-            
-            
-            if(filteredList.count > 0) {
-                self.userModel.setHomeLocale(NSLocale(localeIdentifier: userDefaults.stringForKey("to_country")!))
-            } else {
-                self.displayFailedToParseOverride()
-            }
-            return
-        }
         let locale:NSLocale = locationManager.getUserHomeLocale()
         self.userModel.setHomeLocale(locale)
     }

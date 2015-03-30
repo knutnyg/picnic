@@ -20,12 +20,15 @@ class ConvertsionRateManager {
                 NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
 
                     if error != nil {
+                        println(error.userInfo)
                         promise.failure(NSError(domain: "ConvertionRateManagerAPIError", code: 503, userInfo: nil))
                     }
                     
                     if response != nil {
                         var castedResponse = response as NSHTTPURLResponse
                     
+                        println(castedResponse)
+                        
                         if(castedResponse.statusCode == 200){
                             var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
                             

@@ -16,6 +16,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var currentCountryView:CountryTableViewController!
     var topFilterField:UITextField!
     var bottomFilterField:UITextField!
+    var topOverrideToggle:UISwitch!
+    var bottomOverrideToggle:UISwitch!
     var delegate:TopBannerViewController!=nil
     var moved = false
     
@@ -35,27 +37,38 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         topFilterField = createTextField()
         topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
+        topOverrideToggle = UISwitch()
+        topOverrideToggle.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topOverrideToggle.addTarget(self, action: "topToggleChanged:", forControlEvents: .ValueChanged)
+        
+        bottomOverrideToggle = UISwitch()
+        bottomOverrideToggle.setTranslatesAutoresizingMaskIntoConstraints(false)
+        bottomOverrideToggle.addTarget(self, action: "bottomToggleChanged:", forControlEvents: .ValueChanged)
+
+        
         bottomFilterField = createTextField()
         bottomFilterField.addTarget(self, action: Selector("bottomFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         bottomFilterField.addTarget(self, action: Selector("moveForKeyboard:"), forControlEvents: UIControlEvents.EditingDidBegin)
-        
-        homeCountryView = CountryTableViewController(locale: topLocale)
-        homeCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        currentCountryView = CountryTableViewController(locale: bottomLocale)
+
+        currentCountryView = CountryTableViewController(locale: topLocale, panelConnection: PanelConnection.GPS)
         currentCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        homeCountryView = CountryTableViewController(locale: bottomLocale, panelConnection: PanelConnection.Logical)
+        homeCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
         self.addChildViewController(homeCountryView)
         self.addChildViewController(currentCountryView)
         view.addSubview(topBannerView.view)
         view.addSubview(topFilterField)
+        view.addSubview(topOverrideToggle)
         view.addSubview(homeCountryView.view)
         view.addSubview(bottomFilterField)
+        view.addSubview(bottomOverrideToggle)
         view.addSubview(currentCountryView.view)
         
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "home":homeCountryView.view, "current":currentCountryView.view,
-            "superView":self.view, "topFilter":topFilterField, "bottomFilter":bottomFilterField]
+            "superView":self.view, "topFilter":topFilterField, "bottomFilter":bottomFilterField, "topToggle":topOverrideToggle, "bottomToggle":bottomOverrideToggle]
         
         let constraintModel = ParentConstraintsModel(
             bannerHeight: 70,
@@ -63,7 +76,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             screenHeight: Int(view.frame.height)
         )
         
-        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[topFilter]-[home(%d)]-15-[bottomFilter]-[current(%d)]",
+        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[topFilter]-[current(%d)]-[bottomFilter]-[home(%d)]",
             constraintModel.bannerHeight,
             200,
             200)
@@ -86,9 +99,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         var currentWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[topBanner]-[topToggle]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[current]-[bottomToggle]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        
         view.addConstraints(verticalLayout)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[bottomFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-[topToggle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[bottomFilter]-[bottomToggle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraints(topBannerWidthConstraints)
         view.addConstraints(homeWidthConstraints)
         view.addConstraints(currentWidthConstraints)
@@ -105,18 +121,18 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     func topFilterTextEdited(theTextField:UITextField) -> Void {
         if(theTextField.text.isEmpty){
-            homeCountryView.setCountryArray(homeCountryView.createCountryNameList())
+            currentCountryView.setCountryArray(currentCountryView.createCountryNameList())
         } else {
-            homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
+            currentCountryView.setCountryArray(currentCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
         }
 
     }
     
     func bottomFilterTextEdited(theTextField:UITextField) -> Void {
         if(theTextField.text.isEmpty){
-            currentCountryView.setCountryArray(homeCountryView.createCountryNameList())
+            homeCountryView.setCountryArray(homeCountryView.createCountryNameList())
         } else {
-            currentCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
+            homeCountryView.setCountryArray(homeCountryView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
         }
         
     }
@@ -163,14 +179,21 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         return textField
     }
     
-    func withTopLocale(locale:NSLocale?) -> SettingsViewController {
-        self.topLocale = locale
-        return self
+    func topToggleChanged(sender:UISwitch!) {
+        if sender.on {
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: true)
+        } else {
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: false)
+        }
     }
     
-    func withBottomLocale(locale:NSLocale?) -> SettingsViewController {
-        self.topLocale = locale
-        return self
+    func bottomToggleChanged(sender:UISwitch!){
+        if sender.on {
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: true)
+        } else {
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: false)
+        }
+
     }
     
     /* ----   Initializers   ----  */

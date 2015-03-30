@@ -12,6 +12,7 @@ class CountryTableViewController: UITableViewController {
     
     var locale:NSLocale?
     var country:NSString?
+    var panelConnection:PanelConnection!
     var localeCountryNameTupleList:[LocaleCountryNameTuple]!
     var rawCountryNameList:[LocaleCountryNameTuple]?
     
@@ -85,15 +86,35 @@ class CountryTableViewController: UITableViewController {
         }
         return cell
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
+        
+        
+        //Clear marks
+        var cellCount = self.tableView.numberOfRowsInSection(0)
+        for i in 0...cellCount {
+            var cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0))
+            cell?.accessoryType = UITableViewCellAccessoryType.None
+        }
+        
+        //Add new mark
+        selectedCell!.accessoryType = UITableViewCellAccessoryType.Checkmark
+        
+        //Tell overservers of change
+        switch panelConnection! {
+            case .GPS:
+            NSNotificationCenter.defaultCenter().postNotificationName("overrideGPSLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
+            break
+        case .Logical:
+            NSNotificationCenter.defaultCenter().postNotificationName("overrideLogicalLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
+            break
+        }
+    }
 
     func setCountryArray(localeCountryNameTuple:[LocaleCountryNameTuple]) {
         self.localeCountryNameTupleList = localeCountryNameTuple
         self.tableView.reloadData()
-    }
-    
-    func withLocale(locale:NSLocale?) -> CountryTableViewController{
-        self.locale = locale
-        return self
     }
     
     override func viewDidLayoutSubviews() {
@@ -105,9 +126,10 @@ class CountryTableViewController: UITableViewController {
     
     /* ----   Initializers   ---- */
     
-    init(locale: NSLocale?) {
+    init(locale: NSLocale?, panelConnection:PanelConnection) {
         super.init()
         self.locale = locale
+        self.panelConnection = panelConnection
     }
     
     override init(style: UITableViewStyle) {
@@ -116,10 +138,6 @@ class CountryTableViewController: UITableViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    convenience override init() {
-        self.init(locale: nil)
     }
     
     required init(coder aDecoder: NSCoder) {

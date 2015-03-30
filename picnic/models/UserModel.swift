@@ -4,7 +4,6 @@ import Foundation
 class UserModel : NSObject {
     
     var observers:[UserModelObserver]
-    
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
     var convertionRate:Double?
