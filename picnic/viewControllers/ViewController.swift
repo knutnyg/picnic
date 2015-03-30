@@ -6,21 +6,19 @@ class ViewController: UIViewController {
     
     var topBannerView:TopBannerViewController!
     var converterView:ConverterViewController!
+    var userModel:UserModel!
     
     override func viewDidLoad() {
         
-        var userModel:UserModel = UserModel()
+        userModel = UserModel()
         
-        topBannerView = TopBannerViewController()
-            .withUserModel(userModel)
+        topBannerView = TopBannerViewController(userModel: userModel)
             .withRefreshButton()
             .withSettingsButton()
         
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        converterView = ConverterViewController()
-            .withUserModel(userModel)
-        
+        converterView = ConverterViewController(userModel: userModel)
         converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
@@ -114,9 +112,6 @@ class ViewController: UIViewController {
         view.addConstraints(converterWidthConstraints)
         
     }
-
-    
-    
 }
 
 

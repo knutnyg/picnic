@@ -19,6 +19,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var topOverrideToggle:UISwitch!
     var bottomOverrideToggle:UISwitch!
     var delegate:TopBannerViewController!=nil
+    var userModel:UserModel!
     var moved = false
     
     var topLocale:NSLocale?
@@ -40,11 +41,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         topOverrideToggle = UISwitch()
         topOverrideToggle.setTranslatesAutoresizingMaskIntoConstraints(false)
         topOverrideToggle.addTarget(self, action: "topToggleChanged:", forControlEvents: .ValueChanged)
-        
+        topOverrideToggle.setOn(self.userModel.shouldOverrideGPS, animated: false)
+
         bottomOverrideToggle = UISwitch()
         bottomOverrideToggle.setTranslatesAutoresizingMaskIntoConstraints(false)
         bottomOverrideToggle.addTarget(self, action: "bottomToggleChanged:", forControlEvents: .ValueChanged)
-
+        bottomOverrideToggle.setOn(self.userModel.shouldOverrideLogical, animated: false)
         
         bottomFilterField = createTextField()
         bottomFilterField.addTarget(self, action: Selector("bottomFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
@@ -198,10 +200,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     /* ----   Initializers   ----  */
     
-    init(topLocale: NSLocale?, bottomLocale:NSLocale?) {
+    init(topLocale: NSLocale?, bottomLocale:NSLocale?, userModel:UserModel) {
         super.init()
         self.topLocale = topLocale
         self.bottomLocale = bottomLocale
+        self.userModel = userModel
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -209,7 +212,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     convenience override init() {
-        self.init(topLocale: nil, bottomLocale: nil)
+        self.init(topLocale: nil, bottomLocale: nil, userModel:UserModel())
     }
     
     required init(coder aDecoder: NSCoder) {

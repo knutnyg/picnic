@@ -41,7 +41,6 @@
 		726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */; };
 		72A9D4C51AA5219C00A15E70 /* LoctionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */; };
 		72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */; };
-		72A9D4CA1AA524A000A15E70 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00271AA2FABE00484BAA /* UserModel.swift */; };
 		72A9D4CB1AA5255800A15E70 /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00281AA2FABE00484BAA /* UserModelObserver.swift */; };
 		72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72F307551AA3A3D00066F2A1 /* Images.xcassets */; };
 		B5073E5B2CBECF244D2DE08B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBCC4D1C4542B1A6DF6713BE /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -525,7 +524,6 @@
 				72A9D4CB1AA5255800A15E70 /* UserModelObserver.swift in Sources */,
 				72A9D4C51AA5219C00A15E70 /* LoctionManagerTests.swift in Sources */,
 				721CFFE01AA2F6E400484BAA /* picnicTests.swift in Sources */,
-				72A9D4CA1AA524A000A15E70 /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

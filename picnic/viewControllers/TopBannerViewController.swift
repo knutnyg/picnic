@@ -4,6 +4,7 @@ import UIKit
 
 class TopBannerViewController : UIViewController {
     var contraintModel:TopBannerConstraintsModel!
+    var settingsPanel:SettingsViewController?
     var userModel:UserModel!
 
     override func viewDidLoad() {
@@ -150,7 +151,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        let vc = SettingsViewController(topLocale: self.userModel.currentLocale, bottomLocale: self.userModel.homeLocale)
+        let vc = SettingsViewController(topLocale: self.userModel.currentLocale, bottomLocale: self.userModel.homeLocale, userModel:self.userModel)
         vc.delegate = self
         vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
 
@@ -165,9 +166,21 @@ class TopBannerViewController : UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName("backPressed", object: nil)
     }
     
-    func withUserModel(userModel:UserModel) -> TopBannerViewController{
+    init(userModel:UserModel) {
+        super.init()
         self.userModel = userModel
-        return self
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience override init() {
+        self.init(userModel:UserModel())
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

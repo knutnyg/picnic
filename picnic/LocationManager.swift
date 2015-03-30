@@ -8,16 +8,10 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
     var promise:Promise<NSLocale>?
+    var userModel:UserModel!
     
-    var overrideGPSLocale:NSLocale?
-    var shouldOverrideGPS = false
-    
-    var overrideLogicalLocale:NSLocale?
-    var shouldOverrideLogical = false
-    
-    override init() {
+    init(userModel:UserModel) {
         super.init()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "overrideGPSLocaleChanged:", name: "overrideGPSLocaleChanged", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "overrideLogicalLocaleChanged:", name: "overrideLogicalLocaleChanged", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "shouldOverrideGPSChanged:", name: "shouldOverrideGPSChanged", object: nil)
@@ -26,6 +20,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
+        self.userModel = userModel
     }
     
     
@@ -46,8 +41,8 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func returnOverridedGPSLocationIfSet() -> NSLocale?{
-        if self.shouldOverrideGPS {
-            if let override = self.overrideGPSLocale {
+        if userModel.shouldOverrideGPS {
+            if let override = userModel.overrideGPSLocale {
                 println("locationmanager returning overrided GPS locale")
                 println(LocaleUtils.createCountryNameFromLocale(override))
                 return override
@@ -57,8 +52,8 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func returnOverridedLogicalLocationIfSet() -> NSLocale?{
-        if self.shouldOverrideLogical {
-            if let override = self.overrideLogicalLocale {
+        if userModel.shouldOverrideLogical {
+            if let override = userModel.overrideLogicalLocale {
                 return override
             }
         }
@@ -81,6 +76,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         self.promise = Promise<NSLocale>()
 
         if let override = self.returnOverridedGPSLocationIfSet() {
+            println("overrideing GPS")
             self.promise!.success(override)
             return promise!.future
         }
@@ -111,19 +107,23 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func overrideGPSLocaleChanged(notification:NSNotification){
-        self.overrideGPSLocale = notification.object as? NSLocale
+        userModel.overrideGPSLocale = notification.object as? NSLocale
+        println("LocationManager: Got GPS override")
     }
     
     func overrideLogicalLocaleChanged(notification:NSNotification){
-        self.overrideLogicalLocale = notification.object as? NSLocale
+        userModel.overrideLogicalLocale = notification.object as? NSLocale
+        println("LocationManager: Got Logical override")
     }
     
     func shouldOverrideGPSChanged(notification:NSNotification){
-        self.shouldOverrideGPS = notification.object as Bool
+        userModel.shouldOverrideGPS = notification.object as Bool
+        println("LocationManager: Got should override GPS: \(notification.object)")
     }
     
     func shouldOverrideLogicalChanged(notification:NSNotification){
-        self.shouldOverrideLogical = notification.object as Bool
+        userModel.shouldOverrideLogical = notification.object as Bool
+        println("LocationManager: Got should override Logical: \(notification.object)")
     }
     
 }

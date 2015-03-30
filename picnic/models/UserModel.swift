@@ -10,6 +10,12 @@ class UserModel : NSObject {
     var homeAmount:Double = 0.0;
     var currentAmount:Double = 0.0;
     
+    var overrideGPSLocale:NSLocale?
+    var shouldOverrideGPS = false
+    
+    var overrideLogicalLocale:NSLocale?
+    var shouldOverrideLogical = false
+    
     override init(){
         self.observers = []
         super.init()

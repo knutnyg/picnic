@@ -37,7 +37,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
         
-        locationManager = LocationManager()
+        locationManager = LocationManager(userModel: self.userModel)
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -254,7 +254,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         super.viewDidAppear(animated)
         
         self.updateUserHomeLocale()
-        println(LocaleUtils.createCountryNameFromLocale(self.userModel.homeLocale!))
         locationManager.getUserCurrentLocale()
             .onSuccess { locale in
                 println("got success from GPS:")
@@ -262,9 +261,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.updateUserCurrentLocale(locale)
                 self.fetchCurrency()}
             .onFailure { error in
-                println("got failure getting current locale")
                 self.displayFailedToCurrentLocation()
-//                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
+                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
                 self.fetchCurrency()
         }
     }
@@ -540,6 +538,23 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.topTextField.text = text
             }
         }
+    }
+    
+    init(userModel:UserModel) {
+        super.init()
+        self.userModel = userModel
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience override init() {
+        self.init(userModel:UserModel())
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
