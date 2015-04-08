@@ -12,9 +12,10 @@ class CountryTableViewController: UITableViewController {
     
     var locale:NSLocale?
     var country:NSString?
-    var panelConnection:PanelConnection!
+    var selectorType:CountrySelectorType!
     var localeCountryNameTupleList:[LocaleCountryNameTuple]!
     var rawCountryNameList:[LocaleCountryNameTuple]?
+    var userModel:UserModel!
     
     var hasScrolled = false
     
@@ -90,7 +91,6 @@ class CountryTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
         
-        
         //Clear marks
         var cellCount = self.tableView.numberOfRowsInSection(0)
         for i in 0...cellCount {
@@ -102,12 +102,22 @@ class CountryTableViewController: UITableViewController {
         selectedCell!.accessoryType = UITableViewCellAccessoryType.Checkmark
         
         //Tell overservers of change
-        switch panelConnection! {
-            case .GPS:
-            NSNotificationCenter.defaultCenter().postNotificationName("overrideGPSLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
-            break
-        case .Logical:
+        switch selectorType! {
+            case .HOME_COUNTRY:
             NSNotificationCenter.defaultCenter().postNotificationName("overrideLogicalLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: true)
+            
+            let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
+            vc.delegate = self
+            vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+            
+            self.presentViewController(vc, animated: true, completion: nil)
+            
+            break
+        case .GPS:
+            NSNotificationCenter.defaultCenter().postNotificationName("overrideGPSLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
+            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: true)
+            NSNotificationCenter.defaultCenter().postNotificationName("setupComplete", object: nil)
             break
         }
     }
@@ -126,10 +136,11 @@ class CountryTableViewController: UITableViewController {
     
     /* ----   Initializers   ---- */
     
-    init(locale: NSLocale?, panelConnection:PanelConnection) {
+    init(locale: NSLocale?, userModel:UserModel, selectorType:CountrySelectorType) {
         super.init()
         self.locale = locale
-        self.panelConnection = panelConnection
+        self.userModel = userModel
+        self.selectorType = selectorType
     }
     
     override init(style: UITableViewStyle) {

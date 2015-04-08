@@ -12,8 +12,9 @@ class ViewController: UIViewController {
         
         userModel = UserModel()
         
-        topBannerView = TopBannerViewController(userModel: userModel)
+        topBannerView = TopBannerViewController(userModel: userModel, activeViewController:self)
             .withRefreshButton()
+            .withNameLabel("Picnic Currency")
             .withSettingsButton()
         
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)

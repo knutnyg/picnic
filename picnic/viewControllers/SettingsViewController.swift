@@ -31,7 +31,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
         
-        topBannerView = TopBannerViewController()
+        topBannerView = TopBannerViewController(userModel: userModel, activeViewController: self)
             .withBackButton()
         topBannerView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -52,15 +52,16 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         bottomFilterField.addTarget(self, action: Selector("bottomFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         bottomFilterField.addTarget(self, action: Selector("moveForKeyboard:"), forControlEvents: UIControlEvents.EditingDidBegin)
 
-        currentCountryView = CountryTableViewController(locale: topLocale, panelConnection: PanelConnection.GPS)
+        currentCountryView = CountryTableViewController(locale: topLocale, userModel: userModel, selectorType: CountrySelectorType.GPS)
         currentCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        homeCountryView = CountryTableViewController(locale: bottomLocale, panelConnection: PanelConnection.Logical)
+        homeCountryView = CountryTableViewController(locale: bottomLocale, userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         homeCountryView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addChildViewController(topBannerView)
         self.addChildViewController(homeCountryView)
         self.addChildViewController(currentCountryView)
+        
         view.addSubview(topBannerView.view)
         view.addSubview(topFilterField)
         view.addSubview(topOverrideToggle)

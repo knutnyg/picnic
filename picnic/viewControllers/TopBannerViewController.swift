@@ -6,13 +6,12 @@ class TopBannerViewController : UIViewController {
     var contraintModel:TopBannerConstraintsModel!
     var settingsPanel:SettingsViewController?
     var userModel:UserModel!
+    var activeViewController:UIViewController!
 
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor(netHex: 0x19B5FE)
         self.setConstraintModelBasedOnScreenSize()
-        
-        withNameLabel()
     }
     
     func setConstraintModelBasedOnScreenSize(){
@@ -41,9 +40,9 @@ class TopBannerViewController : UIViewController {
         }
     }
     
-    func withNameLabel() -> TopBannerViewController {
+    func withNameLabel(text:String) -> TopBannerViewController {
         
-        var nameLabel:UILabel = createNameLabel()
+        var nameLabel:UILabel = createNameLabel(text)
         self.view.addSubview(nameLabel)
 
         var visualFormat = String(format: "V:|-%d-[name]",
@@ -129,10 +128,10 @@ class TopBannerViewController : UIViewController {
     }
     
     
-    func createNameLabel() -> UILabel{
+    func createNameLabel(text:String) -> UILabel{
         var nameLabel = UILabel()
         nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        nameLabel.text = "Picnic Currency"
+        nameLabel.text = text
         nameLabel.font = UIFont(name: "verdana", size: 25)
         nameLabel.textColor = UIColor.whiteColor()
 
@@ -151,7 +150,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func settingsPressed(sender:UIButton!) {
-        let vc = SettingsViewController(topLocale: self.userModel.currentLocale, bottomLocale: self.userModel.homeLocale, userModel:self.userModel)
+        let vc = MenuViewController(userModel: userModel)
         vc.delegate = self
         vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
 
@@ -163,20 +162,17 @@ class TopBannerViewController : UIViewController {
     }
     
     func backPressed(sender:UIButton!) {
-        NSNotificationCenter.defaultCenter().postNotificationName("backPressed", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("backPressed", object: activeViewController)
     }
     
-    init(userModel:UserModel) {
+    init(userModel:UserModel, activeViewController:UIViewController) {
         super.init()
         self.userModel = userModel
+        self.activeViewController = activeViewController
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    convenience override init() {
-        self.init(userModel:UserModel())
     }
     
     required init(coder aDecoder: NSCoder) {
