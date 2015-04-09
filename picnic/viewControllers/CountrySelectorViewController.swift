@@ -178,12 +178,12 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     }
     
     func gpsButtonSetAutomaticallyPressed(sender:UIButton!){
-        NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: false)
+        userModel.shouldOverrideGPS = false
         NSNotificationCenter.defaultCenter().postNotificationName("setupComplete", object: nil)
     }
     
     func logicalButtonSetAutomaticallyPressed(sender:UIButton!){
-        NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: false)
+        userModel.shouldOverrideLogical = false
         
         let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
         vc.delegate = self

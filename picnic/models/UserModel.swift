@@ -1,7 +1,7 @@
 
 import Foundation
 
-class UserModel : NSObject {
+ class UserModel : NSObject {
     
     var observers:[UserModelObserver]
     var homeLocale:NSLocale?

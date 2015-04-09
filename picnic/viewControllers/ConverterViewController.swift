@@ -19,11 +19,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var topTextField:UITextField!
     var bottomTextField:UITextField!
     var swapButton:UIButton!
+    
+    var activity:UIActivityIndicatorView!
 
     var pointLabel:UILabel!
     var homeLabel:UILabel!
     
     var homeIsAtTop = false;
+    
 
     // -- App Elements -- //
     var userModel:UserModel!
@@ -33,6 +36,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.activity = UIActivityIndicatorView()
         
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
@@ -262,7 +267,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.fetchCurrency()}
             .onFailure { error in
                 self.displayFailedToCurrentLocation()
-                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_GB"))
+                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_US"))
                 self.fetchCurrency()
         }
     }
@@ -331,6 +336,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func updateUserHomeLocale() {
+        println("updating home locale")
         let locale:NSLocale = locationManager.getUserHomeLocale()
         self.userModel.setHomeLocale(locale)
     }
@@ -493,14 +499,20 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func refreshButtonPressed(notification: NSNotification){
+        self.activity.startAnimating()
         self.updateUserHomeLocale()
         
         locationManager.getUserCurrentLocale()
             .onSuccess { locale in
+                println("got current locale")
                 self.updateUserCurrentLocale(locale)
-                self.fetchCurrency()}
+                self.fetchCurrency()
+                self.activity.stopAnimating()
+            }
             .onFailure { error in
+                println("failed to get current locale")
                 self.displayFailedToCurrentLocation()
+                self.activity.stopAnimating()
         }
     }
     
@@ -538,6 +550,16 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.topTextField.text = text
             }
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        positionSpinnerInMiddle()
+    }
+    
+    func positionSpinnerInMiddle(){
+        var x = view.bounds.width / 2
+        var y = view.bounds.height / 2
+        activity.center = CGPoint(x: x, y: y)
     }
     
     init(userModel:UserModel) {

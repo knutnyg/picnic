@@ -98,8 +98,8 @@ class MenuViewController : UIViewController {
     }
     
     func autoSetupPressed(sender:UIButton!){
-        NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: false)
-        NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: false)
+        userModel.shouldOverrideGPS = false
+        userModel.shouldOverrideLogical = false
         self.delegate.dismissViewControllerAnimated(false, completion: nil)
     }
     

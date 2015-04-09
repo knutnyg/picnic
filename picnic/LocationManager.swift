@@ -12,10 +12,6 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     
     init(userModel:UserModel) {
         super.init()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "overrideGPSLocaleChanged:", name: "overrideGPSLocaleChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "overrideLogicalLocaleChanged:", name: "overrideLogicalLocaleChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "shouldOverrideGPSChanged:", name: "shouldOverrideGPSChanged", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "shouldOverrideLogicalChanged:", name: "shouldOverrideLogicalChanged", object: nil)
         
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -67,14 +63,15 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
             let pm:CLPlacemark = placemarks.first as CLPlacemark
             let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
             self.promise!.success(locale)
+            println("returning current location")
             locationManager.stopUpdatingLocation()
-
         }
     }    
 
     func getUserCurrentLocale() -> Future<NSLocale> {
         self.promise = Promise<NSLocale>()
 
+        println("getting current locale")
         if let override = self.returnOverridedGPSLocationIfSet() {
             println("overrideing GPS")
             self.promise!.success(override)
@@ -85,12 +82,21 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         return self.promise!.future
     }
     
+//    func startTimeoutCounter(){
+//        NSTimer(timeInterval: 3, target: self, selector: Selector("timeout"), userInfo: nil, repeats: false)
+//    }
+//    
+//    func timeout(){
+//        println("timeout!")
+//        self.promise?.failure(NSError())
+//    }
     
     func getUserHomeLocale() -> NSLocale {
         if let override = self.returnOverridedLogicalLocationIfSet() {
+            println("returning override")
             return override
         }
-        
+        println("returning real home country")
         let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as String
         return LocaleUtils.createLocaleFromCountryCode(countryCode)
     }
@@ -103,27 +109,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         self.promise!.failure(error)
+        println("Error getting current locale")
         println("Error: " + error.localizedDescription)
     }
-    
-    func overrideGPSLocaleChanged(notification:NSNotification){
-        userModel.overrideGPSLocale = notification.object as? NSLocale
-        println("LocationManager: Got GPS override")
-    }
-    
-    func overrideLogicalLocaleChanged(notification:NSNotification){
-        userModel.overrideLogicalLocale = notification.object as? NSLocale
-        println("LocationManager: Got Logical override")
-    }
-    
-    func shouldOverrideGPSChanged(notification:NSNotification){
-        userModel.shouldOverrideGPS = notification.object as Bool
-        println("LocationManager: Got should override GPS: \(notification.object)")
-    }
-    
-    func shouldOverrideLogicalChanged(notification:NSNotification){
-        userModel.shouldOverrideLogical = notification.object as Bool
-        println("LocationManager: Got should override Logical: \(notification.object)")
-    }
-    
 }

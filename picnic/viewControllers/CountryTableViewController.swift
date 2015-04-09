@@ -104,8 +104,8 @@ class CountryTableViewController: UITableViewController {
         //Tell overservers of change
         switch selectorType! {
             case .HOME_COUNTRY:
-            NSNotificationCenter.defaultCenter().postNotificationName("overrideLogicalLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
-            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideLogicalChanged", object: true)
+                userModel.overrideLogicalLocale = localeCountryNameTupleList[indexPath.row].locale
+                userModel.shouldOverrideLogical = true
             
             let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
             vc.delegate = self
@@ -115,8 +115,8 @@ class CountryTableViewController: UITableViewController {
             
             break
         case .GPS:
-            NSNotificationCenter.defaultCenter().postNotificationName("overrideGPSLocaleChanged", object: localeCountryNameTupleList[indexPath.row].locale)
-            NSNotificationCenter.defaultCenter().postNotificationName("shouldOverrideGPSChanged", object: true)
+            userModel.overrideGPSLocale = localeCountryNameTupleList[indexPath.row].locale
+            userModel.shouldOverrideGPS = true
             NSNotificationCenter.defaultCenter().postNotificationName("setupComplete", object: nil)
             break
         }
