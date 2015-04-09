@@ -25,22 +25,22 @@ import Foundation
         observers.append(observer)
     }
     
-    func setHomeLocale(locale:NSLocale){
+    func updateHomeLocale(locale:NSLocale){
         self.homeLocale = locale
         homeLocaleHasChanged()
     }
     
-    func setCurrentLocale(locale:NSLocale){
+    func updateCurrentLocale(locale:NSLocale){
         self.currentLocale = locale
         currentLocaleHasChanged()
     }
     
-    func setConvertionRate(convertionRate:Double){
+    func updateConvertionRate(convertionRate:Double){
         self.convertionRate = convertionRate
         convertionRateHasChanged()
     }
     
-    func setHomeAmount(amount:Double) {
+    func updateHomeAmount(amount:Double) {
         self.homeAmount = amount;
         self.currentAmount = amount*self.convertionRate!
         for observer in self.observers {
@@ -49,7 +49,7 @@ import Foundation
         }
     }
     
-    func setCurrentAmount(amount:Double) {
+    func updateCurrentAmount(amount:Double) {
         self.currentAmount = amount;
         self.homeAmount = amount*(1/self.convertionRate!)
         for observer in self.observers {

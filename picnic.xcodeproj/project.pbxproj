@@ -100,7 +100,7 @@
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
 		72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoctionManagerTests.swift; sourceTree = "<group>"; };
 		72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateManager.swift; sourceTree = "<group>"; };
-		72C915EC1AD57C6000DC8F1B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		72C915EC1AD57C6000DC8F1B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		72C915EE1AD580F100DC8F1B /* picnic-Bridgeing-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "picnic-Bridgeing-Header.h"; sourceTree = "<group>"; };
 		72F307551AA3A3D00066F2A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72FEF4371AD461560057F388 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };

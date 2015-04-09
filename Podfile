@@ -1,6 +1,5 @@
 
-pod 'BrightFutures', :git => "https://github.com/Thomvis/BrightFutures.git"
-link_with 'picnic', 'picnicTests'
+pod 'BrightFutures', :git => 'https://github.com/Thomvis/BrightFutures.git', :tag => '1.0.0-beta.5'
 use_frameworks!
 
 pod 'BButton'

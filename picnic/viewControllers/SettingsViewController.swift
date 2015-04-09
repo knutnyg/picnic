@@ -114,7 +114,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
         if (moved) {
             moveBackAfterKeyboard()
@@ -202,7 +202,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     /* ----   Initializers   ----  */
     
     init(topLocale: NSLocale?, bottomLocale:NSLocale?, userModel:UserModel) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.topLocale = topLocale
         self.bottomLocale = bottomLocale
         self.userModel = userModel
@@ -210,10 +210,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    convenience override init() {
-        self.init(topLocale: nil, bottomLocale: nil, userModel:UserModel())
     }
     
     required init(coder aDecoder: NSCoder) {

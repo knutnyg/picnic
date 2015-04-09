@@ -19,14 +19,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var topTextField:UITextField!
     var bottomTextField:UITextField!
     var swapButton:UIButton!
-    
-    var activity:UIActivityIndicatorView!
 
-    var pointLabel:UILabel!
-    var homeLabel:UILabel!
+    var topLabel:UILabel!
+    var bottomLabel:UILabel!
     
     var homeIsAtTop = false;
-    
 
     // -- App Elements -- //
     var userModel:UserModel!
@@ -37,8 +34,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.activity = UIActivityIndicatorView()
-        
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
         
@@ -47,23 +42,23 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         topTextField = createTextField()
-        topTextField.addTarget(self, action: Selector("fromAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        topTextField.addTarget(self, action: Selector("topAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         bottomCountryLabel = UILabel()
         bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
 
         bottomTextField = createTextField()
-        bottomTextField.addTarget(self, action: Selector("toAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
-        pointLabel = UILabel()
-        pointLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        pointLabel.font = UIFont(name: "FontAwesome", size: 30)
-        pointLabel.text = "\u{f124}"
+        topLabel = UILabel()
+        topLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topLabel.font = UIFont(name: "FontAwesome", size: 30)
+        topLabel.text = "\u{f124}"
         
-        homeLabel = UILabel()
-        homeLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        homeLabel.font = UIFont(name: "FontAwesome", size: 30)
-        homeLabel.text = "\u{f015}"
+        bottomLabel = UILabel()
+        bottomLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        bottomLabel.font = UIFont(name: "FontAwesome", size: 30)
+        bottomLabel.text = "\u{f015}"
         
         swapButton = createSwapButton()
         
@@ -72,11 +67,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(swapButton)
         view.addSubview(bottomCountryLabel)
         view.addSubview(bottomTextField)
-        view.addSubview(pointLabel)
-        view.addSubview(homeLabel)
+        view.addSubview(topLabel)
+        view.addSubview(bottomLabel)
         
         let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
-            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "point":pointLabel, "home":homeLabel]
+            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":topLabel, "bottomIcon":bottomLabel]
         
         self.setupGUIBasedOnScreenSize(views)
     }
@@ -200,8 +195,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        let homeConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[point]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let pointConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[home]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let homeConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[topIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let pointConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[bottomIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         visualFormat = String(format: "H:|-42-[topCountryLabel]",
             constraintsModel.distanceFromEdge)
@@ -230,13 +225,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
     
-        visualFormat = String(format: "H:|-%d-[point(28)]-8-[topTextField]-36-|",
+        visualFormat = String(format: "H:|-%d-[topIcon(28)]-8-[topTextField]-36-|",
             constraintsModel.distanceFromEdge)
         
         let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        visualFormat = String(format: "H:|-%d-[home(28)]-8-[bottomTextField]-36-|",
+        visualFormat = String(format: "H:|-%d-[bottomIcon(28)]-8-[bottomTextField]-36-|",
             constraintsModel.distanceFromEdge)
         
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
@@ -257,8 +252,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
         self.updateUserHomeLocale()
+        
         locationManager.getUserCurrentLocale()
             .onSuccess { locale in
                 println("got success from GPS:")
@@ -275,11 +270,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func fetchCurrency() {
         ConvertsionRateManager().getConvertionRate(self.userModel)
                 .onSuccess { conv in
-                    self.userModel.setConvertionRate(conv) }
+                    self.userModel.updateConvertionRate(conv) }
                 .onFailure { error in
                     println("failed to get conv rate")
                     self.displayFailedToResolveCurrencyError()
-                    self.userModel.setConvertionRate(1.0)}
+                    self.userModel.updateConvertionRate(1.0)}
     }
     
     func getConvertionRate(homeCurrency:String, currentCurrency:String) -> Future<Double> {
@@ -292,14 +287,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             println(response)
-            var castedResponse = response as NSHTTPURLResponse
+            var castedResponse = response as! NSHTTPURLResponse
             if error != nil {
                 promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
             } else {
                 if(castedResponse.statusCode == 200){
-                    var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                    var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
 
-                    var conversionRate : Double = boardsDictionary.objectForKey("rate") as Double;
+                    var conversionRate : Double = boardsDictionary.objectForKey("rate") as! Double;
                     promisee.success(conversionRate)
                 } else {
                     promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
@@ -316,81 +311,89 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton!){
         
-        var tempLabelText:NSString = self.homeLabel.text!
-        self.homeLabel.text = self.pointLabel.text
-        self.pointLabel.text = tempLabelText
+        var tempText = self.bottomLabel.text
+        self.bottomLabel.text = self.topLabel.text
+        self.topLabel.text = tempText
         
         homeIsAtTop = !homeIsAtTop
-        
-        setToCountyText()
-        setToCurrencyLabel()
-        setFromCountryText()
-        setFromCurrencyLabel()
-        
-        userModel.setHomeAmount(0)
+        redraw()
+        userModel.updateHomeAmount(0)
         
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
-        self.userModel.setCurrentLocale(locale)
+        self.userModel.updateCurrentLocale(locale)
     }
     
     func updateUserHomeLocale() {
         println("updating home locale")
         let locale:NSLocale = locationManager.getUserHomeLocale()
-        self.userModel.setHomeLocale(locale)
+        self.userModel.updateHomeLocale(locale)
     }
     
-    func setToCountyText(){
+    func setBottomCountryText(){
         var userLanguage = NSLocale.preferredLanguages().description
         
-        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
-        var locale:NSLocale
+        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
+        var locale:NSLocale?
         if (homeIsAtTop) {
-            locale = self.userModel.currentLocale!
+            locale = self.userModel.currentLocale
         } else {
-            locale = self.userModel.homeLocale!
+            locale = self.userModel.homeLocale
         }
-        let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
-        var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-        bottomCountryLabel.text = country
+        if let loc = locale {
+            let countryCode:String = loc.objectForKey(NSLocaleCountryCode) as! String
+            var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+            bottomCountryLabel.text = country
+        }
     }
     
-    func setFromCountryText() {
+    func setTopCountryText() {
         
         var userLanguage = NSLocale.preferredLanguages().description
         
-        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode)))
+        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
         
-        var locale:NSLocale
+        var locale:NSLocale?
         if (homeIsAtTop) {
-            locale = self.userModel.homeLocale!
+            locale = self.userModel.homeLocale
         } else {
-            locale = self.userModel.currentLocale!
+            locale = self.userModel.currentLocale
         }
-        let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as String
-        var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-        topCountryLabel.text = country
+        if let loc = locale {
+            let countryCode:String = loc.objectForKey(NSLocaleCountryCode) as! String
+            var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+            topCountryLabel.text = country
+        }
     }
     
-    func setToCurrencyLabel() {
-        var locale:NSLocale!
+    func setBottomCurrencyLabel() {
+        var locale:NSLocale?
         if(homeIsAtTop) {
             locale = userModel.currentLocale
         } else {
             locale = userModel.homeLocale
         }
-        bottomTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
+        if let loc = locale {
+            bottomTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
+        }
+
     }
     
-    func setFromCurrencyLabel() {
-        var locale:NSLocale!
+    
+    
+    func setTopCurrencyLabel() {
+        var locale:NSLocale?
         if(homeIsAtTop) {
             locale = userModel.homeLocale
         } else {
             locale = userModel.currentLocale
         }
-        topTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
+        
+        if let loc = locale {
+            topTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
+        }
+
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -398,7 +401,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return true;
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
     }
     
@@ -406,7 +409,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return input.stringByReplacingOccurrencesOfString(",", withString: ".", options: NSStringCompareOptions.LiteralSearch, range: nil) as NSString
     }
     
-    func isValid(input:String) -> Bool{
+    func isValid(input:NSString) -> Bool{
         return true
     }
     
@@ -436,36 +439,41 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         println(self.userModel.convertionRate)
     }
     
+    func redraw(){
+        setTopCountryText()
+        setTopCurrencyLabel()
+        setBottomCountryText()
+        setBottomCurrencyLabel()
+    }
+    
     func homeLocaleHasChanged() {
-        setToCountyText()
-        setToCurrencyLabel()
+        redraw()
     }
     
     func currentLocaleHasChanged() {
-        setFromCountryText()
-        setFromCurrencyLabel()
+        redraw()
     }
     
-    func fromAmountEdited(theTextField:UITextField) -> Void {
-        let normalizedNumber = self.normalizeText(topTextField.text)
-        if self.isValid(normalizedNumber) {
+    func topAmountEdited(theTextField:UITextField) -> Void {
+        let normalizedNumber:NSString = self.normalizeText(topTextField.text)
+        if self.isValid(normalizedNumber as String) {
             if (homeIsAtTop) {
-                userModel.setHomeAmount(normalizedNumber.doubleValue)
+                userModel.updateHomeAmount(normalizedNumber.doubleValue)
             } else {
-                userModel.setCurrentAmount(normalizedNumber.doubleValue)
+                userModel.updateCurrentAmount(normalizedNumber.doubleValue)
             }
         } else {
             self.displayErrorMessage()
         }
     }
     
-    func toAmountEdited(theTextField:UITextField) -> Void {
-        let normalizedNumber = self.normalizeText(bottomTextField.text)
-        if self.isValid(normalizedNumber) {
+    func bottomAmountEdited(theTextField:UITextField) -> Void {
+        let normalizedNumber:NSString = self.normalizeText(bottomTextField.text)
+        if self.isValid(normalizedNumber as String) {
             if (homeIsAtTop) {
-                userModel.setCurrentAmount(normalizedNumber.doubleValue)
+                userModel.updateCurrentAmount(normalizedNumber.doubleValue)
             } else {
-                userModel.setHomeAmount(normalizedNumber.doubleValue)
+                userModel.updateHomeAmount(normalizedNumber.doubleValue)
             }
         } else {
             self.displayErrorMessage()
@@ -499,7 +507,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func refreshButtonPressed(notification: NSNotification){
-        self.activity.startAnimating()
         self.updateUserHomeLocale()
         
         locationManager.getUserCurrentLocale()
@@ -507,17 +514,18 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 println("got current locale")
                 self.updateUserCurrentLocale(locale)
                 self.fetchCurrency()
-                self.activity.stopAnimating()
+                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
             }
             .onFailure { error in
                 println("failed to get current locale")
+                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
                 self.displayFailedToCurrentLocation()
-                self.activity.stopAnimating()
+
         }
     }
     
     func homeAmountChanged() {
-        var text = NSString(format: "%.2f", userModel.homeAmount)
+        var text = String(format: "%.2f", userModel.homeAmount)
         if (userModel.homeAmount == 0) {
             text = ""
             self.topTextField.text = ""
@@ -535,7 +543,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func currentAmountChanged() {
-        var text = NSString(format: "%.2f", userModel.currentAmount)
+        var text = String(format: "%.2f", userModel.currentAmount)
         if (userModel.currentAmount == 0) {
             text = ""
             self.topTextField.text = ""
@@ -552,27 +560,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        positionSpinnerInMiddle()
-    }
-    
-    func positionSpinnerInMiddle(){
-        var x = view.bounds.width / 2
-        var y = view.bounds.height / 2
-        activity.center = CGPoint(x: x, y: y)
-    }
-    
     init(userModel:UserModel) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.userModel = userModel
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    convenience override init() {
-        self.init(userModel:UserModel())
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -584,5 +578,19 @@ extension String {
     
     func contains(find: String) -> Bool{
         return self.rangeOfString(find) != nil
+    }
+}
+
+extension UIView {
+    func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(M_PI * 2.0)
+        rotateAnimation.duration = duration
+        
+        if let delegate: AnyObject = completionDelegate {
+            rotateAnimation.delegate = delegate
+        }
+        self.layer.addAnimation(rotateAnimation, forKey: nil)
     }
 }

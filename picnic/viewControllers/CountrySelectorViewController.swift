@@ -55,9 +55,8 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
             screenHeight: Int(view.frame.height)
         )
         
-        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[instruction]-[detected]-[topFilter]-[countryTable(%d)]",
-            constraintModel.bannerHeight,
-            400)
+        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[instruction]-[detected]-[topFilter]-[countryTable]-0-|",
+            constraintModel.bannerHeight)
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
@@ -95,20 +94,20 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         var label = UILabel()
         label.setTranslatesAutoresizingMaskIntoConstraints(false)
         label.textAlignment = NSTextAlignment.Center
-        label.numberOfLines = 2
+        label.numberOfLines = 4
         
         switch selectorType! {
         case .HOME_COUNTRY:
-            label.text = "Please set your prefered home country\n or use the one detected"
+            label.text = "Please set your prefered home country or use the one detected"
             break
         case .GPS:
-            label.text = "Please set your prefered current country\n or use the one detected"
+            label.text = "Please set your prefered current country or use the one detected"
         }
         return label
 
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
     }
     
@@ -128,7 +127,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     func backButtonPressed(notification: NSNotification) {
         if notification.object is CountrySelectorViewController {
-            if notification.object as CountrySelectorViewController == self {
+            if notification.object as! CountrySelectorViewController == self {
                 delegate.dismissViewControllerAnimated(true, completion: nil)
             }
             
@@ -201,7 +200,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     /* ----   Initializers   ----  */
     
     init(userModel:UserModel, selectorType:CountrySelectorType) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.userModel = userModel
         self.selectorType = selectorType
     }

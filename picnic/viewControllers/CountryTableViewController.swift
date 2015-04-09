@@ -50,7 +50,7 @@ class CountryTableViewController: UITableViewController {
         
         var localeCountryNameTupleList:[LocaleCountryNameTuple] = []
         
-        let countryCodeList = NSLocale.ISOCountryCodes() as [String]
+        let countryCodeList = NSLocale.ISOCountryCodes() as! [String]
         var countryLocaleList = countryCodeList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
         
         for locale in countryLocaleList {
@@ -71,7 +71,7 @@ class CountryTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.None
 
         let countryName = localeCountryNameTupleList[indexPath.row].countryName
@@ -137,7 +137,7 @@ class CountryTableViewController: UITableViewController {
     /* ----   Initializers   ---- */
     
     init(locale: NSLocale?, userModel:UserModel, selectorType:CountrySelectorType) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.locale = locale
         self.userModel = userModel
         self.selectorType = selectorType

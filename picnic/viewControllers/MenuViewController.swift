@@ -70,7 +70,7 @@ class MenuViewController : UIViewController {
     
     func backButtonPressed(notification: NSNotification) {
         if notification.object is MenuViewController {
-            if notification.object as MenuViewController == self {
+            if notification.object as! MenuViewController == self {
                 delegate.dismissViewControllerAnimated(true, completion: nil)
             }
         }
@@ -130,16 +130,12 @@ class MenuViewController : UIViewController {
     /* ----   Initializers   ----  */
     
     init(userModel:UserModel) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.userModel = userModel
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    convenience override init() {
-        self.init(userModel:UserModel())
     }
     
     required init(coder aDecoder: NSCoder) {

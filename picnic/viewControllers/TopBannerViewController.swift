@@ -6,9 +6,15 @@ class TopBannerViewController : UIViewController {
     var contraintModel:TopBannerConstraintsModel!
     var settingsPanel:SettingsViewController?
     var userModel:UserModel!
+    var refreshButton:UIButton!
+    var settingsButton:UIButton!
+    var backButton:UIButton!
     var activeViewController:UIViewController!
+    var shouldRefreshIconSpin = false
 
     override func viewDidLoad() {
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshDone:", name: "refreshDone", object: nil)
         
         self.view.backgroundColor = UIColor(netHex: 0x19B5FE)
         self.setConstraintModelBasedOnScreenSize()
@@ -58,7 +64,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func withRefreshButton() -> TopBannerViewController{
-        var refreshButton:UIButton = createfontAwesomeButton("\u{f021}")
+        refreshButton = createfontAwesomeButton("\u{f021}")
         refreshButton.addTarget(self, action: "refreshPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(refreshButton)
         
@@ -81,7 +87,7 @@ class TopBannerViewController : UIViewController {
     }
     
     func withBackButton() -> TopBannerViewController{
-        var backButton:UIButton = createfontAwesomeButton("\u{f060}")
+        backButton = createfontAwesomeButton("\u{f060}")
         backButton.addTarget(self, action: "backPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         
@@ -105,21 +111,21 @@ class TopBannerViewController : UIViewController {
     
     
     func withSettingsButton() -> TopBannerViewController{
-        var settingButton:UIButton = createfontAwesomeButton("\u{f013}")
-        settingButton.addTarget(self, action: "settingsPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(settingButton)
+        settingsButton = createfontAwesomeButton("\u{f013}")
+        settingsButton.addTarget(self, action: "settingsPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(settingsButton)
         
         var visualFormat = String(format: "H:[settings]-%d-|",
             contraintModel.settingsButtonRightMargin)
         
         let settingsRightMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingButton])
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton])
         
         visualFormat = String(format: "V:|-%d-[settings]",
             contraintModel.buttonsMarginTop)
         
         let settingsButtonTopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingButton])
+            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton])
         
         self.view.addConstraints(settingsRightMarginConstraint)
         self.view.addConstraints(settingsButtonTopMargin)
@@ -159,14 +165,31 @@ class TopBannerViewController : UIViewController {
     
     func refreshPressed(sender:UIButton!) {
         NSNotificationCenter.defaultCenter().postNotificationName("refreshPressed", object: nil)
+        makeRefreshIconSpin()
     }
     
     func backPressed(sender:UIButton!) {
         NSNotificationCenter.defaultCenter().postNotificationName("backPressed", object: activeViewController)
     }
     
+    func makeRefreshIconSpin(){
+        shouldRefreshIconSpin = true
+        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        
+    }
+    
+    func refreshDone(notification: NSNotification){
+        shouldRefreshIconSpin = false
+    }
+    
+    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+        if shouldRefreshIconSpin {
+            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        }
+    }
+    
     init(userModel:UserModel, activeViewController:UIViewController) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.userModel = userModel
         self.activeViewController = activeViewController
     }

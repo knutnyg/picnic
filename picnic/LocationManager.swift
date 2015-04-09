@@ -60,8 +60,9 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         if placemarks.isEmpty {
             println("Error with the data.")
         } else {
-            let pm:CLPlacemark = placemarks.first as CLPlacemark
+            let pm:CLPlacemark = placemarks.first as! CLPlacemark
             let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
+            
             self.promise!.success(locale)
             println("returning current location")
             locationManager.stopUpdatingLocation()
@@ -82,22 +83,13 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         return self.promise!.future
     }
     
-//    func startTimeoutCounter(){
-//        NSTimer(timeInterval: 3, target: self, selector: Selector("timeout"), userInfo: nil, repeats: false)
-//    }
-//    
-//    func timeout(){
-//        println("timeout!")
-//        self.promise?.failure(NSError())
-//    }
-    
     func getUserHomeLocale() -> NSLocale {
         if let override = self.returnOverridedLogicalLocationIfSet() {
             println("returning override")
             return override
         }
         println("returning real home country")
-        let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as String
+        let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
         return LocaleUtils.createLocaleFromCountryCode(countryCode)
     }
     
