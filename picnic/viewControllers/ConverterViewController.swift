@@ -195,8 +195,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        let homeConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[topIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        let pointConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[bottomIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+//        let topConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[topIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+//        let bottomConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[bottomIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        view.addConstraint(NSLayoutConstraint(item: topLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: topTextField, attribute: .CenterY, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bottomLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: bottomTextField, attribute: .CenterY, multiplier: 1, constant: 0))
+        
         
         visualFormat = String(format: "H:|-42-[topCountryLabel]",
             constraintsModel.distanceFromEdge)
@@ -245,8 +249,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.view.addConstraints(bottomContryLabelLeftConst)
         self.view.addConstraints(bottomCountrylabelbottomConst)
         self.view.addConstraints(bottomTextFieldWidthConst)
-        self.view.addConstraints(pointConstraint)
-        self.view.addConstraints(homeConstraint)
+//        self.view.addConstraints(pointConstraint)
+//        self.view.addConstraints(homeConstraint)
 
     }
     
