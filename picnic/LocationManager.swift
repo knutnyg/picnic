@@ -28,6 +28,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
 
                 if error != nil {
                     self.handleError(error)
+                    self.locationManager.stopUpdatingLocation()
                 } else {
                     self.handleLocation(placemarks)
                 }
@@ -64,7 +65,6 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
             let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
             
             self.promise!.success(locale)
-            println("returning current location")
             locationManager.stopUpdatingLocation()
         }
     }    
@@ -72,9 +72,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     func getUserCurrentLocale() -> Future<NSLocale> {
         self.promise = Promise<NSLocale>()
 
-        println("getting current locale")
         if let override = self.returnOverridedGPSLocationIfSet() {
-            println("overrideing GPS")
             self.promise!.success(override)
             return promise!.future
         }
@@ -85,10 +83,8 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     
     func getUserHomeLocale() -> NSLocale {
         if let override = self.returnOverridedLogicalLocationIfSet() {
-            println("returning override")
             return override
         }
-        println("returning real home country")
         let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
         return LocaleUtils.createLocaleFromCountryCode(countryCode)
     }
@@ -103,5 +99,6 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         self.promise!.failure(error)
         println("Error getting current locale")
         println("Error: " + error.localizedDescription)
+        locationManager.stopUpdatingLocation()
     }
 }

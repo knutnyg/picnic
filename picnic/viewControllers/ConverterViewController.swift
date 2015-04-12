@@ -101,8 +101,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let swapButtonFontSize = 40 as CGFloat
         
         let constraintsModel = ConverterConstraintsModel(
-            textFieldHeight: 46,
-            topTextFieldMarginTop: 25,
+            textFieldHeight: 43,
+            topTextFieldMarginTop: 31,
             swapButtonMarginTopAndBottom: 20,
             countryLabelDistanceFromTextField: 2,
             distanceFromEdge: 8
@@ -124,8 +124,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         
         let constraintsModel = ConverterConstraintsModel(
-            textFieldHeight: 70,
-            topTextFieldMarginTop: 23,
+            textFieldHeight: 65,
+            topTextFieldMarginTop: 33,
             swapButtonMarginTopAndBottom: 26,
             countryLabelDistanceFromTextField: 2,
             distanceFromEdge: 8
@@ -195,9 +195,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-//        let topConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topCountryLabel]-27-[topIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-//        let bottomConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[bottomCountryLabel]-27-[bottomIcon]", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        
         view.addConstraint(NSLayoutConstraint(item: topLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: topTextField, attribute: .CenterY, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: bottomLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: bottomTextField, attribute: .CenterY, multiplier: 1, constant: 0))
         
@@ -249,13 +246,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.view.addConstraints(bottomContryLabelLeftConst)
         self.view.addConstraints(bottomCountrylabelbottomConst)
         self.view.addConstraints(bottomTextFieldWidthConst)
-//        self.view.addConstraints(pointConstraint)
-//        self.view.addConstraints(homeConstraint)
-
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        refreshData()
+    }
+    
+    func refreshData(){
         self.updateUserHomeLocale()
         
         locationManager.getUserCurrentLocale()
@@ -263,12 +261,17 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 println("got success from GPS:")
                 println(LocaleUtils.createCountryNameFromLocale(locale))
                 self.updateUserCurrentLocale(locale)
-                self.fetchCurrency()}
+                self.fetchCurrency()
+                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
+            }
+            
             .onFailure { error in
                 self.displayFailedToCurrentLocation()
                 self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_US"))
                 self.fetchCurrency()
+                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
         }
+        
     }
     
     func fetchCurrency() {
@@ -383,9 +386,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
 
     }
-    
-    
-    
+
     func setTopCurrencyLabel() {
         var locale:NSLocale?
         if(homeIsAtTop) {
@@ -510,24 +511,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return swapButton
     }
     
-    func refreshButtonPressed(notification: NSNotification){
-        self.updateUserHomeLocale()
-        
-        locationManager.getUserCurrentLocale()
-            .onSuccess { locale in
-                println("got current locale")
-                self.updateUserCurrentLocale(locale)
-                self.fetchCurrency()
-                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
-            }
-            .onFailure { error in
-                println("failed to get current locale")
-                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
-                self.displayFailedToCurrentLocation()
-
-        }
-    }
-    
     func homeAmountChanged() {
         var text = String(format: "%.2f", userModel.homeAmount)
         if (userModel.homeAmount == 0) {
@@ -544,6 +527,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 self.bottomTextField.text = text
             }
         }
+    }
+    
+    func refreshButtonPressed(notification:NSNotification){
+        refreshData()
     }
     
     func currentAmountChanged() {

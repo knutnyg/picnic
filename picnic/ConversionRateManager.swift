@@ -3,46 +3,61 @@ import BrightFutures
 import Foundation
 
 
-class ConvertsionRateManager {
+class ConvertsionRateManager : NSObject, NSURLConnectionDataDelegate{
+    
+    var statusCode:Int?
+    var data:NSData?
+    
+    let HTTP_OK:Int = 200
+    let HTTP_SERVER_ERROR:Int = 503
+    var promise:Promise<Double>!
     
     func getConvertionRate(userModel:UserModel) -> Future<Double> {
         
-        let promise = Promise<Double>()
+        promise = Promise<Double>()
         
-        if let homeLocale = userModel.homeLocale {
-            if let currentLocale = userModel.currentLocale {
-                let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as! String
-                let currentCurrency = currentLocale.objectForKey(NSLocaleCurrencyCode) as! String
-                
-                let urlString = "http://rate-exchange.appspot.com/currency?from=\(homeCurrency)&to=\(currentCurrency)"
-                let request = NSURLRequest(URL: NSURL(string: urlString)!)
-                
-                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+        if let homeLocale = userModel.homeLocale,  currentLocale = userModel.currentLocale {
+            let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as! String
+            let currentCurrency = currentLocale.objectForKey(NSLocaleCurrencyCode) as! String
+            
+            let urlString = "http://picnic.logisk.org/api/exchange/\(homeCurrency)/\(currentCurrency)"
 
-                    if error != nil {
-                        println(error.userInfo)
-                        promise.failure(NSError(domain: "ConvertionRateManagerAPIError", code: 503, userInfo: nil))
-                    }
-                    
-                    if response != nil {
-                        var castedResponse = response as! NSHTTPURLResponse
-                    
-                        println(castedResponse)
-                        
-                        if(castedResponse.statusCode == 200){
-                            var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
-                            
-                            var conversionRate : Double = boardsDictionary.objectForKey("rate") as! Double;
-                            promise.success(conversionRate)
-                            
-                        } else {
-                            promise.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
-                        }
-                    }
-                }
+            let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+            request.timeoutInterval = 15
+            
+            var connection:NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
             }
 
-        }
         return promise.future
+    }
+    
+    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+        self.data = data
+    }
+    
+    func connectionDidFinishLoading(connection: NSURLConnection) {
+        var err: NSError
+        
+        if let status = self.statusCode , data = self.data {
+            if status ==  HTTP_OK {
+                var dataAsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
+                var conversionRate : Double = dataAsDictionary.objectForKey("value")!.doubleValue;
+                println(dataAsDictionary)
+                self.promise.success(conversionRate)
+            } else {
+                self.promise.failure(NSError(domain: "HTTP_STATUS_CODE", code: 503, userInfo: nil))
+            }
+        } else {
+            self.promise.failure(NSError(domain: "RESPONSE_CONTAINED_NIL", code: 0, userInfo: nil))
+        }
+    }
+    
+    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+        self.statusCode = response.valueForKey("statusCode") as? Int
+    }
+    
+    func connection(connection: NSURLConnection, didFailWithError error: NSError) {
+        println("TIMEOUT")
+        self.promise.failure(error)
     }
 }

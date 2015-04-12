@@ -49,14 +49,15 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "countryTable":countryTableView.view,
             "superView":self.view, "topFilter":topFilterField, "instruction":instructionLabel, "detected":useDetectedButton]
         
-        let constraintModel = ParentConstraintsModel(
-            bannerHeight: 70,
-            keyboardHeight: 216,
-            screenHeight: Int(view.frame.height)
-        )
+        var topBannerHeight = 0
+        if view.bounds.height < 500 {
+            topBannerHeight = 55
+        } else {
+            topBannerHeight = 70
+        }
         
         var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[instruction]-[detected]-[topFilter]-[countryTable]-0-|",
-            constraintModel.bannerHeight)
+            topBannerHeight)
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
