@@ -88,19 +88,18 @@ class MenuViewController : UIViewController {
     func setupButtonPressed(sender:UIButton!){
         let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         vc.delegate = self
-        vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-        
+        vc.transitioningDelegate = userModel.tm
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
     func autoSetupPressed(sender:UIButton!){
         userModel.shouldOverrideGPS = false
         userModel.shouldOverrideLogical = false
-        self.delegate.dismissViewControllerAnimated(false, completion: nil)
+        self.delegate.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func setupComplete(notification: NSNotification) {
-        self.delegate.dismissViewControllerAnimated(false, completion: nil)
+        self.delegate.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func createAutomaticInstructionLabel() -> UILabel{

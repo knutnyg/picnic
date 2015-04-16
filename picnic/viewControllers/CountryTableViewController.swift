@@ -116,8 +116,7 @@ class CountryTableViewController: UITableViewController {
             
             let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
             vc.delegate = self
-            vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-            
+            vc.transitioningDelegate = userModel.tm
             self.presentViewController(vc, animated: true, completion: nil)
             
             break

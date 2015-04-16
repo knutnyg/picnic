@@ -100,8 +100,7 @@ class TopBannerViewController : UIViewController {
     func settingsPressed(sender:UIButton!) {
         let vc = MenuViewController(userModel: userModel)
         vc.delegate = self
-        vc.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-
+        vc.transitioningDelegate = userModel.tm
         self.presentViewController(vc, animated: true, completion: nil)
     }
     

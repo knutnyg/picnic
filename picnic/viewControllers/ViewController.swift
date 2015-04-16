@@ -11,6 +11,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         userModel = UserModel()
+        userModel.tm = TransitionManager()
         
         topBannerView = TopBannerViewController(userModel: userModel, activeViewController:self)
             .withRefreshButton()
@@ -29,10 +30,20 @@ class ViewController: UIViewController {
         
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "converter":converterView.view, "superView":self.view]
         
-        setConstraints(views)
+        switch UIDevice.currentDevice().userInterfaceIdiom {
+        case .Pad:
+            setConstraintsiPhone(views)
+        case .Phone:
+            setConstraintsiPhone(views)
+        case .Unspecified:
+            setConstraintsiPhone(views)
+    
+        }
+        UIDevice.currentDevice().userInterfaceIdiom == .Pad
+        setConstraintsiPhone(views)
     }
     
-    func setConstraints(views: [NSObject:AnyObject]){
+    func setConstraintsiPhone(views: [NSObject:AnyObject]){
         var bannerHeight = Int(self.view.bounds.height*0.1)
         var keyboardHeight = 216
         var converterHeight = Int(view.bounds.height) - bannerHeight - keyboardHeight
