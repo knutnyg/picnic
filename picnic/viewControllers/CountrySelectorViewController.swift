@@ -34,8 +34,20 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         topFilterField = createTextField()
         topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
-        countryTableView = CountryTableViewController(locale: userModel.currentLocale, userModel: userModel, selectorType: selectorType)
+        countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
         countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        var lm = LocationManager(userModel: userModel)
+        switch selectorType! {
+        case .GPS:
+            lm.getUserCurrentLocale(false).onSuccess {locale in
+                self.setButtonLocaleAndStyle(locale)
+            }
+            break
+        case .HOME_COUNTRY:
+            self.setButtonLocaleAndStyle(lm.getUserHomeLocale(false))
+            break
+        }
         
         self.addChildViewController(topBannerView)
         self.addChildViewController(countryTableView)
@@ -49,12 +61,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "countryTable":countryTableView.view,
             "superView":self.view, "topFilter":topFilterField, "instruction":instructionLabel, "detected":useDetectedButton]
         
-        var topBannerHeight = 0
-        if view.bounds.height < 500 {
-            topBannerHeight = 55
-        } else {
-            topBannerHeight = 70
-        }
+        var topBannerHeight = Int(view.bounds.height * 0.1)
         
         var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[instruction]-[detected]-[topFilter]-[countryTable]-0-|",
             topBannerHeight)
@@ -76,6 +83,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     func createTopBannerViewController()->TopBannerViewController {
         switch selectorType! {
+
         case .HOME_COUNTRY:
             var vc = TopBannerViewController(userModel: userModel, activeViewController: self)
                 .withBackButton()
@@ -149,31 +157,26 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         return textField
     }
+    func setButtonLocaleAndStyle(locale:NSLocale){
+        setButtonTitleBasedOnLocale(useDetectedButton, locale: locale)
+        useDetectedButton.setType(BButtonType.Success)
+        switch selectorType! {
+        case .GPS:
+            useDetectedButton.addTarget(self, action: "gpsButtonSetAutomaticallyPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+            break
+        case .HOME_COUNTRY:
+            useDetectedButton.addTarget(self, action: "logicalButtonSetAutomaticallyPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+            break
+        }
+
+    }
     
     func createUseDetectedCountryButton() -> BButton{
         var button = BButton()
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.setType(BButtonType.Danger)
-        button.setTitle("not detected", forState: .Normal)
+        button.setTitle("no country detected", forState: .Normal)
     
-        switch selectorType! {
-        case .GPS:
-            if let loc = userModel.currentLocale {
-                button.addAwesomeIcon(FAIcon.FALocationArrow, beforeTitle: true)
-                button.setType(BButtonType.Success)
-                setButtonTitleBasedOnLocale(button, locale: loc)
-                button.addTarget(self, action: "gpsButtonSetAutomaticallyPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-            }
-            break
-        case .HOME_COUNTRY:
-            if let loc = userModel.homeLocale {
-                button.addAwesomeIcon(FAIcon.FAHome, beforeTitle: true)
-                button.setType(BButtonType.Success)
-                setButtonTitleBasedOnLocale(button, locale: loc)
-                button.addTarget(self, action: "logicalButtonSetAutomaticallyPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-            }
-            break
-        }
         return button
     }
     

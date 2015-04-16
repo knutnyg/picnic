@@ -3,47 +3,19 @@ import UIKit
 
 
 class TopBannerViewController : UIViewController {
-    var contraintModel:TopBannerConstraintsModel!
-    var settingsPanel:SettingsViewController?
     var userModel:UserModel!
     var refreshButton:UIButton!
     var settingsButton:UIButton!
     var backButton:UIButton!
     var activeViewController:UIViewController!
     var shouldRefreshIconSpin = false
+    var bannerHeight:Int!
+    var fontSize:CGFloat!
 
     override func viewDidLoad() {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshDone:", name: "refreshDone", object: nil)
-        
         self.view.backgroundColor = UIColor(netHex: 0x19B5FE)
-        self.setConstraintModelBasedOnScreenSize()
-    }
-    
-    func setConstraintModelBasedOnScreenSize(){
-        
-        let iPhoneSix = TopBannerConstraintsModel(
-            refreshButtonLeftMargin: 15,
-            settingsButtonRightMargin: 15,
-            buttonsMarginTop: 19,
-            nameLabelMarginTop: 19)
-        
-        let iPhoneFour = TopBannerConstraintsModel(
-            refreshButtonLeftMargin: 15,
-            settingsButtonRightMargin: 15,
-            buttonsMarginTop: 17,
-            nameLabelMarginTop: 17)
-        
-        let screenHeight = view.frame.height
-        
-        switch screenHeight {
-            case 480: self.contraintModel = iPhoneFour
-            case 568: self.contraintModel = iPhoneSix
-            case 667: self.contraintModel = iPhoneSix
-            case 736: self.contraintModel = iPhoneSix
-            case 1024: self.contraintModel = iPhoneSix
-            default: println("default")
-        }
     }
     
     func withNameLabel(text:String) -> TopBannerViewController {
@@ -51,14 +23,8 @@ class TopBannerViewController : UIViewController {
         var nameLabel:UILabel = createNameLabel(text)
         self.view.addSubview(nameLabel)
 
-        var visualFormat = String(format: "V:|-%d-[name]",
-            contraintModel.nameLabelMarginTop)
-        
-        let lableTop = NSLayoutConstraint.constraintsWithVisualFormat(visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["name":nameLabel])
-        let lableCenter = NSLayoutConstraint(item: nameLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-        
-        self.view.addConstraint(lableCenter)
-        self.view.addConstraints(lableTop)
+        view.addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 3))
+        view.addConstraint(NSLayoutConstraint(item: nameLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0))
         
         return self
     }
@@ -68,20 +34,12 @@ class TopBannerViewController : UIViewController {
         refreshButton.addTarget(self, action: "refreshPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(refreshButton)
         
-        var visualFormat = String(format: "H:|-%d-[refresh]",
-            contraintModel.refreshButtonLeftMargin)
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:|-0-[refresh(50)]", options: NSLayoutFormatOptions(0), metrics: nil, views: ["refresh":refreshButton]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "V:[refresh(50)]", options: NSLayoutFormatOptions(0), metrics: nil, views: ["refresh":refreshButton]))
         
-        let refreshLeftMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["refresh":refreshButton])
-        
-        visualFormat = String(format: "V:|-%d-[refresh]",
-            contraintModel.buttonsMarginTop)
-        
-        let refreshButtonTopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["refresh":refreshButton])
-        
-        self.view.addConstraints(refreshLeftMarginConstraint)
-        self.view.addConstraints(refreshButtonTopMargin)
+        view.addConstraint(NSLayoutConstraint(item: refreshButton, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 3))
         
         return self
     }
@@ -91,20 +49,12 @@ class TopBannerViewController : UIViewController {
         backButton.addTarget(self, action: "backPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         
-        var visualFormat = String(format: "H:|-%d-[back]",
-            self.contraintModel.refreshButtonLeftMargin)
-        
-        let LeftMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["back":backButton])
-        
-        visualFormat = String(format: "V:|-%d-[back]",
-            self.contraintModel.buttonsMarginTop)
-        
-        let TopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["back":backButton])
-        
-        self.view.addConstraints(LeftMarginConstraint)
-        self.view.addConstraints(TopMargin)
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:|-0-[back(50)]", options: NSLayoutFormatOptions(0), metrics: nil, views: ["back":backButton]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "V:[back(50)]", options: NSLayoutFormatOptions(0), metrics: nil, views: ["back":backButton]))
+
+        view.addConstraint(NSLayoutConstraint(item: backButton, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 3))
         
         return self
     }
@@ -115,20 +65,12 @@ class TopBannerViewController : UIViewController {
         settingsButton.addTarget(self, action: "settingsPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(settingsButton)
         
-        var visualFormat = String(format: "H:[settings]-%d-|",
-            contraintModel.settingsButtonRightMargin)
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:[settings(50)]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "V:[settings(50)]", options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton]))
         
-        let settingsRightMarginConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton])
-        
-        visualFormat = String(format: "V:|-%d-[settings]",
-            contraintModel.buttonsMarginTop)
-        
-        let settingsButtonTopMargin = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: ["settings":settingsButton])
-        
-        self.view.addConstraints(settingsRightMarginConstraint)
-        self.view.addConstraints(settingsButtonTopMargin)
+        view.addConstraint(NSLayoutConstraint(item: settingsButton, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 3))
         
         return self
     }
@@ -138,7 +80,7 @@ class TopBannerViewController : UIViewController {
         var nameLabel = UILabel()
         nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         nameLabel.text = text
-        nameLabel.font = UIFont(name: "verdana", size: 25)
+        nameLabel.font = UIFont(name: "verdana", size: fontSize)
         nameLabel.textColor = UIColor.whiteColor()
 
         return nameLabel
@@ -149,7 +91,7 @@ class TopBannerViewController : UIViewController {
         var button = UIButton()
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = UIFont(name: "FontAwesome", size: 22)
+        button.titleLabel!.font = UIFont(name: "FontAwesome", size: fontSize)
         button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
         return button
@@ -192,6 +134,8 @@ class TopBannerViewController : UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.userModel = userModel
         self.activeViewController = activeViewController
+        self.bannerHeight = Int(view.bounds.height * 0.1)
+        self.fontSize = CGFloat(Double(bannerHeight) / 2.6)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {

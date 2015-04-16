@@ -24,6 +24,13 @@ class CountryTableViewController: UITableViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
         self.localeCountryNameTupleList = createCountryNameList()
+        
+        switch selectorType! {
+        case .GPS:
+            locale = userModel.currentLocale
+        case .HOME_COUNTRY:
+            locale = userModel.homeLocale
+        }
     }
     
     
@@ -136,9 +143,8 @@ class CountryTableViewController: UITableViewController {
     
     /* ----   Initializers   ---- */
     
-    init(locale: NSLocale?, userModel:UserModel, selectorType:CountrySelectorType) {
+    init(userModel:UserModel, selectorType:CountrySelectorType) {
         super.init(nibName: nil, bundle: nil)
-        self.locale = locale
         self.userModel = userModel
         self.selectorType = selectorType
     }

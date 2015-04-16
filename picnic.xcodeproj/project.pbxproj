@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */; };
-		39E4C1161AB9D893001B310D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1151AB9D893001B310D /* SettingsViewController.swift */; };
 		721C000E1AA2FA6900484BAA /* childs-transparant.png in Resources */ = {isa = PBXBuildFile; fileRef = 721C00001AA2FA6900484BAA /* childs-transparant.png */; };
 		721C00101AA2FA6900484BAA /* childs.xcf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00021AA2FA6900484BAA /* childs.xcf */; };
 		721C00111AA2FA6900484BAA /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00031AA2FA6900484BAA /* fontawesome-webfont.ttf */; };
@@ -24,7 +23,6 @@
 		721C00201AA2FA7B00484BAA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 721C001E1AA2FA7B00484BAA /* LaunchScreen.xib */; };
 		721C00291AA2FABE00484BAA /* ConverterConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00241AA2FABE00484BAA /* ConverterConstraintsModel.swift */; };
 		721C002A1AA2FABE00484BAA /* ParentConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00251AA2FABE00484BAA /* ParentConstraintsModel.swift */; };
-		721C002B1AA2FABE00484BAA /* TopBannerConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */; };
 		721C002C1AA2FABE00484BAA /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00271AA2FABE00484BAA /* UserModel.swift */; };
 		721C002D1AA2FABE00484BAA /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00281AA2FABE00484BAA /* UserModelObserver.swift */; };
 		721C00301AA2FB2B00484BAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 721C002E1AA2FB2B00484BAA /* Main.storyboard */; };
@@ -62,7 +60,6 @@
 
 /* Begin PBXFileReference section */
 		39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryTableViewController.swift; sourceTree = "<group>"; };
-		39E4C1151AB9D893001B310D /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		721C00001AA2FA6900484BAA /* childs-transparant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "childs-transparant.png"; sourceTree = "<group>"; };
 		721C00011AA2FA6900484BAA /* childs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = childs.png; sourceTree = "<group>"; };
 		721C00021AA2FA6900484BAA /* childs.xcf */ = {isa = PBXFileReference; lastKnownFileType = file; path = childs.xcf; sourceTree = "<group>"; };
@@ -79,7 +76,6 @@
 		721C001F1AA2FA7B00484BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		721C00241AA2FABE00484BAA /* ConverterConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterConstraintsModel.swift; sourceTree = "<group>"; };
 		721C00251AA2FABE00484BAA /* ParentConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentConstraintsModel.swift; sourceTree = "<group>"; };
-		721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerConstraintsModel.swift; sourceTree = "<group>"; };
 		721C00271AA2FABE00484BAA /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		721C00281AA2FABE00484BAA /* UserModelObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModelObserver.swift; sourceTree = "<group>"; };
 		721C002F1AA2FB2B00484BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
@@ -169,7 +165,6 @@
 			children = (
 				721C00241AA2FABE00484BAA /* ConverterConstraintsModel.swift */,
 				721C00251AA2FABE00484BAA /* ParentConstraintsModel.swift */,
-				721C00261AA2FABE00484BAA /* TopBannerConstraintsModel.swift */,
 				721C00271AA2FABE00484BAA /* UserModel.swift */,
 				721C00281AA2FABE00484BAA /* UserModelObserver.swift */,
 			);
@@ -249,7 +244,6 @@
 				39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */,
 				721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */,
 				721CFFFB1AA2FA6000484BAA /* ViewController.swift */,
-				39E4C1151AB9D893001B310D /* SettingsViewController.swift */,
 				72FEF4371AD461560057F388 /* MenuViewController.swift */,
 				72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */,
 			);
@@ -516,7 +510,6 @@
 				725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */,
 				721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */,
 				721C002D1AA2FABE00484BAA /* UserModelObserver.swift in Sources */,
-				721C002B1AA2FABE00484BAA /* TopBannerConstraintsModel.swift in Sources */,
 				721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */,
 				72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */,
 				726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */,
@@ -524,7 +517,6 @@
 				72FEF4381AD461560057F388 /* MenuViewController.swift in Sources */,
 				7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */,
 				721C00291AA2FABE00484BAA /* ConverterConstraintsModel.swift in Sources */,
-				39E4C1161AB9D893001B310D /* SettingsViewController.swift in Sources */,
 				721C002C1AA2FABE00484BAA /* UserModel.swift in Sources */,
 				72FEF43A1AD461950057F388 /* CountrySelectorViewController.swift in Sources */,
 				721C002A1AA2FABE00484BAA /* ParentConstraintsModel.swift in Sources */,

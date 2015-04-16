@@ -69,21 +69,25 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         }
     }    
 
-    func getUserCurrentLocale() -> Future<NSLocale> {
+    func getUserCurrentLocale(withOverride:Bool) -> Future<NSLocale> {
         self.promise = Promise<NSLocale>()
 
-        if let override = self.returnOverridedGPSLocationIfSet() {
-            self.promise!.success(override)
-            return promise!.future
+        if withOverride {
+            if let override = self.returnOverridedGPSLocationIfSet() {
+                self.promise!.success(override)
+                return promise!.future
+            }
         }
         
         self.locationManager.startUpdatingLocation()
         return self.promise!.future
     }
     
-    func getUserHomeLocale() -> NSLocale {
-        if let override = self.returnOverridedLogicalLocationIfSet() {
-            return override
+    func getUserHomeLocale(withOverride:Bool) -> NSLocale {
+        if withOverride {
+            if let override = self.returnOverridedLogicalLocationIfSet() {
+                return override
+            }
         }
         let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
         return LocaleUtils.createLocaleFromCountryCode(countryCode)

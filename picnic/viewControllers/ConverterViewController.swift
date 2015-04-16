@@ -22,8 +22,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     var topLabel:UILabel!
     var bottomLabel:UILabel!
-    
-    var homeIsAtTop = false;
 
     // -- App Elements -- //
     var userModel:UserModel!
@@ -36,6 +34,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
         
         locationManager = LocationManager(userModel: self.userModel)
         topCountryLabel = UILabel()
@@ -256,7 +255,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func refreshData(){
         self.updateUserHomeLocale()
         
-        locationManager.getUserCurrentLocale()
+        locationManager.getUserCurrentLocale(true)
             .onSuccess { locale in
                 println("got success from GPS:")
                 println(LocaleUtils.createCountryNameFromLocale(locale))
@@ -296,7 +295,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             println(response)
             var castedResponse = response as! NSHTTPURLResponse
             if error != nil {
-                promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
+                promisee.failure(NSError(domain: "CurrencyApiError", code: 400, userInfo: nil))
             } else {
                 if(castedResponse.statusCode == 200){
                     var boardsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
@@ -304,7 +303,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                     var conversionRate : Double = boardsDictionary.objectForKey("rate") as! Double;
                     promisee.success(conversionRate)
                 } else {
-                    promisee.failure(NSError(domain: "CurrencyApiError", code: 503, userInfo: nil))
+                    promisee.failure(NSError(domain: "CurrencyApiError", code: 400, userInfo: nil))
                 }
             }
         }
@@ -317,15 +316,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func swapButtonPressed(sender:UIButton!){
-        
-        var tempText = self.bottomLabel.text
-        self.bottomLabel.text = self.topLabel.text
-        self.topLabel.text = tempText
-        
-        homeIsAtTop = !homeIsAtTop
-        redraw()
-        userModel.updateHomeAmount(0)
-        
+        self.view.endEditing(true)
+        userModel.updateCurrentAmount(nil)
+        userModel.updateHomeAmount(nil)
     }
     
     func updateUserCurrentLocale(locale:NSLocale){
@@ -333,8 +326,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func updateUserHomeLocale() {
-        println("updating home locale")
-        let locale:NSLocale = locationManager.getUserHomeLocale()
+        let locale:NSLocale = locationManager.getUserHomeLocale(true)
         self.userModel.updateHomeLocale(locale)
     }
     
@@ -342,14 +334,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var userLanguage = NSLocale.preferredLanguages().description
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
-        var locale:NSLocale?
-        if (homeIsAtTop) {
-            locale = self.userModel.currentLocale
-        } else {
-            locale = self.userModel.homeLocale
-        }
-        if let loc = locale {
-            let countryCode:String = loc.objectForKey(NSLocaleCountryCode) as! String
+        if let locale = self.userModel.homeLocale {
+            let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
             var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
             bottomCountryLabel.text = country
         }
@@ -361,41 +347,22 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
         
-        var locale:NSLocale?
-        if (homeIsAtTop) {
-            locale = self.userModel.homeLocale
-        } else {
-            locale = self.userModel.currentLocale
-        }
-        if let loc = locale {
-            let countryCode:String = loc.objectForKey(NSLocaleCountryCode) as! String
+        if let locale = userModel.currentLocale {
+            let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
             var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
             topCountryLabel.text = country
         }
     }
     
     func setBottomCurrencyLabel() {
-        var locale:NSLocale?
-        if(homeIsAtTop) {
-            locale = userModel.currentLocale
-        } else {
-            locale = userModel.homeLocale
-        }
-        if let loc = locale {
-            bottomTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
+        if let locale = userModel.homeLocale {
+            bottomTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
         }
 
     }
 
     func setTopCurrencyLabel() {
-        var locale:NSLocale?
-        if(homeIsAtTop) {
-            locale = userModel.homeLocale
-        } else {
-            locale = userModel.currentLocale
-        }
-        
-        if let loc = locale {
+        if let loc = userModel.currentLocale {
             topTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
         }
 
@@ -462,8 +429,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func topAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(topTextField.text)
         if self.isValid(normalizedNumber as String) {
-            if (homeIsAtTop) {
-                userModel.updateHomeAmount(normalizedNumber.doubleValue)
+            if normalizedNumber == "" {
+                userModel.updateCurrentAmount(nil)
             } else {
                 userModel.updateCurrentAmount(normalizedNumber.doubleValue)
             }
@@ -475,14 +442,23 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func bottomAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(bottomTextField.text)
         if self.isValid(normalizedNumber as String) {
-            if (homeIsAtTop) {
-                userModel.updateCurrentAmount(normalizedNumber.doubleValue)
+            if normalizedNumber == "" {
+                userModel.updateHomeAmount(nil)
             } else {
                 userModel.updateHomeAmount(normalizedNumber.doubleValue)
             }
         } else {
             self.displayErrorMessage()
         }
+    }
+    
+    func setupComplete(notification:NSNotification){
+        clearTextFields()
+    }
+    
+    func clearTextFields() {
+        self.topTextField.text = ""
+        self.bottomTextField.text = ""
     }
     
     func createTextField() -> UITextField{
@@ -512,20 +488,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func homeAmountChanged() {
-        var text = String(format: "%.2f", userModel.homeAmount)
-        if (userModel.homeAmount == 0) {
-            text = ""
-            self.topTextField.text = ""
-            self.bottomTextField.text = ""
+        var text = ""
+        if let amount = userModel.homeAmount {
+            text = String(format: "%.2f", amount)
         }
-        if(homeIsAtTop) {
-            if (!topTextField.isFirstResponder()) {
-                self.topTextField.text = text
-            }
-        } else {
-            if (!bottomTextField.isFirstResponder()) {
-                self.bottomTextField.text = text
-            }
+        if(!bottomTextField.isFirstResponder()){
+            bottomTextField.text = text
         }
     }
     
@@ -534,20 +502,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func currentAmountChanged() {
-        var text = String(format: "%.2f", userModel.currentAmount)
-        if (userModel.currentAmount == 0) {
-            text = ""
-            self.topTextField.text = ""
-            self.bottomTextField.text = ""
+        var text = ""
+        if let amount = userModel.currentAmount {
+            text = String(format: "%.2f", amount)
         }
-        if (homeIsAtTop) {
-            if (!bottomTextField.isFirstResponder()) {
-                self.bottomTextField.text = text
-            }
-        } else {
-            if (!topTextField.isFirstResponder()) {
-                self.topTextField.text = text
-            }
+        if(!topTextField.isFirstResponder()){
+            topTextField.text = text
         }
     }
     

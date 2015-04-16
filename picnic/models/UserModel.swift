@@ -7,8 +7,8 @@ import Foundation
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
     var convertionRate:Double?
-    var homeAmount:Double = 0.0;
-    var currentAmount:Double = 0.0;
+    var homeAmount:Double?
+    var currentAmount:Double?
     
     var overrideGPSLocale:NSLocale?
     var shouldOverrideGPS = false
@@ -40,18 +40,27 @@ import Foundation
         convertionRateHasChanged()
     }
     
-    func updateHomeAmount(amount:Double) {
+    func updateHomeAmount(amount:Double?) {
         self.homeAmount = amount;
-        self.currentAmount = amount*self.convertionRate!
+        if let number = homeAmount {
+            self.currentAmount = number*self.convertionRate!
+        } else {
+            self.currentAmount = nil
+        }
+
         for observer in self.observers {
             observer.homeAmountChanged();
             observer.currentAmountChanged();
         }
     }
     
-    func updateCurrentAmount(amount:Double) {
-        self.currentAmount = amount;
-        self.homeAmount = amount*(1/self.convertionRate!)
+    func updateCurrentAmount(amount:Double?) {
+        currentAmount = amount;
+        if let number = currentAmount {
+            homeAmount = number*(1/self.convertionRate!)
+        } else {
+            homeAmount = nil
+        }
         for observer in self.observers {
             observer.currentAmountChanged();
             observer.homeAmountChanged();
@@ -75,5 +84,9 @@ import Foundation
         for observer in self.observers {
             observer.currentLocaleHasChanged()
         }
+    }
+    
+    func isManualSetupActive() -> Bool{
+        return shouldOverrideGPS || shouldOverrideLogical
     }
 }

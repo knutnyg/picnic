@@ -22,10 +22,10 @@ class MenuViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        self.view.backgroundColor = UIColor.whiteColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
-        self.view.backgroundColor = UIColor.whiteColor()
 
         topBanner = TopBannerViewController(userModel: userModel, activeViewController:self)
             .withBackButton()
@@ -35,19 +35,13 @@ class MenuViewController : UIViewController {
         instructionAutomaticLabel = createAutomaticInstructionLabel()
         instructionManualLabel = createManualInstructionLabel()
 
-        gpsButton = BButton()
-        gpsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        gpsButton.setType(BButtonType.Success)
-        gpsButton.setTitle("Automatic Setup", forState: .Normal)
-        gpsButton.addAwesomeIcon(FAIcon.FACheckCircle, beforeTitle: true)
+        gpsButton = createBButton("Automatic setup")
         gpsButton.addTarget(self, action: "autoSetupPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        countrySetup = BButton()
-        countrySetup.setTranslatesAutoresizingMaskIntoConstraints(false)
-        countrySetup.setType(BButtonType.Info)
-        countrySetup.setTitle("Choose Countries", forState: .Normal)
-        countrySetup.addAwesomeIcon(FAIcon.FAUser, beforeTitle: true)
+        countrySetup = createBButton("Choose Countries")
         countrySetup.addTarget(self, action: "setupButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        setActiveButtonStyle()
         
         self.addChildViewController(topBanner)
         self.view.addSubview(topBanner.view)
@@ -58,12 +52,7 @@ class MenuViewController : UIViewController {
         
         var views = ["topBanner":topBanner.view, "gps":gpsButton, "setup":countrySetup, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel]
         
-        var topBannerHeight = 0
-        if view.bounds.height < 500 {
-            topBannerHeight = 55
-        } else {
-            topBannerHeight = 70
-        }
+        var topBannerHeight = Int(view.bounds.height * 0.1)
         
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[topBanner(\(topBannerHeight))]-30-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[setup(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[topBanner]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
@@ -121,7 +110,6 @@ class MenuViewController : UIViewController {
         label.textAlignment = NSTextAlignment.Center
         label.numberOfLines = 2
         return label
-        
     }
     
     func createManualInstructionLabel() -> UILabel{
@@ -131,7 +119,25 @@ class MenuViewController : UIViewController {
         label.textAlignment = NSTextAlignment.Center
         label.numberOfLines = 2
         return label
-        
+    }
+    
+    func createBButton(title:String) -> BButton{
+        var button = BButton()
+        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        button.setTitle(title, forState: .Normal)
+        button.setType(BButtonType.Info)
+
+        return button
+    }
+    
+    func setActiveButtonStyle() {
+        if userModel.isManualSetupActive() {
+            countrySetup.setType(BButtonType.Success)
+            countrySetup.addAwesomeIcon(FAIcon.FACheck, beforeTitle: true)
+        } else {
+            gpsButton.setType(BButtonType.Success)
+            gpsButton.addAwesomeIcon(FAIcon.FACheck, beforeTitle: true)
+        }
     }
     
     /* ----   Initializers   ----  */

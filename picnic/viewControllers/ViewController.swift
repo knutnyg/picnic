@@ -29,71 +29,18 @@ class ViewController: UIViewController {
         
         let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "converter":converterView.view, "superView":self.view]
         
-        setupGUIBasedOnScreenSize(views)
+        setConstraints(views)
     }
     
-    func setupGUIBasedOnScreenSize(views: [NSObject:AnyObject]){
-        let screenHeight = view.frame.height
-        
-        switch screenHeight {
-        case 480: setupForiPhoneFour(views)
-        case 568: setupForiPhoneFive(views)
-        case 667: setupForiPhoneSix(views)
-        case 736: setupForiPhoneSix(views)
-        case 1024: setupForiPadTwo(views)
-        default: println("default")
-        }
-    }
-    
-    func setupForiPhoneFour(views: [NSObject:AnyObject]){
-        
-        let constraintModel = ParentConstraintsModel(
-            bannerHeight: 55,
-            keyboardHeight: 216,
-            screenHeight: Int(view.frame.height)
-        )
-        
-        setConstraintsForiPhone(views, constraintModel: constraintModel)
-    }
-    
-    func setupForiPhoneFive(views: [NSObject:AnyObject]){
-        
-        let constraintModel = ParentConstraintsModel(
-            bannerHeight: 70,
-            keyboardHeight: 216,
-            screenHeight: Int(view.frame.height)
-        )
-        
-        setConstraintsForiPhone(views, constraintModel: constraintModel)
-    }
-    
-    func setupForiPhoneSix(views: [NSObject:AnyObject]){
-        
-        let constraintModel = ParentConstraintsModel(
-            bannerHeight: 70,
-            keyboardHeight: 216,
-            screenHeight: Int(view.frame.height)
-        )
-        
-        setConstraintsForiPhone(views, constraintModel: constraintModel)
-    }
-    
-    func setupForiPadTwo(views: [NSObject:AnyObject]){
-        let constraintModel = ParentConstraintsModel(
-            bannerHeight: 70,
-            keyboardHeight: 216,
-            screenHeight: Int(view.frame.height)
-        )
-        
-        setConstraintsForiPhone(views, constraintModel: constraintModel)
-    }
-    
-    func setConstraintsForiPhone(views: [NSObject:AnyObject], constraintModel:ParentConstraintsModel){
+    func setConstraints(views: [NSObject:AnyObject]){
+        var bannerHeight = Int(self.view.bounds.height*0.1)
+        var keyboardHeight = 216
+        var converterHeight = Int(view.bounds.height) - bannerHeight - keyboardHeight
         
         var visualFormat = String(format: "V:|-0-[topBanner(%d)]-0-[converter(%d)]-%d-|",
-            constraintModel.bannerHeight,
-            constraintModel.converterHeight,
-            constraintModel.keyboardHeight)
+            bannerHeight,
+            converterHeight,
+            keyboardHeight)
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
