@@ -21,6 +21,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     var delegate:UIViewController!=nil
     var userModel:UserModel!
     var selectorType:CountrySelectorType!
+    var locationManager:LocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,15 +38,16 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
         countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        var lm = LocationManager(userModel: userModel)
+        locationManager = LocationManager(userModel: userModel)
         switch selectorType! {
         case .GPS:
-            lm.getUserCurrentLocale(false).onSuccess {locale in
-                self.setButtonLocaleAndStyle(locale)
-            }
+            locationManager.getUserCurrentLocale(false)
+                .onSuccess { locale in
+                    self.setButtonLocaleAndStyle(locale)
+                }
             break
         case .HOME_COUNTRY:
-            self.setButtonLocaleAndStyle(lm.getUserHomeLocale(false))
+            self.setButtonLocaleAndStyle(locationManager.getUserHomeLocale(false))
             break
         }
         
@@ -68,8 +70,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-
-        
         
         let size: CGSize = useDetectedButton.titleLabel!.text!.sizeWithAttributes([NSFontAttributeName: useDetectedButton.titleLabel!.font])
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[topBanner]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
