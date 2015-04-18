@@ -39,6 +39,7 @@
 		72A9D4C51AA5219C00A15E70 /* LoctionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */; };
 		72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */; };
 		72A9D4CB1AA5255800A15E70 /* UserModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00281AA2FABE00484BAA /* UserModelObserver.swift */; };
+		72C003B31AE31707009E309E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C003B21AE31707009E309E /* Extensions.swift */; };
 		72C915ED1AD57C6000DC8F1B /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 72C915EC1AD57C6000DC8F1B /* Podfile */; };
 		72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72F307551AA3A3D00066F2A1 /* Images.xcassets */; };
 		72FEF4381AD461560057F388 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4371AD461560057F388 /* MenuViewController.swift */; };
@@ -94,6 +95,7 @@
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
 		72A9D4C41AA5219C00A15E70 /* LoctionManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoctionManagerTests.swift; sourceTree = "<group>"; };
 		72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateManager.swift; sourceTree = "<group>"; };
+		72C003B21AE31707009E309E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		72C915EC1AD57C6000DC8F1B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		72C915EE1AD580F100DC8F1B /* picnic-Bridgeing-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "picnic-Bridgeing-Header.h"; sourceTree = "<group>"; };
 		72F307551AA3A3D00066F2A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */,
 				7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */,
 				726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */,
+				72C003B21AE31707009E309E /* Extensions.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */,
 				72FEF4381AD461560057F388 /* MenuViewController.swift in Sources */,
 				7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */,
+				72C003B31AE31707009E309E /* Extensions.swift in Sources */,
 				721C00291AA2FABE00484BAA /* ConverterConstraintsModel.swift in Sources */,
 				721C002C1AA2FABE00484BAA /* UserModel.swift in Sources */,
 				72FEF43A1AD461950057F388 /* CountrySelectorViewController.swift in Sources */,

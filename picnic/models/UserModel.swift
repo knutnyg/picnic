@@ -16,8 +16,6 @@ import Foundation
     var overrideLogicalLocale:NSLocale?
     var shouldOverrideLogical = false
     
-    var tm:TransitionManager!
-    
     override init(){
         self.observers = []
         super.init()

@@ -16,7 +16,6 @@ class RootViewController: UIViewController {
     override func viewDidLoad() {
         
         userModel = UserModel()
-        userModel.tm = TransitionManager()
         
         view.backgroundColor = UIColor.whiteColor()
         

@@ -12,7 +12,6 @@ import BButton
 
 class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
-    var topBannerView:TopBannerViewController!
     var instructionLabel:UILabel!
     var useDetectedButton:BButton!
     
@@ -113,24 +112,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
         
         return button
-    }
-    
-    func createTopBannerViewController()->TopBannerViewController {
-        switch selectorType! {
-
-        case .HOME_COUNTRY:
-            var vc = TopBannerViewController(userModel: userModel, activeViewController: self)
-                .withBackButton()
-                .withNameLabel("Home Country")
-            vc.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-            return vc
-        case .GPS:
-            var vc = TopBannerViewController(userModel: userModel, activeViewController: self)
-                .withBackButton()
-                .withNameLabel("Current Country")
-            vc.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-            return vc
-        }
     }
     
     func createInstructionLabel() -> UILabel{

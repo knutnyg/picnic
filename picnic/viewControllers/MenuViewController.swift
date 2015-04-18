@@ -16,7 +16,6 @@ class MenuViewController : UIViewController {
     var countrySetup:BButton!
     var instructionAutomaticLabel:UILabel!
     var instructionManualLabel:UILabel!
-    var topBanner:TopBannerViewController!
     var userModel:UserModel!
     var delegate:RootViewController!
     var backButton:UIButton!
