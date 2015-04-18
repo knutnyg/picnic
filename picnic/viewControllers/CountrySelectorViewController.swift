@@ -23,13 +23,15 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     var selectorType:CountrySelectorType!
     var locationManager:LocationManager!
     
+    var backButton:UIButton!
+    var backButtonItem:UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.whiteColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
+        setupNavigationBar()
         
-        topBannerView = createTopBannerViewController()
         instructionLabel = createInstructionLabel()
         useDetectedButton = createUseDetectedCountryButton()
         topFilterField = createTextField()
@@ -51,34 +53,66 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
             break
         }
         
-        self.addChildViewController(topBannerView)
         self.addChildViewController(countryTableView)
         
-        view.addSubview(topBannerView.view)
         view.addSubview(instructionLabel)
         view.addSubview(useDetectedButton)
         view.addSubview(topFilterField)
         view.addSubview(countryTableView.view)
         
-        let views:[NSObject : AnyObject] = ["topBanner":topBannerView.view, "countryTable":countryTableView.view,
+        let views:[NSObject : AnyObject] = ["countryTable":countryTableView.view,
             "superView":self.view, "topFilter":topFilterField, "instruction":instructionLabel, "detected":useDetectedButton]
         
-        var topBannerHeight = Int(view.bounds.height * 0.1)
-        
-        var visualFormat = String(format: "V:|-0-[topBanner(%d)]-[instruction]-[detected]-[topFilter]-[countryTable]-0-|",
-            topBannerHeight)
+        var visualFormat = String(format: "V:|-74-[instruction]-[detected]-[topFilter]-[countryTable]-0-|")
         
         var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         let size: CGSize = useDetectedButton.titleLabel!.text!.sizeWithAttributes([NSFontAttributeName: useDetectedButton.titleLabel!.font])
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[topBanner]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instruction]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraint(NSLayoutConstraint(item: useDetectedButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: size.width + 40))
         view.addConstraint(NSLayoutConstraint(item: useDetectedButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[countryTable]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraints(verticalLayout)  
+    }
+    
+    
+    func setupNavigationBar(){
+        var font = UIFont(name: "Verdana", size:22)!
+        var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        
+        switch selectorType! {
+        case .HOME_COUNTRY:
+            navigationItem.title = "Home Country"
+        case .GPS:
+            navigationItem.title = "Current Country"
+    }
+        
+        var verticalOffset = 3 as CGFloat;
+        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
+        
+        backButton = createfontAwesomeButton("\u{f060}")
+        backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backButtonItem
+    }
+    
+    func back(UIEvent) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func createfontAwesomeButton(unicode:String) -> UIButton{
+        var font = UIFont(name: "FontAwesome", size: 22)!
+        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+        
+        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        button.setTitle(unicode, forState: .Normal)
+        button.titleLabel!.font = font
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+        
+        return button
     }
     
     func createTopBannerViewController()->TopBannerViewController {
@@ -168,7 +202,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
             useDetectedButton.addTarget(self, action: "logicalButtonSetAutomaticallyPressed:", forControlEvents: UIControlEvents.TouchUpInside)
             break
         }
-
     }
     
     func createUseDetectedCountryButton() -> BButton{
@@ -182,7 +215,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     func gpsButtonSetAutomaticallyPressed(sender:UIButton!){
         userModel.shouldOverrideGPS = false
-        NSNotificationCenter.defaultCenter().postNotificationName("setupComplete", object: nil)
+        navigationController?.popToRootViewControllerAnimated(true)
     }
     
     func logicalButtonSetAutomaticallyPressed(sender:UIButton!){

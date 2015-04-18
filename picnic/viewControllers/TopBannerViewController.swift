@@ -97,9 +97,9 @@ class TopBannerViewController : UIViewController {
         return button
     }
     
-    func settingsPressed(sender:UIButton!) {
+    func settings(sender:UIButton!) {
         let vc = MenuViewController(userModel: userModel)
-        vc.delegate = self
+//        vc.delegate = self
         vc.transitioningDelegate = userModel.tm
         self.presentViewController(vc, animated: true, completion: nil)
     }

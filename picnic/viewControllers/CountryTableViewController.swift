@@ -116,14 +116,13 @@ class CountryTableViewController: UITableViewController {
             
             let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
             vc.delegate = self
-            vc.transitioningDelegate = userModel.tm
-            self.presentViewController(vc, animated: true, completion: nil)
+            navigationController?.pushViewController(vc, animated: true)
             
             break
         case .GPS:
             userModel.overrideGPSLocale = localeCountryNameTupleList[indexPath.row].locale
             userModel.shouldOverrideGPS = true
-            NSNotificationCenter.defaultCenter().postNotificationName("setupComplete", object: nil)
+            navigationController?.popToRootViewControllerAnimated(true)
             break
         }
     }

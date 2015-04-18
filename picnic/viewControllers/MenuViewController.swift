@@ -18,20 +18,19 @@ class MenuViewController : UIViewController {
     var instructionManualLabel:UILabel!
     var topBanner:TopBannerViewController!
     var userModel:UserModel!
-    var delegate:TopBannerViewController!=nil
+    var delegate:RootViewController!
+    var backButton:UIButton!
+    var backButtonItem:UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupNavigationBar()
 
         self.view.backgroundColor = UIColor.whiteColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
 
-        topBanner = TopBannerViewController(userModel: userModel, activeViewController:self)
-            .withBackButton()
-            .withNameLabel("Settings")
-        topBanner.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
         instructionAutomaticLabel = createAutomaticInstructionLabel()
         instructionManualLabel = createManualInstructionLabel()
 
@@ -43,19 +42,14 @@ class MenuViewController : UIViewController {
         
         setActiveButtonStyle()
         
-        self.addChildViewController(topBanner)
-        self.view.addSubview(topBanner.view)
         self.view.addSubview(instructionAutomaticLabel)
         self.view.addSubview(instructionManualLabel)
         self.view.addSubview(gpsButton)
         self.view.addSubview(countrySetup)
         
-        var views = ["topBanner":topBanner.view, "gps":gpsButton, "setup":countrySetup, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel]
+        var views = ["gps":gpsButton, "setup":countrySetup, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel]
         
-        var topBannerHeight = Int(view.bounds.height * 0.1)
-        
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[topBanner(\(topBannerHeight))]-30-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[setup(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[topBanner]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-100-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[setup(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsManual]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 180))
@@ -64,42 +58,49 @@ class MenuViewController : UIViewController {
         view.addConstraint(NSLayoutConstraint(item: countrySetup, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
     }
     
-    func backButtonPressed(notification: NSNotification) {
-        if notification.object is MenuViewController {
-            if notification.object as! MenuViewController == self {
-                delegate.dismissViewControllerAnimated(true, completion: nil)
-            }
-        }
-    }
-    
-    func createSwapButton() -> UIButton{
-        var swapButton = UIButton()
-        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        swapButton.setTitle("\u{f0ec}", forState: .Normal)
-        swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
-        swapButton.addTarget(self, action: "swapButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+    func setupNavigationBar(){
         
-        return swapButton
+        var font = UIFont(name: "Verdana", size:22)!
+        var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        navigationItem.title = "Menu"
+        navigationController?.navigationBar.titleTextAttributes = attributes
+        
+        var verticalOffset = 3 as CGFloat;
+        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
+        
+        backButton = createfontAwesomeButton("\u{f060}")
+        backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backButtonItem
     }
     
+    func createfontAwesomeButton(unicode:String) -> UIButton{
+        var font = UIFont(name: "FontAwesome", size: 22)!
+        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+        
+        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        button.setTitle(unicode, forState: .Normal)
+        button.titleLabel!.font = font
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+        
+        return button
+    }
+    
+    func back(UIEvent) {
+        navigationController?.popViewControllerAnimated(true)
+    }
     
     func setupButtonPressed(sender:UIButton!){
         let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         vc.delegate = self
-        vc.transitioningDelegate = userModel.tm
-        self.presentViewController(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func autoSetupPressed(sender:UIButton!){
         userModel.shouldOverrideGPS = false
         userModel.shouldOverrideLogical = false
-        self.delegate.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func setupComplete(notification: NSNotification) {
-        self.delegate.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func createAutomaticInstructionLabel() -> UILabel{

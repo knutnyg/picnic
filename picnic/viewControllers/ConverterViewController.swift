@@ -32,6 +32,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor.whiteColor()
+        
         userModel.addObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
@@ -75,11 +77,16 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func setConstraints(views: [NSObject:AnyObject]){
+        
+        var swapMargin = 0.045
+        if view.bounds.height < 500 {
+            swapMargin = 0.022
+        }
 
         var screenSize = Double(view.bounds.height)
         var textFieldHeight = Int(screenSize * 0.10)
         var topTextFieldMarginTop = Int(screenSize * 0.14)
-        var swapButtonMarginTopAndBottom = Int(screenSize * 0.045)
+        var swapButtonMarginTopAndBottom = Int(screenSize * swapMargin)
         var countryLabelDistanceFromTextField = Int(screenSize * 0.003)
         var distanceFromEdge = Int(screenSize * 0.01)
         

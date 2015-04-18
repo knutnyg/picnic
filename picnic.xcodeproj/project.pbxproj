@@ -33,7 +33,7 @@
 		721CFFF71AA2FA4D00484BAA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF61AA2FA4D00484BAA /* LocationManager.swift */; };
 		721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
 		721CFFFD1AA2FA6000484BAA /* TopBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */; };
-		721CFFFE1AA2FA6000484BAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFB1AA2FA6000484BAA /* ViewController.swift */; };
+		721CFFFE1AA2FA6000484BAA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFB1AA2FA6000484BAA /* RootViewController.swift */; };
 		725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */; };
 		7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */; };
 		726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */; };
@@ -91,7 +91,7 @@
 		721CFFF61AA2FA4D00484BAA /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
 		721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBannerViewController.swift; sourceTree = "<group>"; };
-		721CFFFB1AA2FA6000484BAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		721CFFFB1AA2FA6000484BAA /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CountrySelectorType.swift; path = models/CountrySelectorType.swift; sourceTree = "<group>"; };
 		7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleUtils.swift; sourceTree = "<group>"; };
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
@@ -245,7 +245,7 @@
 				721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */,
 				39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */,
 				721CFFFA1AA2FA6000484BAA /* TopBannerViewController.swift */,
-				721CFFFB1AA2FA6000484BAA /* ViewController.swift */,
+				721CFFFB1AA2FA6000484BAA /* RootViewController.swift */,
 				72FEF4371AD461560057F388 /* MenuViewController.swift */,
 				72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */,
 			);
@@ -507,7 +507,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				721CFFFE1AA2FA6000484BAA /* ViewController.swift in Sources */,
+				721CFFFE1AA2FA6000484BAA /* RootViewController.swift in Sources */,
 				72DFF5A81AE05E3100C3AA1E /* TransitonManager.swift in Sources */,
 				721CFFFD1AA2FA6000484BAA /* TopBannerViewController.swift in Sources */,
 				721CFFF71AA2FA4D00484BAA /* LocationManager.swift in Sources */,
