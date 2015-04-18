@@ -169,12 +169,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     }
     
     func backButtonPressed(notification: NSNotification) {
-        if notification.object is CountrySelectorViewController {
-            if notification.object as! CountrySelectorViewController == self {
-                delegate.dismissViewControllerAnimated(true, completion: nil)
-            }
-            
-        }
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func createTextField() -> UITextField{
@@ -223,8 +218,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
         vc.delegate = self
-        vc.transitioningDelegate = userModel.tm
-        self.presentViewController(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
         
     }
     
