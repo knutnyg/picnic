@@ -12,8 +12,8 @@ class LocaleCountryNameTuple {
     let locale:NSLocale!
     let countryName:String!
     
-    init(locale:NSLocale){
+    init(locale:NSLocale, countryName:String){
         self.locale = locale
-        self.countryName = LocaleUtils.createCountryNameFromLocale(locale)
+        self.countryName = countryName
     }
 }

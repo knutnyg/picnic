@@ -122,10 +122,10 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         switch selectorType! {
         case .HOME_COUNTRY:
-            label.text = "Please set your prefered home country or use the one detected"
+            label.text = "Please set your preferred home country or use the one detected:"
             break
         case .GPS:
-            label.text = "Please set your prefered current country or use the one detected"
+            label.text = "Please set your preferred current country or use the one detected:"
         }
         return label
 
@@ -204,8 +204,8 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     }
     
     func setButtonTitleBasedOnLocale(button:BButton, locale:NSLocale) {
-        if let countryName = LocaleUtils.createCountryNameFromLocale(locale) {
-            button.setTitle("Use \(countryName)", forState: .Normal)
+        if let countryName = LocaleUtils.createCountryNameFromLocale(locale, languageLocale: userModel.languageLocale) {
+            button.setTitle(countryName, forState: .Normal)
         }
     }
     

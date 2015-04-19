@@ -19,6 +19,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var topTextField:UITextField!
     var bottomTextField:UITextField!
     var swapButton:UIButton!
+    
+    var refreshButton:UIButton!
+    var settingsButton:UIButton!
+    var refreshButtonItem:UIBarButtonItem!
+    var settingsButtonItem:UIBarButtonItem!
+    
+    var shouldRefreshContiniueSpinning:Bool = false
 
     var topLabel:UILabel!
     var bottomLabel:UILabel!
@@ -31,12 +38,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor.whiteColor()
+        userModel = UserModel()
         
         userModel.addObserver(self)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshButtonPressed:", name: "refreshPressed", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
+        view.backgroundColor = UIColor.whiteColor()
+        
+        setupNavigationBar()
         
         locationManager = LocationManager(userModel: self.userModel)
         topCountryLabel = UILabel()
@@ -70,19 +77,57 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.setConstraints(views)
     }
     
-    
-    func withUserModel(userModel:UserModel) -> ConverterViewController{
-        self.userModel = userModel
-        return self
+    func setupNavigationBar(){
+        navigationController?.navigationBar.barTintColor = UIColor(netHex: 0x19B5FE)
+        
+        var font = UIFont(name: "Verdana", size:22)!
+        var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        navigationItem.title = "Picnic Currency"
+        navigationController?.navigationBar.titleTextAttributes = attributes
+        
+        var verticalOffset = 1.5 as CGFloat;
+        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
+        
+        refreshButton = createfontAwesomeButton("\u{f021}")
+        refreshButton.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+        refreshButtonItem = UIBarButtonItem(customView: refreshButton)
+        
+        settingsButton = createfontAwesomeButton("\u{f013}")
+        settingsButton.addTarget(self, action: "settings:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingsButtonItem = UIBarButtonItem(customView: settingsButton)
+        
+        navigationItem.leftBarButtonItems = [refreshButtonItem]
+        navigationItem.rightBarButtonItem = settingsButtonItem
+        
     }
+    
+    func createfontAwesomeButton(unicode:String) -> UIButton{
+        var font = UIFont(name: "FontAwesome", size: 22)!
+        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+        
+        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        button.setTitle(unicode, forState: .Normal)
+        button.titleLabel!.font = font
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+        
+        return button
+    }
+
+
     
     func setConstraints(views: [NSObject:AnyObject]){
         
         var swapMargin = 0.045
+        var keyboardHeight = 216
         if view.bounds.height < 500 {
             swapMargin = 0.022
         }
 
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+            keyboardHeight = 350
+        }
+        
         var screenSize = Double(view.bounds.height)
         var textFieldHeight = Int(screenSize * 0.10)
         var topTextFieldMarginTop = Int(screenSize * 0.14)
@@ -100,11 +145,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.topLabel.font = UIFont(name: "FontAwesome", size: iconFontSize)
         self.bottomLabel.font = UIFont(name: "FontAwesome", size: iconFontSize)
         
-        var visualFormat = String(format: "V:[topTextField(%d)]-%d-[swapButton]-%d-[bottomTextField(%d)]-0-|",
+        var visualFormat = String(format: "V:[topTextField(%d)]-%d-[swapButton]-%d-[bottomTextField(%d)]-%d-|",
             textFieldHeight,
             swapButtonMarginTopAndBottom,
             swapButtonMarginTopAndBottom,
-            textFieldHeight)
+            textFieldHeight,
+            keyboardHeight)
         
         let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
@@ -162,38 +208,35 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        clearTextFields()
         refreshData()
-        topTextField.text = ""
-        bottomTextField.text = ""
     }
     
     func refreshData(){
-        self.updateUserHomeLocale()
+        shouldRefreshContiniueSpinning = true
+        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        updateUserHomeLocale()
         
         locationManager.getUserCurrentLocale(true)
             .onSuccess { locale in
-                println("got success from GPS:")
-                println(LocaleUtils.createCountryNameFromLocale(locale))
                 self.updateUserCurrentLocale(locale)
                 self.fetchCurrency()
-                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
             }
-            
             .onFailure { error in
                 self.displayFailedToCurrentLocation()
                 self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_US"))
                 self.fetchCurrency()
-                NSNotificationCenter.defaultCenter().postNotificationName("refreshDone", object: nil)
         }
-        
     }
     
     func fetchCurrency() {
         ConvertsionRateManager().getConvertionRate(self.userModel)
                 .onSuccess { conv in
+                    self.shouldRefreshContiniueSpinning = false
                     self.userModel.updateConvertionRate(conv) }
                 .onFailure { error in
                     println("failed to get conv rate")
+                    self.shouldRefreshContiniueSpinning = false
                     self.displayFailedToResolveCurrencyError()
                     self.userModel.updateConvertionRate(1.0)}
     }
@@ -214,25 +257,17 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func setBottomCountryText(){
-        var userLanguage = NSLocale.preferredLanguages().description
-        
-        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
         if let locale = self.userModel.homeLocale {
             let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
-            var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+            var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
             bottomCountryLabel.text = country
         }
     }
     
     func setTopCountryText() {
-        
-        var userLanguage = NSLocale.preferredLanguages().description
-        
-        var userLanguageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
-        
         if let locale = userModel.currentLocale {
             let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
-            var country: String = userLanguageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+            var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
             topCountryLabel.text = country
         }
     }
@@ -264,14 +299,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return input.stringByReplacingOccurrencesOfString(",", withString: ".", options: NSStringCompareOptions.LiteralSearch, range: nil) as NSString
     }
     
-    func isValid(input:NSString) -> Bool{
-        return true
-    }
-    
-    func displayErrorMessage(){
-        topTextField.text = "0082384928"
-    }
-    
     func displayFailedToResolveCurrencyError(){
         var alert2 = UIAlertController(title: "Error", message: "Unable to access current convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
         alert2.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
@@ -279,19 +306,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func displayFailedToCurrentLocation(){
-        var alert = UIAlertController(title: "Error", message: "Unable to verify your location. Please make sure that the app is allowed to use GPS under general settings, and that your GPS works.", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert = UIAlertController(title: "Error", message: "Unable to detect your location. Please make sure that the app is allowed the use of GPS under general settings.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    func displayFailedToParseOverride(){
-        var alert = UIAlertController(title: "Error", message: "Error in format of override locale. Should be on format: ab_CD", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    func convertionRateHasChanged(){
-        println(self.userModel.convertionRate)
     }
     
     func redraw(){
@@ -311,32 +328,21 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func topAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(topTextField.text)
-        if self.isValid(normalizedNumber as String) {
-            if normalizedNumber == "" {
-                userModel.updateCurrentAmount(nil)
-            } else {
-                userModel.updateCurrentAmount(normalizedNumber.doubleValue)
-            }
+        if normalizedNumber == "" {
+            userModel.updateCurrentAmount(nil)
         } else {
-            self.displayErrorMessage()
+            userModel.updateCurrentAmount(normalizedNumber.doubleValue)
         }
+   
     }
     
     func bottomAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(bottomTextField.text)
-        if self.isValid(normalizedNumber as String) {
             if normalizedNumber == "" {
                 userModel.updateHomeAmount(nil)
             } else {
                 userModel.updateHomeAmount(normalizedNumber.doubleValue)
             }
-        } else {
-            self.displayErrorMessage()
-        }
-    }
-    
-    func setupComplete(notification:NSNotification){
-        clearTextFields()
     }
     
     func clearTextFields() {
@@ -389,8 +395,23 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
     }
     
-    func refreshButtonPressed(notification:NSNotification){
+    func refresh(sender:UIButton!) {
+        shouldRefreshContiniueSpinning = true
+        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
         refreshData()
+        
+    }
+    
+    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+        if self.shouldRefreshContiniueSpinning {
+            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        }
+    }
+    
+    func settings(sender:UIButton!) {
+        let vc = MenuViewController(userModel: userModel)
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func currentAmountChanged() {
@@ -403,37 +424,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
     }
     
-    init(userModel:UserModel) {
-        super.init(nibName: nil, bundle: nil)
-        self.userModel = userModel
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func convertionRateHasChanged() {
     }
 }
 
-extension String {
-    
-    func contains(find: String) -> Bool{
-        return self.rangeOfString(find) != nil
-    }
-}
-
-extension UIView {
-    func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
-        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        rotateAnimation.fromValue = 0.0
-        rotateAnimation.toValue = CGFloat(M_PI * 2.0)
-        rotateAnimation.duration = duration
-        
-        if let delegate: AnyObject = completionDelegate {
-            rotateAnimation.delegate = delegate
-        }
-        self.layer.addAnimation(rotateAnimation, forKey: nil)
-    }
-}

@@ -61,7 +61,7 @@ class CountryTableViewController: UITableViewController {
         var countryLocaleList = countryCodeList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
         
         for locale in countryLocaleList {
-            localeCountryNameTupleList += [LocaleCountryNameTuple(locale: locale)]
+            localeCountryNameTupleList += [LocaleUtils.createLocaleCountryNameTuple(locale, language: userModel.languageLocale)]
         }
         
         let result = localeCountryNameTupleList.sorted { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }

@@ -4,6 +4,7 @@ import Foundation
  class UserModel : NSObject {
     
     var observers:[UserModelObserver]
+    var languageLocale:NSLocale!
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
     var convertionRate:Double?
@@ -19,6 +20,13 @@ import Foundation
     override init(){
         self.observers = []
         super.init()
+
+        self.setupUserLanguageLocale()
+    }
+    
+    func setupUserLanguageLocale(){
+        var userLanguage = NSLocale.preferredLanguages().description
+        languageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
     }
     
     func addObserver(observer:UserModelObserver){
@@ -42,8 +50,8 @@ import Foundation
     
     func updateHomeAmount(amount:Double?) {
         self.homeAmount = amount;
-        if let number = homeAmount {
-            self.currentAmount = number*self.convertionRate!
+        if let number = homeAmount, convertionRate = self.convertionRate {
+            self.currentAmount = number*convertionRate
         } else {
             self.currentAmount = nil
         }
@@ -56,8 +64,8 @@ import Foundation
     
     func updateCurrentAmount(amount:Double?) {
         currentAmount = amount;
-        if let number = currentAmount {
-            homeAmount = number*(1/self.convertionRate!)
+        if let number = currentAmount, convertionRate = self.convertionRate {
+            homeAmount = number*(1/convertionRate)
         } else {
             homeAmount = nil
         }

@@ -13,28 +13,17 @@ class RootViewController: UIViewController {
     var refreshButtonItem:UIBarButtonItem!
     var settingsButtonItem:UIBarButtonItem!
     
-    override func viewDidLoad() {
+    var shouldRefreshContiniueSpinning:Bool = false
+    
+    func setConstraints(views: [NSObject:AnyObject]){
         
-        userModel = UserModel()
-        
-        view.backgroundColor = UIColor.whiteColor()
-        
-        setupNavigationBar()
-        
-        converterView = ConverterViewController(userModel: userModel)
-        converterView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-
-        self.addChildViewController(converterView)
-        view.addSubview(converterView.view)
-        
-        let views:[NSObject : AnyObject] = ["converter":converterView.view, "superView":self.view]
-        
-        setConstraintsiPhone(views)
-    }
-    func setConstraintsiPhone(views: [NSObject:AnyObject]){
         var bannerHeight = Int(self.view.bounds.height*0.1)
         var keyboardHeight = 216
         var converterHeight = Int(view.bounds.height) - bannerHeight - keyboardHeight
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+            keyboardHeight = 350
+        }
         
         var visualFormat = String(format: "V:|-66-[converter]-%d-|",
             keyboardHeight)
@@ -48,7 +37,6 @@ class RootViewController: UIViewController {
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
         view.addConstraints(verticalLayout)
-        //        view.addConstraints(topBannerWidthConstraints)
         view.addConstraints(converterWidthConstraints)
         
     }
@@ -78,17 +66,15 @@ class RootViewController: UIViewController {
         navigationItem.leftBarButtonItems = [spacer, refreshButtonItem]
 
         navigationItem.rightBarButtonItem = settingsButtonItem
-//        navigationItem.leftBarButtonItem = refreshButton
 
     }
     
-    func refresh(sender:UIButton!) {
-        NSNotificationCenter.defaultCenter().postNotificationName("refreshPressed", object: nil)
-        makeRefreshIconSpin()
-    }
+
     
-    func makeRefreshIconSpin(){
-        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+        if self.shouldRefreshContiniueSpinning {
+            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        }
     }
     
     func settings(sender:UIButton!) {
@@ -97,19 +83,7 @@ class RootViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func createfontAwesomeButton(unicode:String) -> UIButton{
-        var font = UIFont(name: "FontAwesome", size: 22)!
-        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
         
-        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = font
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
-        
-        return button
-    }
-    
     func createFABarButton(unicode:String, fontSize:CGFloat) -> UIBarButtonItem {
         var font = UIFont(name: "FontAwesome", size:fontSize)!
         var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]

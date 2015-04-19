@@ -17,7 +17,7 @@ class MenuViewController : UIViewController {
     var instructionAutomaticLabel:UILabel!
     var instructionManualLabel:UILabel!
     var userModel:UserModel!
-    var delegate:RootViewController!
+    var delegate:ConverterViewController!
     var backButton:UIButton!
     var backButtonItem:UIBarButtonItem!
     

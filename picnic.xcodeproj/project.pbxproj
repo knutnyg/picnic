@@ -28,11 +28,9 @@
 		721C00301AA2FB2B00484BAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 721C002E1AA2FB2B00484BAA /* Main.storyboard */; };
 		721C00321AA3366400484BAA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 721C00311AA3366400484BAA /* Settings.bundle */; };
 		721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFC91AA2F6E400484BAA /* AppDelegate.swift */; };
-		721CFFD41AA2F6E400484BAA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 721CFFD21AA2F6E400484BAA /* LaunchScreen.xib */; };
 		721CFFE01AA2F6E400484BAA /* picnicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFDF1AA2F6E400484BAA /* picnicTests.swift */; };
 		721CFFF71AA2FA4D00484BAA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF61AA2FA4D00484BAA /* LocationManager.swift */; };
 		721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
-		721CFFFE1AA2FA6000484BAA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFFB1AA2FA6000484BAA /* RootViewController.swift */; };
 		725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */; };
 		7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */; };
 		726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */; };
@@ -83,13 +81,11 @@
 		721CFFC41AA2F6E400484BAA /* picnic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picnic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		721CFFC81AA2F6E400484BAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		721CFFC91AA2F6E400484BAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		721CFFD31AA2F6E400484BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		721CFFD91AA2F6E400484BAA /* picnicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = picnicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		721CFFDE1AA2F6E400484BAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		721CFFDF1AA2F6E400484BAA /* picnicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = picnicTests.swift; sourceTree = "<group>"; };
 		721CFFF61AA2FA4D00484BAA /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
-		721CFFFB1AA2FA6000484BAA /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CountrySelectorType.swift; path = models/CountrySelectorType.swift; sourceTree = "<group>"; };
 		7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleUtils.swift; sourceTree = "<group>"; };
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
@@ -201,7 +197,6 @@
 				721C001D1AA2FA7B00484BAA /* Base.lproj */,
 				721CFFF81AA2FA6000484BAA /* viewControllers */,
 				721CFFC91AA2F6E400484BAA /* AppDelegate.swift */,
-				721CFFD21AA2F6E400484BAA /* LaunchScreen.xib */,
 				72C915EC1AD57C6000DC8F1B /* Podfile */,
 				721CFFFF1AA2FA6900484BAA /* Resources */,
 				72F307551AA3A3D00066F2A1 /* Images.xcassets */,
@@ -242,7 +237,6 @@
 			children = (
 				721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */,
 				39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */,
-				721CFFFB1AA2FA6000484BAA /* RootViewController.swift */,
 				72FEF4371AD461560057F388 /* MenuViewController.swift */,
 				72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */,
 			);
@@ -380,7 +374,6 @@
 				721C00151AA2FA6900484BAA /* childs_180.png in Resources */,
 				721C00131AA2FA6900484BAA /* childs_114.png in Resources */,
 				721C00191AA2FA6900484BAA /* childs_80.png in Resources */,
-				721CFFD41AA2F6E400484BAA /* LaunchScreen.xib in Resources */,
 				721C00171AA2FA6900484BAA /* childs_57.png in Resources */,
 				72C915ED1AD57C6000DC8F1B /* Podfile in Resources */,
 				721C001A1AA2FA6900484BAA /* childs_87.png in Resources */,
@@ -504,7 +497,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				721CFFFE1AA2FA6000484BAA /* RootViewController.swift in Sources */,
 				721CFFF71AA2FA4D00484BAA /* LocationManager.swift in Sources */,
 				725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */,
 				721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */,
@@ -558,14 +550,6 @@
 				721C002F1AA2FB2B00484BAA /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		721CFFD21AA2F6E400484BAA /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				721CFFD31AA2F6E400484BAA /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

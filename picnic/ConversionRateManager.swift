@@ -42,7 +42,6 @@ class ConvertsionRateManager : NSObject, NSURLConnectionDataDelegate{
             if status ==  HTTP_OK {
                 var dataAsDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
                 var conversionRate : Double = dataAsDictionary.objectForKey("value")!.doubleValue;
-                println(dataAsDictionary)
                 self.promise.success(conversionRate)
             } else {
                 self.promise.failure(NSError(domain: "HTTP_STATUS_CODE", code: 503, userInfo: nil))
@@ -59,5 +58,14 @@ class ConvertsionRateManager : NSObject, NSURLConnectionDataDelegate{
     func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         println("TIMEOUT")
         self.promise.failure(error)
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }
