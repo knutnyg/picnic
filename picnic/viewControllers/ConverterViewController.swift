@@ -77,6 +77,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.setConstraints(views)
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        clearTextFields()
+        refreshData()
+    }
+    
     func setupNavigationBar(){
         navigationController?.navigationBar.barTintColor = UIColor(netHex: 0x19B5FE)
         
@@ -100,33 +106,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         navigationItem.rightBarButtonItem = settingsButtonItem
         
     }
-    
-    func createfontAwesomeButton(unicode:String) -> UIButton{
-        var font = UIFont(name: "FontAwesome", size: 22)!
-        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
-        
-        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = font
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
-        
-        return button
-    }
-
 
     
     func setConstraints(views: [NSObject:AnyObject]){
         
-        var swapMargin = 0.045
-        var keyboardHeight = 216
-        if view.bounds.height < 500 {
-            swapMargin = 0.022
-        }
-
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
-            keyboardHeight = 350
-        }
+        var swapMargin = getSwapButtonMarginBasedOnDevice()
+        var keyboardHeight = getKeyboardHeightBasedOnDevice()
         
         var screenSize = Double(view.bounds.height)
         var textFieldHeight = Int(screenSize * 0.10)
@@ -206,11 +191,33 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.view.addConstraints(bottomTextFieldWidthConst)
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        clearTextFields()
-        refreshData()
+    
+    func getKeyboardHeightBasedOnDevice() -> Int{
+        var keyboardHeight = 216
+        
+        if view.bounds.height > 667 {
+            //iPhone 6 PLUS RAAAAAGE
+            keyboardHeight = 226
+        }
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+            keyboardHeight = 350
+        }
+        
+        return keyboardHeight
+        
     }
+    
+    func getSwapButtonMarginBasedOnDevice() -> Double{
+        
+        //Special case for iPhone 4
+        if view.bounds.height < 500 {
+            return 0.022
+        }
+        return 0.045
+    }
+    
+
     
     func refreshData(){
         shouldRefreshContiniueSpinning = true
@@ -246,6 +253,21 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.updateCurrentAmount(nil)
         userModel.updateHomeAmount(nil)
     }
+    
+    
+    func createfontAwesomeButton(unicode:String) -> UIButton{
+        var font = UIFont(name: "FontAwesome", size: 22)!
+        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+        
+        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        button.setTitle(unicode, forState: .Normal)
+        button.titleLabel!.font = font
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+        
+        return button
+    }
+
     
     func updateUserCurrentLocale(locale:NSLocale){
         self.userModel.updateCurrentLocale(locale)
@@ -300,13 +322,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func displayFailedToResolveCurrencyError(){
-        var alert2 = UIAlertController(title: "Error", message: "Unable to access current convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert2 = UIAlertController(title: "Error", message: "Unable to access obtain the convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
         alert2.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert2, animated: true, completion: nil)
     }
     
     func displayFailedToCurrentLocation(){
-        var alert = UIAlertController(title: "Error", message: "Unable to detect your location. Please make sure that the app is allowed the use of GPS under general settings.", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert = UIAlertController(title: "Error", message: "Unable to detect your location. Please make sure Picnic is allowed the use of GPS under general settings.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
