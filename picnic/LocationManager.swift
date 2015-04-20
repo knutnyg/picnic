@@ -14,7 +14,7 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
         super.init()
         
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         self.locationManager.requestWhenInUseAuthorization()
         self.userModel = userModel
     }

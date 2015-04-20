@@ -1,10 +1,3 @@
-//
-//  ParentConstraintsModel.swift
-//  currencyolini
-//
-//  Created by Knut Nygaard on 28/02/15.
-//  Copyright (c) 2015 Knut Nygaard. All rights reserved.
-//
 
 import Foundation
 

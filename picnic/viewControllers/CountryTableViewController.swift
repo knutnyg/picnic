@@ -32,8 +32,7 @@ class CountryTableViewController: UITableViewController {
             locale = userModel.homeLocale
         }
     }
-    
-    
+
     func scrollToCurrentLocaleIfSet() {
         if let loc = self.locale {
             var calculatedLocaleCountryName = LocaleUtils.createCountryNameFromLocale(loc)

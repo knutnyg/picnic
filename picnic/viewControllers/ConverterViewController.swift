@@ -1,18 +1,10 @@
-//
-//  ConverterViewController.swift
-//  currencyolini
-//
-//  Created by Knut Nygaard on 2/28/15.
-//  Copyright (c) 2015 Knut Nygaard. All rights reserved.
-//
 
 import Foundation
 import BrightFutures
 import UIKit
 
 class ConverterViewController: UIViewController, UserModelObserver, UITextFieldDelegate {
-    
-    
+
     // -- UI Elements -- //
     var topCountryLabel:UILabel!
     var bottomCountryLabel:UILabel!
@@ -57,7 +49,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
-        
+
         topLabel = createFALabel("\u{f124}")
         bottomLabel = createFALabel("\u{f015}")
         
