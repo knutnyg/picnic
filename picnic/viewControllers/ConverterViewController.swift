@@ -50,8 +50,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
 
-        topLabel = createFALabel("\u{f124}")
-        bottomLabel = createFALabel("\u{f015}")
+        topLabel = FAComponents.createFALabel("\u{f124}")
+        bottomLabel = FAComponents.createFALabel("\u{f015}")
         
         swapButton = createSwapButton()
         
@@ -86,17 +86,16 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var verticalOffset = 1.5 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
         
-        refreshButton = createfontAwesomeButton("\u{f021}")
+        refreshButton = FAComponents.createfontAwesomeButton("\u{f021}")
         refreshButton.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
         refreshButtonItem = UIBarButtonItem(customView: refreshButton)
         
-        settingsButton = createfontAwesomeButton("\u{f013}")
+        settingsButton = FAComponents.createfontAwesomeButton("\u{f013}")
         settingsButton.addTarget(self, action: "settings:", forControlEvents: UIControlEvents.TouchUpInside)
         settingsButtonItem = UIBarButtonItem(customView: settingsButton)
         
-        navigationItem.leftBarButtonItems = [refreshButtonItem]
+        navigationItem.leftBarButtonItem = refreshButtonItem
         navigationItem.rightBarButtonItem = settingsButtonItem
-        
     }
 
     
@@ -246,21 +245,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.updateHomeAmount(nil)
     }
     
-    
-    func createfontAwesomeButton(unicode:String) -> UIButton{
-        var font = UIFont(name: "FontAwesome", size: 22)!
-        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
-        
-        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = font
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
-        
-        return button
-    }
-
-    
     func updateUserCurrentLocale(locale:NSLocale){
         self.userModel.updateCurrentLocale(locale)
     }
@@ -297,7 +281,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         if let loc = userModel.currentLocale {
             topTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
         }
-
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -335,7 +318,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func homeLocaleHasChanged() {
         redraw()
     }
-    
+
     func currentLocaleHasChanged() {
         redraw()
     }
@@ -362,15 +345,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func clearTextFields() {
         self.topTextField.text = ""
         self.bottomTextField.text = ""
-    }
-    
-    func createFALabel(unicode:String) -> UILabel{
-        var screenSize = view.bounds.height
-        var label = UILabel()
-        label.setTranslatesAutoresizingMaskIntoConstraints(false)
-        label.text = unicode
-        label.textAlignment = NSTextAlignment.Center
-        return label
     }
     
     func createTextField() -> UITextField{

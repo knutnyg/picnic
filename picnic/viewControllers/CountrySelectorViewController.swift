@@ -84,7 +84,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         var verticalOffset = 3 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
         
-        backButton = createfontAwesomeButton("\u{f060}")
+        backButton = FAComponents.createfontAwesomeButton("\u{f060}")
         backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
         backButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backButtonItem
@@ -92,19 +92,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     func back(UIEvent) {
         navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func createfontAwesomeButton(unicode:String) -> UIButton{
-        var font = UIFont(name: "FontAwesome", size: 22)!
-        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
-        
-        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = font
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
-        
-        return button
     }
     
     func createInstructionLabel() -> UILabel{
