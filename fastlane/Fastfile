@@ -42,7 +42,7 @@ platform :ios do
   desc "This will also make sure the profile is up to date"
   lane :beta do
 #    snapshot
-    sigh
+#    sigh
     deliver :skip_deploy, :beta
 
     # sh "your_script.sh"

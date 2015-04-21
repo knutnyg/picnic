@@ -10,10 +10,7 @@ devices([
 ])
 
 languages([
-  'en-US',
-  'de-DE',
-  'it-IT'
-])
+  'en-US'])
 
 # Where should the resulting screenshots be stored?
 screenshots_path "./screenshots"
@@ -24,10 +21,10 @@ screenshots_path "./screenshots"
 # js_file './snapshot.js'
 
 # The name of the project's scheme
-# scheme 'SchemeName'
+scheme 'picnic'
 
 # Where is your project (or workspace)? Provide the full path here
-# project_path './YourProject.xcworkspace'
+project_path '../picnic.xcworkspace'
 
 # By default, the latest version should be used automatically. If you want to change it, do it here
 # ios_version '8.1'
