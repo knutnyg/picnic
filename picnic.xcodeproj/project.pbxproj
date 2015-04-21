@@ -86,6 +86,8 @@
 		721CFFDF1AA2F6E400484BAA /* picnicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = picnicTests.swift; sourceTree = "<group>"; };
 		721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocationManager.swift; sourceTree = "<group>"; };
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
+		724314DB1AE6D9D800A5213C /* BrightFutures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BrightFutures.framework; path = "Pods/../build/Debug-iphoneos/BrightFutures.framework"; sourceTree = "<group>"; };
+		724314DD1AE6D9F000A5213C /* BButton.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BButton.framework; path = "Pods/../build/Debug-iphoneos/BButton.framework"; sourceTree = "<group>"; };
 		725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CountrySelectorType.swift; path = models/CountrySelectorType.swift; sourceTree = "<group>"; };
 		7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleUtils.swift; sourceTree = "<group>"; };
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
@@ -278,6 +280,8 @@
 		A2265EA50607EF73DB222C36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				724314DD1AE6D9F000A5213C /* BButton.framework */,
+				724314DB1AE6D9D800A5213C /* BrightFutures.framework */,
 				CBCC4D1C4542B1A6DF6713BE /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -638,6 +642,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = picnic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,6 +660,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = picnic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

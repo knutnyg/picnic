@@ -1,5 +1,4 @@
 
-pod 'BrightFutures', :git => 'https://github.com/Thomvis/BrightFutures.git', :tag => '1.0.0-beta.5'
+pod 'BrightFutures', '1.0.0-beta.6'
 use_frameworks!
-
 pod 'BButton'
