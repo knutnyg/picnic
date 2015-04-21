@@ -24,7 +24,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     // -- App Elements -- //
     var userModel:UserModel!
-    var locationManager:LocationManager!
+    var locationManager:GPSLocationManager!
 
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
@@ -37,7 +37,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         setupNavigationBar()
         
-        locationManager = LocationManager(userModel: self.userModel)
+        locationManager = GPSLocationManager(userModel: self.userModel)
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -71,6 +71,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        var shouldRefreshContiniueSpinning:Bool = false
         clearTextFields()
         refreshData()
     }

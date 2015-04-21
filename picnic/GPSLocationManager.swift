@@ -2,9 +2,10 @@
 import Foundation
 import CoreLocation
 import BrightFutures
+import CoreTelephony
 
 
-class LocationManager : NSObject, CLLocationManagerDelegate {
+class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
     var promise:Promise<NSLocale>?
@@ -12,14 +13,12 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     
     init(userModel:UserModel) {
         super.init()
-        
+
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         self.locationManager.requestWhenInUseAuthorization()
         self.userModel = userModel
     }
-    
-    
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
@@ -100,7 +99,13 @@ class LocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        self.promise!.failure(error)
+        if let locale = CelluarLocationManager.getCountryLocaleByCelluar() {
+            self.promise!.success(locale)
+        } else {
+            "Fallback failed"
+            self.promise!.failure(error)
+        }
+        
         println("Error getting current locale")
         println("Error: " + error.localizedDescription)
         locationManager.stopUpdatingLocation()

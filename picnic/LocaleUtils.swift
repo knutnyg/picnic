@@ -5,7 +5,7 @@ import Foundation
 class LocaleUtils {
     
     class func createLocaleFromCountryCode(countryCode:NSString)->NSLocale {
-        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCountryCode:countryCode]))
+        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCountryCode:countryCode.uppercaseString]))
     }
     
     class func createCountryNameFromLocale(locale:NSLocale, languageLocale:NSLocale? = nil) -> String? {
