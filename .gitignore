@@ -6,4 +6,5 @@ Pods
 .idea
 *.ipa
 picnic.app.dSYM.zip
+fastlane/report.xml
 
