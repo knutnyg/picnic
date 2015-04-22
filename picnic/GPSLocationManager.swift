@@ -9,6 +9,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
     var promise:Promise<NSLocale>?
+    var promiseInProgress:Bool = false
     var userModel:UserModel!
     
     init(userModel:UserModel) {
@@ -57,19 +58,24 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func handleLocation(placemarks: [AnyObject]) {
+        println("handling location")
         if placemarks.isEmpty {
             println("Error with the data.")
         } else {
             let pm:CLPlacemark = placemarks.first as! CLPlacemark
             let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
             
-            self.promise!.success(locale)
+            if(promiseInProgress){
+                self.promise!.success(locale)
+                promiseInProgress = false
+            }
             locationManager.stopUpdatingLocation()
         }
     }    
 
     func getUserCurrentLocale(withOverride:Bool) -> Future<NSLocale> {
         self.promise = Promise<NSLocale>()
+        self.promiseInProgress = true
 
         if withOverride {
             if let override = self.returnOverridedGPSLocationIfSet() {
@@ -93,6 +99,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func handleError(error : NSError!) {
+        println("got error")
         if (error != nil) {
             return
         }
@@ -101,6 +108,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         if let locale = CelluarLocationManager.getCountryLocaleByCelluar() {
             self.promise!.success(locale)
+            self.promiseInProgress = false
         } else {
             "Fallback failed"
             self.promise!.failure(error)
