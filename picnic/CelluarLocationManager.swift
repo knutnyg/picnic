@@ -7,11 +7,11 @@ import CoreTelephony
 class CelluarLocationManager {
 
     class func getCountryLocaleByCelluar() -> NSLocale?{
-        var networkInfo:CTTelephonyNetworkInfo = CTTelephonyNetworkInfo()
-        var carrier:CTCarrier = networkInfo.subscriberCellularProvider
-
-        var isoCountryCode = carrier.isoCountryCode
-        
+        var networkInfo:CTTelephonyNetworkInfo? = CTTelephonyNetworkInfo()
+        var isoCountryCode:String!
+        if let ni = networkInfo, carrier = ni.subscriberCellularProvider {
+            isoCountryCode = carrier.isoCountryCode
+        }
         if let icc = isoCountryCode {
             return LocaleUtils.createLocaleFromCountryCode(icc)
         } else {
