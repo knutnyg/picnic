@@ -13,7 +13,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     var delegate:UIViewController!=nil
     var userModel:UserModel!
     var selectorType:CountrySelectorType!
-    var locationManager:GPSLocationManager!
+    var locationManager:LocationManager!
     
     var backButton:UIButton!
     var backButtonItem:UIBarButtonItem!
@@ -32,7 +32,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
         countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        locationManager = GPSLocationManager(userModel: userModel)
+        locationManager = LocationManager(userModel: userModel)
         switch selectorType! {
         case .GPS:
             locationManager.getUserCurrentLocale(false)

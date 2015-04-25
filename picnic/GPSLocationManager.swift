@@ -7,7 +7,7 @@ import CoreTelephony
 
 class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
-    let locationManager = CLLocationManager()
+    var locationManager = CLLocationManager()
     var promise:Promise<NSLocale>?
     var promiseInProgress:Bool = false
     var userModel:UserModel!
@@ -22,100 +22,78 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+            handleLocationUpdate(manager)
+    }
+    
+    internal func handleLocationUpdate(manager:CLLocationManager){
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
             {
                 (placemarks, error)->Void in
-
+                
                 if error != nil {
                     self.handleError(error)
-                    self.locationManager.stopUpdatingLocation()
+                    self.stopMonitoringGPS()
                 } else {
                     self.handleLocation(placemarks)
-                }
 
+                }
             }
         )
+
     }
     
-    func returnOverridedGPSLocationIfSet() -> NSLocale?{
-        if userModel.shouldOverrideGPS {
-            if let override = userModel.overrideGPSLocale {
-                println("locationmanager returning overrided GPS locale")
-                println(LocaleUtils.createCountryNameFromLocale(override))
-                return override
-            }
-        }
-        return nil
-    }
-    
-    func returnOverridedLogicalLocationIfSet() -> NSLocale?{
-        if userModel.shouldOverrideLogical {
-            if let override = userModel.overrideLogicalLocale {
-                return override
-            }
-        }
-        return nil
+    func test(placemarks: [AnyObject]){
+        println("handling locaiton")
     }
     
     func handleLocation(placemarks: [AnyObject]) {
-        println("handling location")
         if placemarks.isEmpty {
             println("Error with the data.")
         } else {
-            let pm:CLPlacemark = placemarks.first as! CLPlacemark
-            let locale:NSLocale = LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
+            
+            let locale = getLocaleFromPlacemark(placemarks)
             
             if(promiseInProgress){
                 self.promise!.success(locale)
                 promiseInProgress = false
             }
-            locationManager.stopUpdatingLocation()
+            stopMonitoringGPS()
         }
-    }    
+        println("done handler")
+    }
+    
+    internal func getLocaleFromPlacemark(placemarks:[AnyObject]) -> NSLocale{
+        let pm:CLPlacemark = placemarks.first as! CLPlacemark
+        return LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
+    }
 
-    func getUserCurrentLocale(withOverride:Bool) -> Future<NSLocale> {
+    func getUserCurrentLocale() -> Future<NSLocale> {
         self.promise = Promise<NSLocale>()
         self.promiseInProgress = true
 
-        if withOverride {
-            if let override = self.returnOverridedGPSLocationIfSet() {
-                self.promise!.success(override)
-                return promise!.future
-            }
-        }
-        
-        self.locationManager.startUpdatingLocation()
+        startMonitoringGPS()
         return self.promise!.future
     }
     
-    func getUserHomeLocale(withOverride:Bool) -> NSLocale {
-        if withOverride {
-            if let override = self.returnOverridedLogicalLocationIfSet() {
-                return override
-            }
-        }
-        let countryCode:String =  NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
-        return LocaleUtils.createLocaleFromCountryCode(countryCode)
+    internal func startMonitoringGPS(){
+        locationManager.startUpdatingLocation()
     }
     
+    internal func stopMonitoringGPS(){
+        locationManager.stopUpdatingLocation()
+    }
+    
+        
     func handleError(error : NSError!) {
         println("got error")
         if (error != nil) {
             return
         }
     }
-    
+
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        if let locale = CelluarLocationManager.getCountryLocaleByCelluar() {
-            self.promise!.success(locale)
-            self.promiseInProgress = false
-        } else {
-            "Fallback failed"
-            self.promise!.failure(error)
-        }
-        
-        println("Error getting current locale")
+        self.promise!.failure(error)
         println("Error: " + error.localizedDescription)
-        locationManager.stopUpdatingLocation()
+        stopMonitoringGPS()
     }
 }

@@ -6,18 +6,27 @@ import CoreTelephony
 
 class CelluarLocationManager {
 
-    class func getCountryLocaleByCelluar() -> NSLocale?{
-        var networkInfo:CTTelephonyNetworkInfo? = CTTelephonyNetworkInfo()
-        var isoCountryCode:String!
-        if let ni = networkInfo, carrier = ni.subscriberCellularProvider {
-            isoCountryCode = carrier.isoCountryCode
-        }
-        if let icc = isoCountryCode {
-            return LocaleUtils.createLocaleFromCountryCode(icc)
+    func getCountryLocaleByCelluar() -> NSLocale?{
+        
+        if let cc = getCountryCodeFromSim() {
+            return LocaleUtils.createLocaleFromCountryCode(cc)
         } else {
             println("Error: Celluar icc is nil!")
         }
         return nil
+    }
+    
+    internal func getCountryCodeFromSim() -> String?{
+        var networkInfo:CTTelephonyNetworkInfo? = CTTelephonyNetworkInfo()
+
+        if let ni = networkInfo, carrier = ni.subscriberCellularProvider {
+            return carrier.isoCountryCode
+        } else {
+            return nil
+        }
+        
+
+        
     }
     
 }

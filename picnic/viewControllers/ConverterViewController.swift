@@ -24,7 +24,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     // -- App Elements -- //
     var userModel:UserModel!
-    var locationManager:GPSLocationManager!
+    var locationManager:LocationManager!
+    var conversionRateManager:ConversionRateManager!
 
     let userDefaults = NSUserDefaults.standardUserDefaults();
     
@@ -37,7 +38,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         setupNavigationBar()
         
-        locationManager = GPSLocationManager(userModel: self.userModel)
+        locationManager = LocationManager(userModel: userModel)
+        conversionRateManager = ConversionRateManager()
+        
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -229,7 +232,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func fetchCurrency() {
-        ConvertsionRateManager().getConvertionRate(self.userModel)
+        conversionRateManager.getConvertionRate(self.userModel)
                 .onSuccess { conv in
                     self.shouldRefreshContiniueSpinning = false
                     self.userModel.updateConvertionRate(conv) }
