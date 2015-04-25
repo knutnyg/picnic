@@ -29,7 +29,9 @@ platform :ios do
         message: "Starting deploy"
       })
       sh "../increment_build_number.sh"
-      ipa
+      ipa({
+        scheme: "picnic"
+        })
       deliver
       sh "../commit_release.sh"
       slack({
