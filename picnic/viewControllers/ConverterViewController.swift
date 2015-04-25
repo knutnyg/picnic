@@ -211,9 +211,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
         return 0.045
     }
-    
 
-    
     func refreshData(){
         shouldRefreshContiniueSpinning = true
         refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)

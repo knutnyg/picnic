@@ -124,4 +124,23 @@ class LocationManagerTests: XCTestCase {
                 expectation.fulfill()        }
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
+    
+    func testWithOverrideTrueAndShouldNotOverride(){
+        let expectedLocale = NSLocale(localeIdentifier: "en_GB")
+        let expectation = self.expectationWithDescription("delayed answer")
+        
+        locationManager.userModel.shouldOverrideGPS = false
+        locationManager.userModel.overrideGPSLocale = NSLocale(localeIdentifier: "nb_NO")
+        
+        locationManager.getUserCurrentLocale(true)
+            .onSuccess { locale in
+                XCTAssertEqual(locale.objectForKey(NSLocaleCountryCode) as! String, expectedLocale.objectForKey(NSLocaleCountryCode) as! String, "returned locale should be same country as expected locale")
+                expectation.fulfill()
+            }.onFailure {error in
+                XCTAssert(false, "should not return failure")
+                expectation.fulfill()
+            }
+        self.waitForExpectationsWithTimeout(5, handler: nil)
+
+    }
 }

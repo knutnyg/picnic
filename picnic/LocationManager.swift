@@ -22,10 +22,13 @@ class LocationManager : NSObject{
         self.promiseInProgress = true
         
         if withOverride {
-            if let override = self.returnOverridedGPSLocationIfSet() {
-                return Future<NSLocale>.succeeded(override)
+            if userModel.shouldOverrideGPS {
+                if let locale = userModel.overrideGPSLocale {
+                    return Future<NSLocale>.succeeded(locale)
+                } else {
+                    return Future<NSLocale>.failed(NSError(domain: "Override inconsistent", code: 500, userInfo: nil))
+                }
             }
-            return Future<NSLocale>.failed(NSError(domain: "Override inconsistent", code: 500, userInfo: nil))
         }
         gpsLocationManager.getUserCurrentLocale()
             .onSuccess { locale in
@@ -44,8 +47,6 @@ class LocationManager : NSObject{
     func returnOverridedGPSLocationIfSet() -> NSLocale?{
         if userModel.shouldOverrideGPS {
             if let override = userModel.overrideGPSLocale {
-                println("locationmanager returning overrided GPS locale")
-                println(LocaleUtils.createCountryNameFromLocale(override))
                 return override
             }
         }
