@@ -26,7 +26,7 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   lane :deploy do
       slack({
-        message: "Starting fastlane test"
+        message: "Starting deploy"
       })
       sh "../increment_build_number.sh"
       ipa
