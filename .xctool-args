@@ -1,0 +1,6 @@
+[
+  "-workspace", "picnic.xcworkspace",
+  "-scheme", "picnic",
+  "-sdk", "iphonesimulator",
+  "test"
+]
