@@ -2,7 +2,7 @@
 
 PROJECT=esiqveland/picnic
 TAG="latest"
-TUTUM_UUID=""
+TUTUM_UUID="89ea94d5"
 URL="https://picnic.logisk.org/version"
 
 function usage() {
