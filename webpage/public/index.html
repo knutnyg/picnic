@@ -1,14 +1,38 @@
 <html>
 <head>
 	<title>Picnic Currency Converter Support Site</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-	<h1>FAQ:</h1>
-	<ul>
-		<li>Q: Why does the app show the same country for both sides of the converter?</li>
-		<li>A: The app uses your location as well as phones region. The region can be changed under Settings>General>Language and Region</li>
-		<li>Q: I want to select another country than the ones proposed!</li><li>A: It is possible to override countries by adding country-identifiers under System Preferences > Picnic. These must be of the format xx_XX i.e: en_US. Better integration for overriding will come in a future release.</li>
-	</ul>
-	<p>For comments and bugreports please leave feedback through the app store!</p>
+	<header>
+		<h1>Picnic Currency</h1>
+	</header>
+	<div id="introduction" class="textbox">
+		<h2>Vision</h2>
+		<p>Picnic currency aims to simplify the currency conversion process, by offering up to date currency conversion from the local currency to your own. We want to provide a zero-configuration experience that works wherever you decide to go. 
+		</p>
+	</div>
+
+	<div id="how" class="textbox" >
+		<h2>How does it Work?</h2>
+		<p>Picnic determines your location using your device's GPS. Cellular information is used as a fallback if the GPS is unable to determine a location. If you want to manually configure picnic with different countries than the ones detected, this can be done thought the wizard in the menu.
+		</p>
+		<br>
+		<p>Because our data is based on public available information which provide no guarantee for correctness, our currency rates should be used for informational purpose only. The currency rates provided by Picnic may vary from the ones provided by your bank.
+		</p>
+	</div>
+
+	<div id="Privacy" class="textbox">
+		<h2>Privacy</h2>
+		<p>Picnic takes your privacy seriousy. Information about your location is only used internally in the application and never transmitted.</p>
+	</div>
+
+	<div id="FAQ" class="textbox">
+		<h2>FAQ</h2>
+		<ul>
+			<li>Q: Will there be offline support?</li>
+			<li>A: Yes, offline support will be available shortly after the application is available</li>
+		</ul>
+	</div>
 </body>
 </html>

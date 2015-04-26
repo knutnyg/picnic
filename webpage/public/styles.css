@@ -1,0 +1,46 @@
+
+header h1 {
+	color: white;
+	font-family: Verdana, Georgia, Serif;
+	font-size: 28px;
+	text-align: center;
+	padding-top: 18px
+}
+
+header {
+	background-color: #19B5FE;
+	height: 70px;
+}
+
+h2 {
+	margin: 0px;
+	margin-bottom: 5px;
+	font-family: helvetica;
+}
+
+p {
+	margin: 0px;
+	font-family: helvetica;
+}
+
+ul {
+	list-style-type: none;
+	padding-left: 0px;
+	margin-top: 0px;
+}
+
+body {
+	margin: 0px;
+
+}
+
+.textbox {
+	margin-top: 25px;
+	min-width: 300px;
+	max-width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 10px;
+	padding-right: 10px;		
+}
+
