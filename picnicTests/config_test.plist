@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>api_url</key>
-	<string>http://example.com/example/api</string>
+	<string>http://example.com/api/</string>
 </dict>
 </plist>

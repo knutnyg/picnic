@@ -56,11 +56,11 @@ class ConvertionRateManagerTests : XCTestCase {
         setBundleToTest(crm)
         crm.config = crm.loadConfig()
         
-        var url = crm.getURL("NOK", currentCurrency: "DKK")?.description
+        var url = crm.getConversionURL("NOK", currentCurrency: "DKK")?.description
         XCTAssertNotNil(url, "url should not be nil")
         
         if let u = url {
-            XCTAssertEqual("http://example.com/example/api/NOK/DKK", url!, "URLS should match")
+            XCTAssertEqual("http://example.com/api/exchange/NOK/DKK", url!, "URLS should match")
         }
     }
     
@@ -76,9 +76,13 @@ class ConvertionRateManagerTests : XCTestCase {
         userModel.currentLocale = NSLocale(localeIdentifier: "en_US")
         userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
         
-        conversionRateManagerIntegration.config = ["api_url":"invalid url"]
+        var crm = ConversionRateManager()
+        crm.config = ["api_url":"invalid url"]
 
-        conversionRateManagerIntegration.getConvertionRate(userModel)
+        crm.getConvertionRate(userModel)
+            .onSuccess{conv in
+                XCTAssert(false, "should fail!")
+            }
             .onFailure {error in
                 XCTAssert(true, "invalid url should fail")
                 expectation.fulfill()
@@ -99,8 +103,51 @@ class ConvertionRateManagerTests : XCTestCase {
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
     
+    func testGetAllCurrencies(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        conversionRateManagerIntegration.getAllCurrencies()
+            .onSuccess {dict in
+                XCTAssert(true, "should succeed")
+//                println(dict)
+                expectation.fulfill()
+        }
+            .onFailure{error in
+                XCTAssert(false, "should succeed")
+                expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+    
+    func testGetAllCurrenciesURL(){
+        var crm = ConversionRateManager()
+        setBundleToTest(crm)
+        crm.config = crm.loadConfig()
+        
+        var URL = crm.getAllCurrenciesURL()!
+        var expected = "http://example.com/api/currencies"
+        
+        XCTAssertEqual(URL.description,expected,"should be equal")
+        
+    }
+    
+    func testSavingAndLoadingOfflineDataFile(){
+        var dict:[String:OfflineEntry] = [:]
+        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 2)
+        saveDictionaryToDisk("test.dat", dict)
+        
+        var loadedDict = readOfflineDateFromDisk("test.dat")
+        XCTAssertNotNil(loadedDict, "shouldNotBeNil")
+    }
+    
+    func testLoadingNilShouldNotCrashApp(){
+        var result = readOfflineDateFromDisk("doesNotExist.dat")
+        XCTAssertNil(result, "should be nil!")
+    }
+    
     func setBundleToTest(crm:ConversionRateManager){
         var bundle = NSBundle(forClass: ConvertionRateManagerTests.self)
         crm.configPath = bundle.pathForResource("config_test", ofType: "plist")
     }
+    
+    
 }

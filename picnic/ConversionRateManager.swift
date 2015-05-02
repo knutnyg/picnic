@@ -1,6 +1,8 @@
 
 import BrightFutures
 import Foundation
+import SwiftHTTP
+import JSONJoy
 
 
 class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
@@ -10,7 +12,8 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     let HTTP_OK:Int = 200
     let HTTP_SERVER_ERROR:Int = 503
-    var promise:Promise<Double>!
+    var conversionRatePromise:Promise<Double>!
+    var currenciesPromise:Promise<NSDictionary>!
     var configPath:String?
     internal var config:NSDictionary?
 
@@ -25,30 +28,87 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     }
     
     func getConvertionRate(userModel:UserModel) -> Future<Double> {
-        promise = Promise<Double>()
+        conversionRatePromise = Promise<Double>()
         
         if let homeLocale = userModel.homeLocale,  currentLocale = userModel.currentLocale {
             let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as! String
             let currentCurrency = currentLocale.objectForKey(NSLocaleCurrencyCode) as! String
             
-            if let url = getURL(homeCurrency, currentCurrency: currentCurrency) {
+            if(userModel.offlineMode){
+                if let data = userModel.offlineData {
+                    var valueFrom = data[currentCurrency]?.value
+                    var valueTo = data[homeCurrency]?.value
+                    
+                    println("using offline data:")
+                    println("converting from: \(currentCurrency) to \(homeCurrency) with convrate: \(valueFrom!/valueTo!)")
+                    
+                    return Future.succeeded(valueFrom!/valueTo!)
+                }
+
+            }
+            
+            if let url = getConversionURL(homeCurrency, currentCurrency: currentCurrency) {
+                println(url)
                 var request = NSMutableURLRequest(URL: url)
                 request.timeoutInterval = 15
                 var connection:NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
             } else {
-                promise.failure(NSError(domain: "Error creaing URL", code: 500, userInfo: nil))
+                conversionRatePromise.failure(NSError(domain: "Error creaing URL", code: 500, userInfo: nil))
             }
         } else {
-            promise.failure(NSError(domain: "Home and/or current locale not set!", code: 500, userInfo: nil))
+            conversionRatePromise.failure(NSError(domain: "Home and/or current locale not set!", code: 500, userInfo: nil))
         }
-        return promise.future
+        return conversionRatePromise.future
     }
     
-    func getURL(homeCurrency:String, currentCurrency:String) -> NSURL?{
+    func getAllCurrencies() -> Future<NSDictionary> {
+        currenciesPromise = Promise<NSDictionary>()
+        
+        let URL = getAllCurrenciesURL()!
+        let request = HTTPTask()
+        request.requestSerializer = HTTPRequestSerializer()
+        request.responseSerializer = JSONResponseSerializer()
+        
+        request.GET(URL.description, parameters: nil,
+            success:
+            {(response: HTTPResponse) in
+                if response.responseObject != nil {
+                    if let dict = response.responseObject as? Dictionary<String,AnyObject> {
+                        self.currenciesPromise.success(dict)
+                    }
+                } else {
+                    self.currenciesPromise.failure(NSError(domain: "no data in response", code: 500, userInfo: nil))
+                }
+            },
+            failure:
+            {(error: NSError, response: HTTPResponse?) in
+                self.currenciesPromise.failure(error)
+        })
+        return currenciesPromise.future
+    }
+    
+    func getFileURL(fileName: String) -> NSURL {
+        let manager = NSFileManager.defaultManager()
+        let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
+        return dirURL!.URLByAppendingPathComponent(fileName)
+    }
+    
+    func getConversionURL(homeCurrency:String, currentCurrency:String) -> NSURL?{
         if let conf = config {
             var url: String? = conf.valueForKey("api_url") as? String
             if let baseurl = url {
-                return NSURL(string: "\(baseurl)/\(homeCurrency)/\(currentCurrency)")
+                return NSURL(string: "\(baseurl)exchange/\(homeCurrency)/\(currentCurrency)")
+            }
+        }
+        println("Error creating url from properties")
+        return nil
+    }
+    
+    func getAllCurrenciesURL() -> NSURL?{
+        if let conf = config {
+            var url: String? = conf.valueForKey("api_url") as? String
+            if let baseurl = url {
+                return NSURL(string: "\(baseurl)currencies")
             }
         }
         println("Error creating url from properties")
@@ -73,12 +133,12 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         
         if let status = self.statusCode , data = self.data, conversionRate = getConversionRateFromResponse(data) {
             if status ==  HTTP_OK {
-                self.promise.success(conversionRate)
+                self.conversionRatePromise.success(conversionRate)
             } else {
-                self.promise.failure(NSError(domain: "HTTP", code: 400, userInfo: nil))
+                self.conversionRatePromise.failure(NSError(domain: "HTTP", code: 400, userInfo: nil))
             }
         } else {
-            self.promise.failure(NSError(domain: "RESPONSE_CONTAINED_NIL", code: 400, userInfo: nil))
+            self.conversionRatePromise.failure(NSError(domain: "RESPONSE_CONTAINED_NIL", code: 400, userInfo: nil))
         }
     }
     
@@ -100,7 +160,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         println("TIMEOUT")
-        self.promise.failure(error)
+        self.conversionRatePromise.failure(error)
     }
     
     func delay(delay:Double, closure:()->()) {

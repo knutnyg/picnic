@@ -37,6 +37,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.backgroundColor = UIColor.whiteColor()
         
         setupNavigationBar()
+        readOfflineDataFromDisk()
         
         locationManager = LocationManager(userModel: userModel)
         conversionRateManager = ConversionRateManager()
@@ -70,6 +71,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":topLabel, "bottomIcon":bottomLabel]
         
         self.setConstraints(views)
+    }
+    
+    func readOfflineDataFromDisk() {
+        if let data = readOfflineDateFromDisk("data.dat"){
+            userModel.offlineData = data
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

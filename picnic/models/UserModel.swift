@@ -17,6 +17,9 @@ import Foundation
     var overrideLogicalLocale:NSLocale?
     var shouldOverrideLogical = false
     
+    var offlineMode:Bool = false
+    var offlineData:Dictionary<String,OfflineEntry>?
+    
     override init(){
         self.observers = []
         super.init()
