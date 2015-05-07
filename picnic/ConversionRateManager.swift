@@ -2,7 +2,6 @@
 import BrightFutures
 import Foundation
 import SwiftHTTP
-import JSONJoy
 
 
 class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
@@ -10,8 +9,6 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     var statusCode:Int?
     var data:NSData?
     
-    let HTTP_OK:Int = 200
-    let HTTP_SERVER_ERROR:Int = 503
     var conversionRatePromise:Promise<ConversionRateObject>!
     var currenciesPromise:Promise<NSDictionary>!
     var configPath:String?
@@ -160,15 +157,6 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             }
         }
         return nil
-    }
-    
-    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
-        self.statusCode = response.valueForKey("statusCode") as? Int
-    }
-    
-    func connection(connection: NSURLConnection, didFailWithError error: NSError) {
-        println("TIMEOUT")
-        self.conversionRatePromise.failure(error)
     }
     
     func delay(delay:Double, closure:()->()) {

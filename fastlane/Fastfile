@@ -49,10 +49,10 @@ platform :ios do
 
 
   error do |lane, exception|
-    # slack({
-    #   message: exception.message
-    #   success: false
-    # })
+     slack({
+       message: exception.message
+       success: false
+     })
   end
 
 end
