@@ -21,6 +21,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     var topLabel:UILabel!
     var bottomLabel:UILabel!
+    var dataAgeLabel:UILabel!
 
     // -- App Elements -- //
     var userModel:UserModel!
@@ -57,6 +58,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         topLabel = FAComponents.createFALabel("\u{f124}")
         bottomLabel = FAComponents.createFALabel("\u{f015}")
         
+        dataAgeLabel = createLabel("")
+        
         swapButton = createSwapButton()
         
         view.addSubview(topCountryLabel)
@@ -66,9 +69,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(bottomTextField)
         view.addSubview(topLabel)
         view.addSubview(bottomLabel)
+        view.addSubview(dataAgeLabel)
         
         let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
-            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":topLabel, "bottomIcon":bottomLabel]
+            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":topLabel, "bottomIcon":bottomLabel, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
     }
@@ -185,6 +189,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
+        view.addConstraint(NSLayoutConstraint(item: dataAgeLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0))
+        
+        view.addConstraint(NSLayoutConstraint(item: dataAgeLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: bottomTextField, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: CGFloat(keyboardHeight / 2)))
+
         self.view.addConstraints(verticalLayout)
         self.view.addConstraints(topCountrylabelSpaceToTextField)
         self.view.addConstraints(topTextFieldWidthConst)
@@ -222,8 +230,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func refreshData(){
         shouldRefreshContiniueSpinning = true
         refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
-        updateUserHomeLocale()
         
+        updateUserHomeLocale()
+        updateUserCurrentLocale()
+        
+        getOfflineData()
+    }
+    
+    func updateUserCurrentLocale(){
         locationManager.getUserCurrentLocale(true)
             .onSuccess { locale in
                 self.updateUserCurrentLocale(locale)
@@ -236,16 +250,70 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         }
     }
     
-    func fetchCurrency() {
+    func getOfflineData(){
+        ConversionRateManager().getAllCurrencies()
+            .onSuccess{dict in
+                var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
+                self.userModel.offlineData = offlineEntries
+                saveDictionaryToDisk("data.dat", offlineEntries)
+            }.onFailure {error in
+                println("Error retrieving offline list")
+            }
+    }
+    
+    func parseResult(dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]{
+        var resultDict:[String:OfflineEntry] = [:]
+        
+        for key in dict.keys {
+            var value = (dict[key]!["value"]! as NSString).doubleValue
+            var from = dict[key]!["unit_from"]!
+            var to = dict[key]!["unit_to"]!
+            var timestamp = dict[key]!["timestamp"]!
+            
+            resultDict[key] = OfflineEntry(timeStamp: dateFromUTCString(timestamp), unit_from: from, unit_to: to, value: value)
+        }
+        return resultDict
+    }
+    
+    func fetchCurrency(completion: (() -> Void)? = nil) {
         conversionRateManager.getConvertionRate(self.userModel)
-                .onSuccess { conv in
+                .onSuccess { convObj in
                     self.shouldRefreshContiniueSpinning = false
-                    self.userModel.updateConvertionRate(conv) }
+                    self.userModel.convertionRate = convObj.value
+                    self.userModel.conversionRateTimeStamp = convObj.timestamp
+                    
+                    if self.isDataOld(convObj.timestamp) {
+                        self.dataAgeLabel.text = "Last updated: \(convObj.timestamp.mediumPrintable())"
+                    } else {
+                        self.dataAgeLabel.text = ""
+                    }
+                    if let callback = completion {
+                        callback()
+                    }
+                }
                 .onFailure { error in
                     println("failed to get conv rate")
                     self.shouldRefreshContiniueSpinning = false
                     self.displayFailedToResolveCurrencyError()
-                    self.userModel.updateConvertionRate(1.0)}
+                    self.userModel.convertionRate = 1
+                    self.dataAgeLabel.text = ""
+                    
+                    if let callback = completion {
+                        callback()
+                    }
+
+        }
+    }
+    
+    func isDataOld(timestamp:NSDate) -> Bool{
+        
+        var limit = NSDate().addDays(-2)
+        
+        let res = timestamp.compare(limit)
+        if res == NSComparisonResult.OrderedDescending {
+            return false
+        }
+        return true
     }
     
     func swapButtonPressed(sender:UIButton!){
@@ -419,9 +487,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         if(!topTextField.isFirstResponder()){
             topTextField.text = text
         }
-    }
-    
-    func convertionRateHasChanged() {
     }
 }
 

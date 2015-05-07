@@ -1,5 +1,6 @@
 
 import Foundation
+import UIKit
 
 extension UIColor {
     convenience init(red: Int, green: Int, blue: Int) {
@@ -33,5 +34,47 @@ extension UIView {
             rotateAnimation.delegate = delegate
         }
         self.layer.addAnimation(rotateAnimation, forKey: nil)
+    }
+}
+
+extension NSDate {
+    
+    func shortPrintable()-> String{
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd.MM"
+        
+        return dateFormatter.stringFromDate(self)
+    }
+    
+    func mediumPrintable() -> String {
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd. MMMM YYYY"
+        
+        return dateFormatter.stringFromDate(self)
+    }
+    
+    func utcFormat() -> String {
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        
+        return dateFormatter.stringFromDate(self)
+    }
+    
+    func addDays(daysToAdd : Int) -> NSDate
+    {
+        var secondsInDays : NSTimeInterval = Double(daysToAdd) * 60 * 60 * 24
+        var dateWithDaysAdded : NSDate = self.dateByAddingTimeInterval(secondsInDays)
+        
+        //Return Result
+        return dateWithDaysAdded
+    }
+    
+    func addHours(hoursToAdd : Int) -> NSDate
+    {
+        var secondsInHours : NSTimeInterval = Double(hoursToAdd) * 60 * 60
+        var dateWithHoursAdded : NSDate = self.dateByAddingTimeInterval(secondsInHours)
+        
+        //Return Result
+        return dateWithHoursAdded
     }
 }

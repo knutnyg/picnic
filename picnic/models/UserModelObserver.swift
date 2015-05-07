@@ -7,5 +7,4 @@ protocol UserModelObserver {
     func homeAmountChanged()
     func currentLocaleHasChanged()
     func currentAmountChanged()
-    func convertionRateHasChanged()
 }

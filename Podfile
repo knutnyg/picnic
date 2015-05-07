@@ -1,5 +1,5 @@
 
-pod 'BrightFutures', '1.0.0-beta.7'
+pod 'BrightFutures', '1.0.0'
 link_with 'picnic','picnicTests'
 use_frameworks!
 pod 'BButton'

@@ -10,19 +10,25 @@ class ConvertionRateManagerTests : XCTestCase {
     var conversionRateManagerSub = ConversionRateManagerSub()
     
     func testIntegrationTestConversionRate(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        
         var userModel = UserModel()
         userModel.currentLocale = NSLocale(localeIdentifier: "en_US")
         userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
         conversionRateManagerIntegration.getConvertionRate(userModel)
             .onSuccess { conversionRate in
-                XCTAssertNotNil(conversionRate, "value should not be nil")
-                XCTAssertGreaterThan(conversionRate, 0, "value should be greater than 0")
+                XCTAssertNotNil(conversionRate.value, "value should not be nil")
+                XCTAssertGreaterThan(conversionRate.value, 0, "value should be greater than 0")
+                expectation.fulfill()
             }.onFailure { error in
                 XCTAssert(false, "Should get conversion rate")
+                expectation.fulfill()
             }
+        self.waitForExpectationsWithTimeout(5, handler: nil)
     }
     
     func testInvalidURL(){
+        let expectation = self.expectationWithDescription("delayed answer")
         var userModel = UserModel()
         userModel.currentLocale = NSLocale(localeIdentifier: "en_US")
         userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
@@ -30,11 +36,14 @@ class ConvertionRateManagerTests : XCTestCase {
         conversionRateManagerSub.getConvertionRate(userModel)
             .onSuccess { rate in
                 XCTAssert(false, "this should not work")
+                expectation.fulfill()
             }
             .onFailure { error in
                 XCTAssert(true, "should fail")
-                XCTAssertEqual(error.code.description, "400", "Should return errorcode 400")
+                XCTAssertEqual(error.code.description, "3840", "Should return errorcode 3840")
+                expectation.fulfill()
         }
+        self.waitForExpectationsWithTimeout(5, handler: nil)
     }
     
     func testDataParserFailsWithBadData(){
@@ -108,7 +117,6 @@ class ConvertionRateManagerTests : XCTestCase {
         conversionRateManagerIntegration.getAllCurrencies()
             .onSuccess {dict in
                 XCTAssert(true, "should succeed")
-//                println(dict)
                 expectation.fulfill()
         }
             .onFailure{error in
@@ -147,6 +155,94 @@ class ConvertionRateManagerTests : XCTestCase {
     func setBundleToTest(crm:ConversionRateManager){
         var bundle = NSBundle(forClass: ConvertionRateManagerTests.self)
         crm.configPath = bundle.pathForResource("config_test", ofType: "plist")
+    }
+    
+    func testFallbackToOffline(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        
+        var dict:[String:OfflineEntry] = [:]
+        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 0.2)
+        dict["SEK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "SEK", value: 0.3)
+        
+        var userModel = UserModel()
+        userModel.currentLocale = NSLocale(localeIdentifier: "se_SE")
+        userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
+        
+        userModel.offlineData = dict
+        
+        var crm = ConversionRateManager()
+        crm.config = ["api_url":"www.awdadawdawdawgiufbflawif.com/"]
+        
+        crm.getConvertionRate(userModel)
+            .onSuccess{conv in
+                XCTAssert(true, "should be picked up by fallback")
+                XCTAssertGreaterThan(1, conv.value, "should be positive")
+                expectation.fulfill()
+            }
+            .onFailure {error in
+                XCTAssert(true, "invalid url should fail")
+                expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(5, handler: nil)
+
+    }
+    
+    func testOldFallbackDataShowsAgeLabel(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        var conv = ConverterViewController()
+        conv.viewDidLoad()
+        
+        
+        var dict:[String:OfflineEntry] = [:]
+        dict["NOK"] = OfflineEntry(timeStamp: NSDate().addDays(-5), unit_from: "USD", unit_to: "NOK", value: 0.2)
+        dict["SEK"] = OfflineEntry(timeStamp: NSDate().addDays(-5), unit_from: "USD", unit_to: "SEK", value: 0.3)
+        
+        var userModel = UserModel()
+        userModel.currentLocale = NSLocale(localeIdentifier: "se_SE")
+        userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
+        
+        userModel.offlineData = dict
+        
+        var crm = ConversionRateManager()
+        crm.config = ["api_url":"www.awdadawdawdawgiufbflawif.com/"]
+        
+        conv.conversionRateManager = crm
+        conv.userModel = userModel
+        
+        conv.fetchCurrency()
+        
+        delay(1, {expectation.fulfill()})
+        self.waitForExpectationsWithTimeout(5, handler: nil)
+        
+        XCTAssertTrue(conv.dataAgeLabel.text!.contains("Last updated"), "Data age label should be set")
+    }
+    
+    func testNewFallbackDataShowsEmptyAgeLabel(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        var conv = ConverterViewController()
+        conv.viewDidLoad()
+        
+        
+        var dict:[String:OfflineEntry] = [:]
+        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 0.2)
+        dict["SEK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "SEK", value: 0.3)
+        
+        var userModel = UserModel()
+        userModel.currentLocale = NSLocale(localeIdentifier: "se_SE")
+        userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
+        
+        userModel.offlineData = dict
+        
+        var crm = ConversionRateManager()
+        crm.config = ["api_url":"www.awdadawdawdawgiufbflawif.com/"]
+        
+        conv.conversionRateManager = crm
+        conv.userModel = userModel
+        
+        conv.fetchCurrency(completion: {expectation.fulfill()})
+        
+        self.waitForExpectationsWithTimeout(5, handler: nil)
+        XCTAssertTrue(conv.dataAgeLabel.text!.isEmpty, "Data age label should be empty")
     }
     
     

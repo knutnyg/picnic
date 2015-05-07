@@ -8,6 +8,7 @@ import Foundation
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
     var convertionRate:Double?
+    var conversionRateTimeStamp:NSDate?
     var homeAmount:Double?
     var currentAmount:Double?
     
@@ -46,11 +47,6 @@ import Foundation
         currentLocaleHasChanged()
     }
     
-    func updateConvertionRate(convertionRate:Double){
-        self.convertionRate = convertionRate
-        convertionRateHasChanged()
-    }
-    
     func updateHomeAmount(amount:Double?) {
         self.homeAmount = amount;
         if let number = homeAmount, convertionRate = self.convertionRate {
@@ -77,13 +73,6 @@ import Foundation
             observer.homeAmountChanged();
         }
     }
-    
-    func convertionRateHasChanged(){
-        for observer in self.observers {
-            observer.convertionRateHasChanged()
-        }
-    }
-    
     
     func homeLocaleHasChanged(){
         for observer in self.observers {

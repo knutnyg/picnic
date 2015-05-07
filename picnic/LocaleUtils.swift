@@ -1,6 +1,7 @@
 
 
 import Foundation
+import UIKit
 
 class LocaleUtils {
     
@@ -54,3 +55,11 @@ func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
     return nil
 }
 
+func createLabel(text:String) -> UILabel{
+    var label = UILabel()
+    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.text = text
+    label.textAlignment = NSTextAlignment.Center
+    label.numberOfLines = 2
+    return label
+}

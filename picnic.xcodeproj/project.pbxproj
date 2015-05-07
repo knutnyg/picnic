@@ -58,11 +58,20 @@
 		725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */; };
 		7263533E1AC7DCC300F4F4A5 /* LocaleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */; };
 		726353441AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */; };
+		7266E4551AF947230032EF4C /* ConverterViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7266E4541AF947230032EF4C /* ConverterViewControllerTests.swift */; };
+		7266E4561AF947770032EF4C /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
+		7266E4571AF947D90032EF4C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C003B21AE31707009E309E /* Extensions.swift */; };
+		7266E4581AF948400032EF4C /* FAComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324F4A701F24E1C27D5CA52D /* FAComponents.swift */; };
+		7266E4591AF948550032EF4C /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4371AD461560057F388 /* MenuViewController.swift */; };
+		7266E45A1AF9485E0032EF4C /* CountrySelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */; };
+		7266E45B1AF948680032EF4C /* CountryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */; };
 		72A9D4C51AA5219C00A15E70 /* GPSLoctionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C41AA5219C00A15E70 /* GPSLoctionManagerTests.swift */; };
 		72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */; };
 		72B2EFAB1AF4C47E00E26FE4 /* OfflineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */; };
 		72B2EFAD1AF4C6C800E26FE4 /* OfflineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */; };
 		72C003B31AE31707009E309E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C003B21AE31707009E309E /* Extensions.swift */; };
+		72C10AF31AF93C7B00F68907 /* ConversionRateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */; };
+		72C10AF41AF93FCA00F68907 /* ConversionRateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */; };
 		72C915ED1AD57C6000DC8F1B /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 72C915EC1AD57C6000DC8F1B /* Podfile */; };
 		72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72F307551AA3A3D00066F2A1 /* Images.xcassets */; };
 		72FEF4381AD461560057F388 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4371AD461560057F388 /* MenuViewController.swift */; };
@@ -127,10 +136,12 @@
 		725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CountrySelectorType.swift; path = models/CountrySelectorType.swift; sourceTree = "<group>"; };
 		7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleUtils.swift; sourceTree = "<group>"; };
 		726353431AC7FB3C00F4F4A5 /* LocaleCountryNameTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleCountryNameTuple.swift; sourceTree = "<group>"; };
+		7266E4541AF947230032EF4C /* ConverterViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewControllerTests.swift; sourceTree = "<group>"; };
 		72A9D4C41AA5219C00A15E70 /* GPSLoctionManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLoctionManagerTests.swift; sourceTree = "<group>"; };
 		72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateManager.swift; sourceTree = "<group>"; };
 		72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineEntry.swift; sourceTree = "<group>"; };
 		72C003B21AE31707009E309E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateObject.swift; sourceTree = "<group>"; };
 		72C915EC1AD57C6000DC8F1B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		72C915EE1AD580F100DC8F1B /* picnic-Bridgeing-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "picnic-Bridgeing-Header.h"; sourceTree = "<group>"; };
 		72F307551AA3A3D00066F2A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -201,6 +212,7 @@
 				721C00271AA2FABE00484BAA /* UserModel.swift */,
 				721C00281AA2FABE00484BAA /* UserModelObserver.swift */,
 				72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */,
+				72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -256,6 +268,7 @@
 		721CFFDC1AA2F6E400484BAA /* picnicTests */ = {
 			isa = PBXGroup;
 			children = (
+				7266E4531AF947090032EF4C /* viewControllers */,
 				723475B01AEBC6E20036E764 /* managers */,
 				7239BB4F1AE960620097CFA2 /* Subclasses */,
 				721CFFDD1AA2F6E400484BAA /* Supporting Files */,
@@ -348,6 +361,14 @@
 				723475B11AEBC7690036E764 /* Timing.swift */,
 			);
 			name = util;
+			sourceTree = "<group>";
+		};
+		7266E4531AF947090032EF4C /* viewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7266E4541AF947230032EF4C /* ConverterViewControllerTests.swift */,
+			);
+			name = viewControllers;
 			sourceTree = "<group>";
 		};
 		A2265EA50607EF73DB222C36 /* Frameworks */ = {
@@ -598,6 +619,7 @@
 				723475B21AEBC7690036E764 /* Timing.swift in Sources */,
 				72FEF43A1AD461950057F388 /* CountrySelectorViewController.swift in Sources */,
 				324F458A1EA809936436364F /* FAComponents.swift in Sources */,
+				72C10AF31AF93C7B00F68907 /* ConversionRateObject.swift in Sources */,
 				324F46A050E9ED2FFDF20E1A /* CelluarLocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -607,12 +629,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7239BB521AE960A10097CFA2 /* GPSLocationManager.swift in Sources */,
+				7266E4551AF947230032EF4C /* ConverterViewControllerTests.swift in Sources */,
 				7234759B1AEB6A120036E764 /* LocationManagerSub.swift in Sources */,
 				7239BB561AE962890097CFA2 /* LocaleCountryNameTuple.swift in Sources */,
+				7266E45B1AF948680032EF4C /* CountryTableViewController.swift in Sources */,
 				7239BB541AE9626A0097CFA2 /* LocaleUtils.swift in Sources */,
+				7266E45A1AF9485E0032EF4C /* CountrySelectorViewController.swift in Sources */,
+				7266E4561AF947770032EF4C /* ConverterViewController.swift in Sources */,
 				723475A01AEB932F0036E764 /* ConvertionRateManagerTests.swift in Sources */,
+				7266E4591AF948550032EF4C /* MenuViewController.swift in Sources */,
+				7266E4581AF948400032EF4C /* FAComponents.swift in Sources */,
 				723475971AEB68E70036E764 /* LocationManagerTests.swift in Sources */,
 				7239BB551AE962790097CFA2 /* CelluarLocationManager.swift in Sources */,
+				7266E4571AF947D90032EF4C /* Extensions.swift in Sources */,
 				72B2EFAD1AF4C6C800E26FE4 /* OfflineEntry.swift in Sources */,
 				7239BB511AE9607D0097CFA2 /* GPSLocationManagerSub.swift in Sources */,
 				72A9D4C51AA5219C00A15E70 /* GPSLoctionManagerTests.swift in Sources */,
@@ -623,6 +652,7 @@
 				723475B31AEBC78C0036E764 /* Timing.swift in Sources */,
 				7239BB531AE960EA0097CFA2 /* UserModel.swift in Sources */,
 				723475A21AEB93BD0036E764 /* ConversionRateManagerSub.swift in Sources */,
+				72C10AF41AF93FCA00F68907 /* ConversionRateObject.swift in Sources */,
 				7220BA561AEA9FDC00F5DC85 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
