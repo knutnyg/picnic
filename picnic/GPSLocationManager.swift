@@ -30,6 +30,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             {
                 (placemarks, error)->Void in
                 
+                println("got response")
                 if error != nil {
                     self.handleError(error)
                     self.stopMonitoringGPS()
@@ -40,10 +41,6 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             }
         )
 
-    }
-    
-    func test(placemarks: [AnyObject]){
-        println("handling locaiton")
     }
     
     func handleLocation(placemarks: [AnyObject]) {
@@ -85,10 +82,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
         
     func handleError(error : NSError!) {
-        println("got error")
-        if (error != nil) {
-            return
-        }
+        self.promise?.failure(error)
     }
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
