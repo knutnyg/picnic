@@ -325,8 +325,18 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton){
         self.view.endEditing(true)
+        var temp = userModel.homeLocale
+        userModel.homeLocale = userModel.currentLocale
+        userModel.currentLocale = temp
+        
+        if let conv = userModel.convertionRate {
+            userModel.convertionRate = 1/conv
+        }
+        
         userModel.updateCurrentAmount(nil)
         userModel.updateHomeAmount(nil)
+        
+        redraw()
     }
     
     func housePressed(sender:UIButton){
