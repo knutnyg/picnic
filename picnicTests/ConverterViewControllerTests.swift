@@ -51,6 +51,6 @@ class ConverterViewControllerTests: XCTestCase {
     func testOldDataIsOld(){
         var timestamp = NSDate().addDays(-3)
         XCTAssertTrue(vc.isDataOld(timestamp), "Should be true")
-    } 
+    }
 
 }

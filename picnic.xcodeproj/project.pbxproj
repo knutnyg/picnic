@@ -69,6 +69,10 @@
 		72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */; };
 		72B2EFAB1AF4C47E00E26FE4 /* OfflineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */; };
 		72B2EFAD1AF4C6C800E26FE4 /* OfflineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */; };
+		72B5B93B1AFF828600C436D4 /* supported_currencies.txt in Resources */ = {isa = PBXBuildFile; fileRef = 72B5B93A1AFF828600C436D4 /* supported_currencies.txt */; };
+		72B5B93C1AFF828600C436D4 /* supported_currencies.txt in Resources */ = {isa = PBXBuildFile; fileRef = 72B5B93A1AFF828600C436D4 /* supported_currencies.txt */; };
+		72B5B93E1AFF836F00C436D4 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5B93D1AFF836F00C436D4 /* FileUtils.swift */; };
+		72B5B93F1AFF836F00C436D4 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5B93D1AFF836F00C436D4 /* FileUtils.swift */; };
 		72C003B31AE31707009E309E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C003B21AE31707009E309E /* Extensions.swift */; };
 		72C10AF31AF93C7B00F68907 /* ConversionRateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */; };
 		72C10AF41AF93FCA00F68907 /* ConversionRateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */; };
@@ -140,6 +144,8 @@
 		72A9D4C41AA5219C00A15E70 /* GPSLoctionManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLoctionManagerTests.swift; sourceTree = "<group>"; };
 		72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateManager.swift; sourceTree = "<group>"; };
 		72B2EFAA1AF4C47E00E26FE4 /* OfflineEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineEntry.swift; sourceTree = "<group>"; };
+		72B5B93A1AFF828600C436D4 /* supported_currencies.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = supported_currencies.txt; sourceTree = SOURCE_ROOT; };
+		72B5B93D1AFF836F00C436D4 /* FileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
 		72C003B21AE31707009E309E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		72C10AF21AF93C7B00F68907 /* ConversionRateObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateObject.swift; sourceTree = "<group>"; };
 		72C915EC1AD57C6000DC8F1B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -252,6 +258,7 @@
 				72F307551AA3A3D00066F2A1 /* Images.xcassets */,
 				721CFFC71AA2F6E400484BAA /* Supporting Files */,
 				723475A31AEB94090036E764 /* config.plist */,
+				72B5B93A1AFF828600C436D4 /* supported_currencies.txt */,
 			);
 			path = picnic;
 			sourceTree = "<group>";
@@ -359,6 +366,7 @@
 				72C003B21AE31707009E309E /* Extensions.swift */,
 				324F4A701F24E1C27D5CA52D /* FAComponents.swift */,
 				723475B11AEBC7690036E764 /* Timing.swift */,
+				72B5B93D1AFF836F00C436D4 /* FileUtils.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -469,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				721C00321AA3366400484BAA /* Settings.bundle in Resources */,
+				72B5B93B1AFF828600C436D4 /* supported_currencies.txt in Resources */,
 				721C00151AA2FA6900484BAA /* childs_180.png in Resources */,
 				723475A41AEB94090036E764 /* config.plist in Resources */,
 				721C00131AA2FA6900484BAA /* childs_114.png in Resources */,
@@ -498,6 +507,7 @@
 				723475AF1AEBC36B0036E764 /* config_test.plist in Resources */,
 				723475A81AEBBBCC0036E764 /* valid_json.txt in Resources */,
 				723475AB1AEBBBF80036E764 /* invalid_json.txt in Resources */,
+				72B5B93C1AFF828600C436D4 /* supported_currencies.txt in Resources */,
 				723475A51AEB94090036E764 /* config.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -621,6 +631,7 @@
 				324F458A1EA809936436364F /* FAComponents.swift in Sources */,
 				72C10AF31AF93C7B00F68907 /* ConversionRateObject.swift in Sources */,
 				324F46A050E9ED2FFDF20E1A /* CelluarLocationManager.swift in Sources */,
+				72B5B93E1AFF836F00C436D4 /* FileUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,6 +648,7 @@
 				7266E45A1AF9485E0032EF4C /* CountrySelectorViewController.swift in Sources */,
 				7266E4561AF947770032EF4C /* ConverterViewController.swift in Sources */,
 				723475A01AEB932F0036E764 /* ConvertionRateManagerTests.swift in Sources */,
+				72B5B93F1AFF836F00C436D4 /* FileUtils.swift in Sources */,
 				7266E4591AF948550032EF4C /* MenuViewController.swift in Sources */,
 				7266E4581AF948400032EF4C /* FAComponents.swift in Sources */,
 				723475971AEB68E70036E764 /* LocationManagerTests.swift in Sources */,

@@ -11,6 +11,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var topTextField:UITextField!
     var bottomTextField:UITextField!
     var swapButton:UIButton!
+    var pointButton:UIButton!
+    var houseButton:UIButton!
     
     var refreshButton:UIButton!
     var settingsButton:UIButton!
@@ -55,24 +57,29 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
 
-        topLabel = FAComponents.createFALabel("\u{f124}")
-        bottomLabel = FAComponents.createFALabel("\u{f015}")
+        pointButton = createFAButton("\u{f124}")
+        pointButton.addTarget(self, action: Selector("pointPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        houseButton = createFAButton("\u{f015}")
+        houseButton.addTarget(self, action: Selector("housePressed:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         dataAgeLabel = createLabel("")
         
-        swapButton = createSwapButton()
+        swapButton = createFAButton("\u{f0ec}")
+        swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
+        swapButton.addTarget(self, action: "swapButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         
         view.addSubview(topCountryLabel)
         view.addSubview(topTextField)
         view.addSubview(swapButton)
         view.addSubview(bottomCountryLabel)
         view.addSubview(bottomTextField)
-        view.addSubview(topLabel)
-        view.addSubview(bottomLabel)
+        view.addSubview(pointButton)
+        view.addSubview(houseButton)
         view.addSubview(dataAgeLabel)
         
         let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
-            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":topLabel, "bottomIcon":bottomLabel, "dataAgeLabel":dataAgeLabel]
+            "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":pointButton, "bottomIcon":houseButton, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
     }
@@ -101,11 +108,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         var verticalOffset = 1.5 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
         
-        refreshButton = FAComponents.createfontAwesomeButton("\u{f021}")
+        refreshButton = createfontAwesomeButton("\u{f021}")
         refreshButton.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
         refreshButtonItem = UIBarButtonItem(customView: refreshButton)
         
-        settingsButton = FAComponents.createfontAwesomeButton("\u{f013}")
+        settingsButton = createfontAwesomeButton("\u{f013}")
         settingsButton.addTarget(self, action: "settings:", forControlEvents: UIControlEvents.TouchUpInside)
         settingsButtonItem = UIBarButtonItem(customView: settingsButton)
         
@@ -133,8 +140,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
         self.bottomTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
-        self.topLabel.font = UIFont(name: "FontAwesome", size: iconFontSize)
-        self.bottomLabel.font = UIFont(name: "FontAwesome", size: iconFontSize)
+        self.pointButton.titleLabel!.font = UIFont(name: "FontAwesome", size: iconFontSize)
+        self.houseButton.titleLabel!.font = UIFont(name: "FontAwesome", size: iconFontSize)
         
         var visualFormat = String(format: "V:[topTextField(%d)]-%d-[swapButton]-%d-[bottomTextField(%d)]-%d-|",
             textFieldHeight,
@@ -152,8 +159,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        view.addConstraint(NSLayoutConstraint(item: topLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: topTextField, attribute: .CenterY, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: bottomLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: bottomTextField, attribute: .CenterY, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: topTextField, attribute: .CenterY, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: bottomTextField, attribute: .CenterY, multiplier: 1, constant: 0))
         
         view.addConstraint(NSLayoutConstraint(item: topCountryLabel, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: topTextField, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0))
         
@@ -174,7 +181,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
             visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         
-        let size: CGSize = bottomLabel.text!.sizeWithAttributes([NSFontAttributeName: bottomLabel.font])
+        let size: CGSize = houseButton.titleLabel!.text!.sizeWithAttributes([NSFontAttributeName: houseButton.titleLabel!.font])
         var labelWidth = size.width + CGFloat(2*distanceFromEdge)
         
         visualFormat = String(format: "H:|-%d-[topIcon(\(size.width))]-%d-[topTextField]-\(labelWidth)-|",
@@ -316,10 +323,20 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return true
     }
     
-    func swapButtonPressed(sender:UIButton!){
+    func swapButtonPressed(sender:UIButton){
         self.view.endEditing(true)
         userModel.updateCurrentAmount(nil)
         userModel.updateHomeAmount(nil)
+    }
+    
+    func housePressed(sender:UIButton){
+        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func pointPressed(sender:UIButton){
+        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func updateUserCurrentLocale(locale:NSLocale){

@@ -76,7 +76,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             var timestamp = data[from]?.timeStamp
             
             if let from = fromVal, to = toVal, ts = timestamp {
-                return ConversionRateObject(value: (to/from),timestamp: ts)
+                return ConversionRateObject(value: (from/to),timestamp: ts)
             }
         }
         

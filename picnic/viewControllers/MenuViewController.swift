@@ -19,6 +19,9 @@ class MenuViewController : UIViewController {
     var userModel:UserModel!
     var delegate:ConverterViewController!
     var backButton:UIButton!
+    var pointButton:BButton!
+    var houseButton:BButton!
+    
     var backButtonItem:UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -33,31 +36,43 @@ class MenuViewController : UIViewController {
         instructionAutomaticLabel = createLabel("Let Picnic guess where you are:")
         instructionManualLabel = createLabel("or you decide:")
 
-        gpsButton = createBButton("Automatic setup")
+        gpsButton = createBButton(" Automatic setup")
         gpsButton.addTarget(self, action: "autoSetupPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        countrySetup = createBButton("Choose Countries")
-        countrySetup.addTarget(self, action: "setupButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        pointButton = createBButton(" Set location")
+        pointButton.addAwesomeIcon(FAIcon.FALocationArrow, beforeTitle: true)
+        pointButton.addTarget(self, action: Selector("pointPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+
+        houseButton = createBButton(" Set home")
+        houseButton.addAwesomeIcon(FAIcon.FAHome, beforeTitle: true)
+        houseButton.addTarget(self, action: Selector("housePressed:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         setActiveButtonStyle()
         
         self.view.addSubview(instructionAutomaticLabel)
         self.view.addSubview(instructionManualLabel)
         self.view.addSubview(gpsButton)
-        self.view.addSubview(countrySetup)
+        self.view.addSubview(pointButton)
+        self.view.addSubview(houseButton)
         
-        var views = ["gps":gpsButton, "setup":countrySetup, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel]
+        var views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton]
         
         var screenHeight = view.bounds.height
         var marginTop = Int((screenHeight - 24 - 120) / 2) - 66
         
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[setup(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsManual]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        
+        view.addConstraint(NSLayoutConstraint(item: houseButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
+        view.addConstraint(NSLayoutConstraint(item: pointButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
+        view.addConstraint(NSLayoutConstraint(item: instructionManualLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 180))
         view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: countrySetup, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 180))
-        view.addConstraint(NSLayoutConstraint(item: countrySetup, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
+        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
     }
     
     func createReloadButton() -> UIButton{
@@ -92,7 +107,7 @@ class MenuViewController : UIViewController {
         var verticalOffset = 3 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
 
-        backButton = FAComponents.createfontAwesomeButton("\u{f060}")
+        backButton = createfontAwesomeButton("\u{f060}")
         backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
         backButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backButtonItem
@@ -114,6 +129,16 @@ class MenuViewController : UIViewController {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    func pointPressed(sender:UIButton){
+        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func housePressed(sender:UIButton){
+        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func createBButton(title:String) -> BButton{
         var button = BButton()
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -124,10 +149,16 @@ class MenuViewController : UIViewController {
     }
     
     func setActiveButtonStyle() {
-        if userModel.isManualSetupActive() {
-            countrySetup.setType(BButtonType.Success)
-            countrySetup.addAwesomeIcon(FAIcon.FACheck, beforeTitle: true)
-        } else {
+        
+        if userModel.shouldOverrideGPS {
+            pointButton.setType(BButtonType.Success)
+        }
+        
+        if userModel.shouldOverrideLogical {
+            houseButton.setType(BButtonType.Success)
+        }
+        
+        if !userModel.isManualSetupActive() {
             gpsButton.setType(BButtonType.Success)
             gpsButton.addAwesomeIcon(FAIcon.FACheck, beforeTitle: true)
         }

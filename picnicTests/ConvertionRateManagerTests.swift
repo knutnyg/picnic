@@ -18,7 +18,7 @@ class ConvertionRateManagerTests : XCTestCase {
         conversionRateManagerIntegration.getConvertionRate(userModel)
             .onSuccess { conversionRate in
                 XCTAssertNotNil(conversionRate.value, "value should not be nil")
-                XCTAssertGreaterThan(conversionRate.value, 0, "value should be greater than 0")
+                XCTAssertLessThan(conversionRate.value, 1, "value should be less than 1")
                 expectation.fulfill()
             }.onFailure { error in
                 XCTAssert(false, "Should get conversion rate")
@@ -176,7 +176,7 @@ class ConvertionRateManagerTests : XCTestCase {
         crm.getConvertionRate(userModel)
             .onSuccess{conv in
                 XCTAssert(true, "should be picked up by fallback")
-                XCTAssertGreaterThan(1, conv.value, "should be positive")
+                XCTAssertGreaterThan(conv.value, 1, "should be positive")
                 expectation.fulfill()
             }
             .onFailure {error in
@@ -245,5 +245,34 @@ class ConvertionRateManagerTests : XCTestCase {
         XCTAssertTrue(conv.dataAgeLabel.text!.isEmpty, "Data age label should be empty")
     }
     
+    func testConversionRateFallback(){
+        let expectation = self.expectationWithDescription("delayed answer")
+        var conv = ConverterViewController()
+        conv.viewDidLoad()
+        
+        
+        var dict:[String:OfflineEntry] = [:]
+        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 0.125)
+        dict["USD"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "USD", value: 1)
+        
+        var userModel = UserModel()
+        userModel.currentLocale = NSLocale(localeIdentifier: "en_US")
+        userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
+        
+        userModel.offlineData = dict
+        
+        var crm = ConversionRateManager()
+        crm.config = ["api_url":"www.awdadawdawdawgiufbflawif.com/"]
+        
+        conv.conversionRateManager = crm
+        conv.userModel = userModel
+        
+        conv.fetchCurrency(completion: {expectation.fulfill()})
+
+        
+        self.waitForExpectationsWithTimeout(5, handler: nil)
+        
+        XCTAssertGreaterThan(conv.userModel.convertionRate!, 1, "Should be grater than 1")
+    }
     
 }

@@ -9,6 +9,10 @@ class LocaleUtils {
         return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCountryCode:countryCode.uppercaseString]))
     }
     
+    class func createLocaleFromCurrencyCode(currencyCode:String) -> NSLocale {
+        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCurrencyCode:currencyCode.uppercaseString]))
+    }
+    
     class func createCountryNameFromLocale(locale:NSLocale, languageLocale:NSLocale? = nil) -> String? {
         let countryCode: String? = locale.objectForKey(NSLocaleCountryCode) as? String
         if let cc = countryCode {
@@ -17,7 +21,6 @@ class LocaleUtils {
             } else {
                 return NSLocale(localeIdentifier: "en_US").displayNameForKey(NSLocaleCountryCode, value: cc)
             }
-
         }
         return nil
     }
@@ -34,26 +37,6 @@ func dateFromUTCString(dateOnUTC:String) -> NSDate{
     return dateFormatter.dateFromString(dateOnUTC)!
 }
 
-func getFileURL(fileName: String) -> NSURL {
-    let manager = NSFileManager.defaultManager()
-    let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
-    return dirURL!.URLByAppendingPathComponent(fileName)
-}
-
-func saveDictionaryToDisk(fileName:String, dict:Dictionary<String,AnyObject>){
-    let filePath = getFileURL(fileName).path!
-    NSKeyedArchiver.archiveRootObject(dict, toFile: filePath)
-}
-
-func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
-    println("Reading offline data from disk")
-    if let filePath = getFileURL(fileName).path {
-        if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String:OfflineEntry] {
-            return dict
-        }
-    }
-    return nil
-}
 
 func createLabel(text:String) -> UILabel{
     var label = UILabel()

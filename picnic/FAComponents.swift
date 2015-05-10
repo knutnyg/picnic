@@ -6,26 +6,32 @@
 import Foundation
 import UIKit
 
-class FAComponents {
+func createFALabel(unicode:String) -> UILabel{
+    var label = UILabel()
+    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.text = unicode
+    label.textAlignment = NSTextAlignment.Center
+    return label
+}
 
-    class func createFALabel(unicode:String) -> UILabel{
-        var label = UILabel()
-        label.setTranslatesAutoresizingMaskIntoConstraints(false)
-        label.text = unicode
-        label.textAlignment = NSTextAlignment.Center
-        return label
-    }
+func createfontAwesomeButton(unicode:String) -> UIButton{
+    var font = UIFont(name: "FontAwesome", size: 22)!
+    let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
 
-    class func createfontAwesomeButton(unicode:String) -> UIButton{
-        var font = UIFont(name: "FontAwesome", size: 22)!
-        let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+    var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+    button.setTitle(unicode, forState: .Normal)
+    button.titleLabel!.font = font
+    button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+    button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
 
-        var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        button.setTitle(unicode, forState: .Normal)
-        button.titleLabel!.font = font
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+    return button
+}
 
-        return button
-    }
+func createFAButton(unicode:String) -> UIButton{
+    var button = UIButton()
+    button.setTranslatesAutoresizingMaskIntoConstraints(false)
+    button.setTitle(unicode, forState: .Normal)
+    button.setTitleColor(UIColor.blackColor(), forState: .Normal)
+    button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+    return button
 }

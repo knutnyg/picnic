@@ -6,6 +6,7 @@ platform :ios do
 
   before_all do
     	cocoapods
+	sh "../extract_supported_currencies.py"
 
       xctest({
         workspace: "picnic.xcworkspace",
@@ -50,7 +51,7 @@ platform :ios do
 
   error do |lane, exception|
      slack({
-       message: exception.message
+       message: exception.message,
        success: false
      })
   end

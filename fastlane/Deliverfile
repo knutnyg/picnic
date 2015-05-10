@@ -22,7 +22,8 @@ default_language "en-US"
 
 #ipa "../picnic.ipa"
 skip_pdf true
-
+hide_transporter_output
+skip_deploy
 
 # to provide an ipa file for TestFlight distribution, use beta_ipa 
 beta_ipa "../picnic.ipa"

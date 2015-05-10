@@ -55,11 +55,23 @@ class CountryTableViewController: UITableViewController {
         }
         
         var localeCountryNameTupleList:[LocaleCountryNameTuple] = []
+        var localeList:[NSLocale] = []
         
-        let countryCodeList = NSLocale.ISOCountryCodes() as! [String]
-        var countryLocaleList = countryCodeList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
+        var currencies = readFileAsString("supported_currencies", "txt")
+        var currencyList = split(currencies!) {$0 == "\n"}
         
-        for locale in countryLocaleList {
+        //finn alle land
+        var rawCountryList = NSLocale.ISOCountryCodes() as! [String]
+
+        //lag locale objecter
+        var rawLocaleList:[NSLocale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
+
+        //filtrer land der currency finnes i støttet liste
+        var filteredList = rawLocaleList.filter({locale in
+            return contains(currencyList, (locale.objectForKey(NSLocaleCurrencyCode) as! String))
+            })
+        
+        for locale in filteredList {
             localeCountryNameTupleList += [LocaleUtils.createLocaleCountryNameTuple(locale, language: userModel.languageLocale)]
         }
         
@@ -97,33 +109,25 @@ class CountryTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
         
-        //Clear marks
         var cellCount = self.tableView.numberOfRowsInSection(0)
         for i in 0...cellCount {
             var cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0))
             cell?.accessoryType = UITableViewCellAccessoryType.None
         }
         
-        //Add new mark
         selectedCell!.accessoryType = UITableViewCellAccessoryType.Checkmark
         
-        //Tell overservers of change
         switch selectorType! {
-            case .HOME_COUNTRY:
-                userModel.overrideLogicalLocale = localeCountryNameTupleList[indexPath.row].locale
-                userModel.shouldOverrideLogical = true
-            
-            let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.GPS)
-            vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
-            
+        case .HOME_COUNTRY:
+            userModel.overrideLogicalLocale = localeCountryNameTupleList[indexPath.row].locale
+            userModel.shouldOverrideLogical = true
             break
         case .GPS:
             userModel.overrideGPSLocale = localeCountryNameTupleList[indexPath.row].locale
             userModel.shouldOverrideGPS = true
-            navigationController?.popToRootViewControllerAnimated(true)
             break
         }
+        navigationController?.popToRootViewControllerAnimated(true)
     }
 
     func setCountryArray(localeCountryNameTuple:[LocaleCountryNameTuple]) {
