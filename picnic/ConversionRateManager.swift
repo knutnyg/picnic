@@ -38,15 +38,32 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                 request.GET(URL.description, parameters: nil,
                     success: {
                         (response: HTTPResponse) in
+                        
                         if response.responseObject != nil {
                             if let dict = response.responseObject as? Dictionary<String, AnyObject> {
                                 println("returning conversion rate")
-                                var value = (dict["value"] as! NSString).doubleValue
-                                var timeStamp = dateFromUTCString(dict["timestamp"] as! String)
-                                var convObj = ConversionRateObject(value: value, timestamp: timeStamp)
-
-                                conversionRatePromise.success(convObj)
+                                if let value = (dict["value"] as? NSString)?.doubleValue {
+                                    var timeStamp = dateFromUTCString(dict["timestamp"] as! String)
+                                    var convObj = ConversionRateObject(value: value, timestamp: timeStamp)
+                                    
+                                    conversionRatePromise.success(convObj)
+                                    return
+                                } else {
+                                    println("response does not contain conversion rate")
+                                }
+                            } else {
+                                println("unparseable response")
                             }
+                        } else {
+                            println("empty response")
+                        }
+                        
+                        if let fallbackValue = self.getOfflineConversionRate(userModel, from: currentCurrency, to: homeCurrency) {
+                            println("returning fallback conversion rate")
+                            conversionRatePromise.success(fallbackValue)
+                            return
+                        } else {
+                            conversionRatePromise.failure(NSError(domain: "Got errorinous response", code: 400, userInfo: nil))
                         }
                     },
                     failure: {(error: NSError, response: HTTPResponse?) in
@@ -58,7 +75,6 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                             conversionRatePromise.failure(error)
                         }
                 })
-
             } else {
                 conversionRatePromise.failure(NSError(domain: "failed to load url", code: 400, userInfo: nil))
             }
@@ -79,9 +95,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                 return ConversionRateObject(value: (from/to),timestamp: ts)
             }
         }
-        
         return nil
-
     }
     
     func getAllCurrencies() -> Future<NSDictionary> {
