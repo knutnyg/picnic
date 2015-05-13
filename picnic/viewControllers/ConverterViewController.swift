@@ -242,6 +242,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         updateUserCurrentLocale()
         
         getOfflineData()
+        
+        println(userModel.shouldOverrideGPS)
+        println(userModel.shouldOverrideLogical)
     }
     
     func updateUserCurrentLocale(){
@@ -325,12 +328,23 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton){
         self.view.endEditing(true)
-        var temp = userModel.homeLocale
+        var tempLocale = userModel.homeLocale
         userModel.homeLocale = userModel.currentLocale
-        userModel.currentLocale = temp
+        userModel.currentLocale = tempLocale
+        
+        var tempBool = userModel.shouldOverrideGPS
+        userModel.shouldOverrideGPS = userModel.shouldOverrideLogical
+        userModel.shouldOverrideLogical = tempBool
+        
+        var tempOverrideLocal = userModel.overrideGPSLocale
+        userModel.overrideGPSLocale = userModel.overrideLogicalLocale
+        userModel.overrideLogicalLocale = tempOverrideLocal
         
         if let conv = userModel.convertionRate {
-            userModel.convertionRate = 1/conv
+            if conv != 0 {
+                userModel.convertionRate = 1/conv
+            }
+
         }
         
         userModel.updateCurrentAmount(nil)

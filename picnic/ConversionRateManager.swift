@@ -8,9 +8,8 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     var statusCode:Int?
     var data:NSData?
-    
-    var conversionRatePromise:Promise<ConversionRateObject>!
-    var currenciesPromise:Promise<NSDictionary>!
+    var promiseInProgress:Bool = false
+
     var configPath:String?
     internal var config:NSDictionary?
 
@@ -25,7 +24,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     }
     
     func getConvertionRate(userModel:UserModel) -> Future<ConversionRateObject> {
-        conversionRatePromise = Promise<ConversionRateObject>()
+        var conversionRatePromise = Promise<ConversionRateObject>()
         
         if let homeLocale = userModel.homeLocale,  currentLocale = userModel.currentLocale {
             let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as! String
@@ -45,7 +44,8 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                                 var value = (dict["value"] as! NSString).doubleValue
                                 var timeStamp = dateFromUTCString(dict["timestamp"] as! String)
                                 var convObj = ConversionRateObject(value: value, timestamp: timeStamp)
-                                self.conversionRatePromise.success(convObj)
+
+                                conversionRatePromise.success(convObj)
                             }
                         }
                     },
@@ -53,18 +53,18 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                         
                         if let fallbackValue = self.getOfflineConversionRate(userModel, from: currentCurrency, to: homeCurrency) {
                             println("returning fallback conversion rate")
-                            self.conversionRatePromise.success(fallbackValue)
+                            conversionRatePromise.success(fallbackValue)
                         } else {
-                            self.conversionRatePromise.failure(error)
+                            conversionRatePromise.failure(error)
                         }
                 })
 
             } else {
-                self.conversionRatePromise.failure(NSError(domain: "failed to load url", code: 400, userInfo: nil))
+                conversionRatePromise.failure(NSError(domain: "failed to load url", code: 400, userInfo: nil))
             }
             
         } else {
-            self.conversionRatePromise.failure(NSError(domain: "locales not set", code: 400, userInfo: nil))
+            conversionRatePromise.failure(NSError(domain: "locales not set", code: 400, userInfo: nil))
         }
         return conversionRatePromise.future
     }

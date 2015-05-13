@@ -36,7 +36,6 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
                     self.stopMonitoringGPS()
                 } else {
                     self.handleLocation(placemarks)
-
                 }
             }
         )
@@ -51,8 +50,8 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             let locale = getLocaleFromPlacemark(placemarks)
             
             if(promiseInProgress){
-                self.promise!.success(locale)
                 promiseInProgress = false
+                self.promise!.success(locale)
             }
             stopMonitoringGPS()
         }
@@ -82,10 +81,12 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
         
     func handleError(error : NSError!) {
-        self.promise?.failure(error)
+        self.promiseInProgress = false
+        self.promise!.failure(error)
     }
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        self.promiseInProgress = false
         self.promise!.failure(error)
         println("Error: " + error.localizedDescription)
         stopMonitoringGPS()
