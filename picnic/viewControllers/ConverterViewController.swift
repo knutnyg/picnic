@@ -20,6 +20,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var settingsButtonItem:UIBarButtonItem!
     
     var shouldRefreshContiniueSpinning:Bool = false
+    var isRefreshing:Bool = false
 
     var topLabel:UILabel!
     var bottomLabel:UILabel!
@@ -82,6 +83,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":pointButton, "bottomIcon":houseButton, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
+
+        redraw()
     }
     
     func readOfflineDataFromDisk() {
@@ -92,9 +95,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        var shouldRefreshContiniueSpinning:Bool = false
         clearTextFields()
-        refreshData()
+        if !isRefreshing {
+            refreshData()
+        }
     }
     
     func setupNavigationBar(){
@@ -235,16 +239,15 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     func refreshData(){
+        isRefreshing = true
         shouldRefreshContiniueSpinning = true
         refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+
+        getOfflineData()
         
         updateUserHomeLocale()
         updateUserCurrentLocale()
-        
-        getOfflineData()
-        
-        println(userModel.shouldOverrideGPS)
-        println(userModel.shouldOverrideLogical)
+        fetchCurrency()
     }
     
     func updateUserCurrentLocale(){
@@ -255,9 +258,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             }
             .onFailure { error in
                 self.displayFailedToCurrentLocation()
-                self.updateUserCurrentLocale(NSLocale(localeIdentifier: "en_US"))
-                self.fetchCurrency()
-        }
+            }
+            .onComplete { context in
+                self.shouldRefreshContiniueSpinning = false
+                self.isRefreshing = false
+            }
     }
     
     func getOfflineData(){
@@ -288,7 +293,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func fetchCurrency(completion: (() -> Void)? = nil) {
         conversionRateManager.getConvertionRate(self.userModel)
                 .onSuccess { convObj in
-                    self.shouldRefreshContiniueSpinning = false
                     self.userModel.convertionRate = convObj.value
                     self.userModel.conversionRateTimeStamp = convObj.timestamp
                     
@@ -303,7 +307,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
                 }
                 .onFailure { error in
                     println("failed to get conv rate")
-                    self.shouldRefreshContiniueSpinning = false
                     self.displayFailedToResolveCurrencyError()
                     self.userModel.convertionRate = 1
                     self.dataAgeLabel.text = ""
@@ -354,11 +357,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func housePressed(sender:UIButton){
+        locationManager.stopGatheringGPSLocaiton()
         var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func pointPressed(sender:UIButton){
+        locationManager.stopGatheringGPSLocaiton()
         var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -370,6 +375,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func updateUserHomeLocale() {
         let locale:NSLocale = locationManager.getUserHomeLocale(true)
         self.userModel.updateHomeLocale(locale)
+        
     }
     
     func setBottomCountryText(){
@@ -502,10 +508,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func refresh(sender:UIButton!) {
-        shouldRefreshContiniueSpinning = true
-        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
-        refreshData()
-        
+        if !isRefreshing {
+            refreshData()
+        }
     }
     
     override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
@@ -515,6 +520,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func settings(sender:UIButton!) {
+        locationManager.stopGatheringGPSLocaiton()
         let vc = MenuViewController(userModel: userModel)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)

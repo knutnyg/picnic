@@ -23,8 +23,11 @@ import Foundation
     
     override init(){
         self.observers = []
-        super.init()
+        self.homeLocale = NSLocale(localeIdentifier: "en_US")
+        self.currentLocale = NSLocale(localeIdentifier: "en_US")
+        self.convertionRate = 1.0
 
+        super.init()
         self.setupUserLanguageLocale()
     }
     

@@ -113,7 +113,6 @@ class LocationManagerTests: XCTestCase {
         let expectation = self.expectationWithDescription("delayed answer")
         
         (locationManager.gpsLocationManager as! GPSLocationManagerSub).shouldFail = true
-        (locationManager.celluarLocationManager as! CelluarLocationManagerSub).shouldFail = true
         
         locationManager.getUserCurrentLocale(false)
             .onSuccess { locale in

@@ -4,22 +4,19 @@ import BrightFutures
 
 class LocationManager : NSObject{
     
-    var promiseInProgress = false
     var userModel:UserModel!
+    var currentLocationPromise:Promise<NSLocale>!
     
     var gpsLocationManager:GPSLocationManager!
-    var celluarLocationManager:CelluarLocationManager!
     
     init(userModel:UserModel) {
         super.init()
         self.userModel = userModel
         gpsLocationManager = GPSLocationManager(userModel: userModel)
-        celluarLocationManager = CelluarLocationManager()
     }
     
     func getUserCurrentLocale(withOverride:Bool) -> Future<NSLocale> {
-        var promise = Promise<NSLocale>()
-        self.promiseInProgress = true
+        currentLocationPromise = Promise<NSLocale>()
         
         if withOverride {
             if userModel.shouldOverrideGPS {
@@ -32,16 +29,19 @@ class LocationManager : NSObject{
         }
         gpsLocationManager.getUserCurrentLocale()
             .onSuccess { locale in
-                promise.success(locale)
+                self.currentLocationPromise.success(locale)
             }
             .onFailure { error in
-                if let locale = self.celluarLocationManager.getCountryLocaleByCelluar() {
-                    promise.success(locale)
-                } else {
-                    promise.failure(error)
-                }
+                self.currentLocationPromise.failure(error)
             }
-        return promise.future
+        return currentLocationPromise.future
+    }
+    
+    func stopGatheringGPSLocaiton(){
+        if gpsLocationManager.promiseInProgress {
+            gpsLocationManager.locationManager.stopUpdatingLocation()
+            currentLocationPromise.complete(Result<NSLocale>(NSLocale(localeIdentifier: "en_US")))
+        }
     }
     
     func returnOverridedGPSLocationIfSet() -> NSLocale?{

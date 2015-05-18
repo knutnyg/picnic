@@ -33,7 +33,6 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
                 println("got response")
                 if error != nil {
                     self.handleError(error)
-                    self.stopMonitoringGPS()
                 } else {
                     self.handleLocation(placemarks)
                 }
@@ -53,6 +52,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
                 promiseInProgress = false
                 self.promise!.success(locale)
             }
+            
             stopMonitoringGPS()
         }
         println("done handler")
@@ -79,16 +79,13 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
     }
     
-        
+    
     func handleError(error : NSError!) {
-        self.promiseInProgress = false
-        self.promise!.failure(error)
+        //This error is usually bad data preceeding good data. So we just skip it.
+        println(error)
     }
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        self.promiseInProgress = false
-        self.promise!.failure(error)
         println("Error: " + error.localizedDescription)
-        stopMonitoringGPS()
     }
 }

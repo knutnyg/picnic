@@ -102,7 +102,7 @@ class ConvertionRateManagerTests : XCTestCase {
     func testMissingLocale(){
         let expectation = self.expectationWithDescription("delayed answer")
         var userModel = UserModel()
-        userModel.homeLocale = NSLocale(localeIdentifier: "nb_NO")
+        userModel.homeLocale = nil
         
         conversionRateManagerIntegration.getConvertionRate(userModel)
             .onFailure {error in
