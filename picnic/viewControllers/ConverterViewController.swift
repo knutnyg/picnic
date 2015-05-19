@@ -358,12 +358,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func housePressed(sender:UIButton){
         locationManager.stopGatheringGPSLocaiton()
+        isRefreshing = false
         var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func pointPressed(sender:UIButton){
         locationManager.stopGatheringGPSLocaiton()
+        isRefreshing = false
         var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -521,6 +523,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func settings(sender:UIButton!) {
         locationManager.stopGatheringGPSLocaiton()
+        isRefreshing = false
         let vc = MenuViewController(userModel: userModel)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
