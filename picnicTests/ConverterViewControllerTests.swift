@@ -42,15 +42,4 @@ class ConverterViewControllerTests: XCTestCase {
         let interval = date2.timeIntervalSinceDate(date1)
         XCTAssertGreaterThan(interval, 10000, "2 days is greater than 10000 ms")
     }
-
-    func testNewDataIsNotOld(){
-        var timestamp = NSDate().addHours(-10)
-        XCTAssertFalse(vc.isDataOld(timestamp), "Should be false")
-    }
-    
-    func testOldDataIsOld(){
-        var timestamp = NSDate().addDays(-3)
-        XCTAssertTrue(vc.isDataOld(timestamp), "Should be true")
-    }
-
 }

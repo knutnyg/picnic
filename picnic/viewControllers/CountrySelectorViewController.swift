@@ -13,7 +13,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     var delegate:UIViewController!=nil
     var userModel:UserModel!
     var selectorType:CountrySelectorType!
-    var locationManager:LocationManager!
     
     var backButton:UIButton!
     var backButtonItem:UIBarButtonItem!
@@ -29,8 +28,6 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
         countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        locationManager = LocationManager(userModel: userModel)
         
         self.addChildViewController(countryTableView)
         

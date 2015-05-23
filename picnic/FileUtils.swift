@@ -22,6 +22,7 @@ func saveDictionaryToDisk(fileName:String, dict:Dictionary<String,AnyObject>){
 func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
     println("Reading offline data from disk")
     if let filePath = getFileURL(fileName).path {
+        println(filePath)
         if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String:OfflineEntry] {
             return dict
         }

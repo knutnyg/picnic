@@ -7,8 +7,6 @@ import Foundation
     var languageLocale:NSLocale!
     var homeLocale:NSLocale?
     var currentLocale:NSLocale?
-    var convertionRate:Double?
-    var conversionRateTimeStamp:NSDate?
     var homeAmount:Double?
     var currentAmount:Double?
     
@@ -17,15 +15,18 @@ import Foundation
     
     var overrideLogicalLocale:NSLocale?
     var shouldOverrideLogical = false
-    
+
     var offlineMode:Bool = false
     var offlineData:Dictionary<String,OfflineEntry>?
+    
+    var updatingHomeLocaleCounter:Int = 0
+    var updatingCurrentLocaleCounter:Int = 0
+    var updateingAllCurrenciesCounter:Int = 0
     
     override init(){
         self.observers = []
         self.homeLocale = NSLocale(localeIdentifier: "en_US")
         self.currentLocale = NSLocale(localeIdentifier: "en_US")
-        self.convertionRate = 1.0
 
         super.init()
         self.setupUserLanguageLocale()
@@ -50,30 +51,78 @@ import Foundation
         currentLocaleHasChanged()
     }
     
-    func updateHomeAmount(amount:Double?) {
-        self.homeAmount = amount;
-        if let number = homeAmount, convertionRate = self.convertionRate {
-            self.currentAmount = number*convertionRate
+    private func calculateConversionRate() -> Double?{
+        
+        var activeHomeLocale:NSLocale?
+        if shouldOverrideLogical {
+            activeHomeLocale = overrideLogicalLocale
         } else {
-            self.currentAmount = nil
+            activeHomeLocale = homeLocale
         }
-
-        for observer in self.observers {
-            observer.homeAmountChanged();
-            observer.currentAmountChanged();
+        
+        var activeCurrentLocale:NSLocale?
+        if shouldOverrideGPS {
+            activeCurrentLocale = overrideGPSLocale
+        } else {
+            activeCurrentLocale = currentLocale
+        }
+        
+        var homeRate:Double = 0
+        var curRate:Double = 0
+        if let locale:NSLocale = activeHomeLocale, cc:String = locale.objectForKey(NSLocaleCurrencyCode) as? String, od = offlineData {
+            if let rate = od[cc]?.value{
+                homeRate = rate
+            }
+        }
+        
+        if let locale:NSLocale = activeCurrentLocale, cc:String = locale.objectForKey(NSLocaleCurrencyCode) as? String, od = offlineData {
+            if let rate = od[cc]?.value{
+                curRate = rate
+            }
+        }
+        
+        if homeRate != 0 && curRate != 0 {
+            return curRate / homeRate
+        }
+        
+        return nil
+    }
+    
+    private func calculateHomeAmount(){
+        if let conv = calculateConversionRate() {
+            homeAmount = currentAmount! * conv
         }
     }
     
-    func updateCurrentAmount(amount:Double?) {
-        currentAmount = amount;
-        if let number = currentAmount, convertionRate = self.convertionRate {
-            homeAmount = number*(1/convertionRate)
+    private func calculateCurrentAmount(){
+        if let conv = calculateConversionRate() {
+            currentAmount = homeAmount! * (1/conv)
+        }
+    }
+    
+    func updateCurrentAmount(val:Double?){
+        if let amount = val {
+            currentAmount = amount
+            calculateHomeAmount()
+            
+            for observer in self.observers {
+                observer.homeAmountChanged()
+            }
         } else {
             homeAmount = nil
         }
-        for observer in self.observers {
-            observer.currentAmountChanged();
-            observer.homeAmountChanged();
+        
+    }
+    
+    func updateHomeAmount(val:Double?){
+        if let amount = val {
+            homeAmount = amount
+            calculateCurrentAmount()
+            for observer in self.observers {
+                observer.currentAmountChanged()
+            }
+        } else {
+            currentAmount = nil
         }
     }
     

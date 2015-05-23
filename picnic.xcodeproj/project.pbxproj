@@ -29,10 +29,6 @@
 		721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFC91AA2F6E400484BAA /* AppDelegate.swift */; };
 		721CFFF71AA2FA4D00484BAA /* GPSLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */; };
 		721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */; };
-		7220BA551AEA9FDC00F5DC85 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7220BA541AEA9FDC00F5DC85 /* LocationManager.swift */; };
-		7220BA561AEA9FDC00F5DC85 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7220BA541AEA9FDC00F5DC85 /* LocationManager.swift */; };
-		723475971AEB68E70036E764 /* LocationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723475961AEB68E70036E764 /* LocationManagerTests.swift */; };
-		7234759B1AEB6A120036E764 /* LocationManagerSub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7234759A1AEB6A120036E764 /* LocationManagerSub.swift */; };
 		723475A01AEB932F0036E764 /* ConvertionRateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7234759F1AEB932F0036E764 /* ConvertionRateManagerTests.swift */; };
 		723475A21AEB93BD0036E764 /* ConversionRateManagerSub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723475A11AEB93BD0036E764 /* ConversionRateManagerSub.swift */; };
 		723475A41AEB94090036E764 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 723475A31AEB94090036E764 /* config.plist */; };
@@ -44,7 +40,6 @@
 		723475AF1AEBC36B0036E764 /* config_test.plist in Resources */ = {isa = PBXBuildFile; fileRef = 723475AE1AEBC36B0036E764 /* config_test.plist */; };
 		723475B21AEBC7690036E764 /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723475B11AEBC7690036E764 /* Timing.swift */; };
 		723475B31AEBC78C0036E764 /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723475B11AEBC7690036E764 /* Timing.swift */; };
-		7239BB511AE9607D0097CFA2 /* GPSLocationManagerSub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7239BB501AE9607D0097CFA2 /* GPSLocationManagerSub.swift */; };
 		7239BB521AE960A10097CFA2 /* GPSLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */; };
 		7239BB531AE960EA0097CFA2 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C00271AA2FABE00484BAA /* UserModel.swift */; };
 		7239BB541AE9626A0097CFA2 /* LocaleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7263533D1AC7DCC300F4F4A5 /* LocaleUtils.swift */; };
@@ -119,9 +114,6 @@
 		721CFFDE1AA2F6E400484BAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocationManager.swift; sourceTree = "<group>"; };
 		721CFFF91AA2FA6000484BAA /* ConverterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
-		7220BA541AEA9FDC00F5DC85 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		723475961AEB68E70036E764 /* LocationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerTests.swift; sourceTree = "<group>"; };
-		7234759A1AEB6A120036E764 /* LocationManagerSub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerSub.swift; sourceTree = "<group>"; };
 		7234759F1AEB932F0036E764 /* ConvertionRateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertionRateManagerTests.swift; sourceTree = "<group>"; };
 		723475A11AEB93BD0036E764 /* ConversionRateManagerSub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionRateManagerSub.swift; sourceTree = "<group>"; };
 		723475A31AEB94090036E764 /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
@@ -129,7 +121,6 @@
 		723475A91AEBBBF80036E764 /* invalid_json.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = invalid_json.txt; sourceTree = "<group>"; };
 		723475AE1AEBC36B0036E764 /* config_test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config_test.plist; sourceTree = "<group>"; };
 		723475B11AEBC7690036E764 /* Timing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timing.swift; sourceTree = "<group>"; };
-		7239BB501AE9607D0097CFA2 /* GPSLocationManagerSub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocationManagerSub.swift; sourceTree = "<group>"; };
 		724314DB1AE6D9D800A5213C /* BrightFutures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BrightFutures.framework; path = "Pods/../build/Debug-iphoneos/BrightFutures.framework"; sourceTree = "<group>"; };
 		724314DD1AE6D9F000A5213C /* BButton.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BButton.framework; path = "Pods/../build/Debug-iphoneos/BButton.framework"; sourceTree = "<group>"; };
 		725DDD9C1AC81BC900FA6ED5 /* CountrySelectorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CountrySelectorType.swift; path = models/CountrySelectorType.swift; sourceTree = "<group>"; };
@@ -315,8 +306,6 @@
 		7234759E1AEB89D90036E764 /* managers */ = {
 			isa = PBXGroup;
 			children = (
-				7239BB501AE9607D0097CFA2 /* GPSLocationManagerSub.swift */,
-				7234759A1AEB6A120036E764 /* LocationManagerSub.swift */,
 				723475A11AEB93BD0036E764 /* ConversionRateManagerSub.swift */,
 			);
 			name = managers;
@@ -326,7 +315,6 @@
 			isa = PBXGroup;
 			children = (
 				72A9D4C41AA5219C00A15E70 /* GPSLoctionManagerTests.swift */,
-				723475961AEB68E70036E764 /* LocationManagerTests.swift */,
 				7234759F1AEB932F0036E764 /* ConvertionRateManagerTests.swift */,
 			);
 			name = managers;
@@ -345,7 +333,6 @@
 			children = (
 				72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */,
 				721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */,
-				7220BA541AEA9FDC00F5DC85 /* LocationManager.swift */,
 			);
 			name = managers;
 			sourceTree = "<group>";
@@ -609,7 +596,6 @@
 				725DDD9D1AC81BC900FA6ED5 /* CountrySelectorType.swift in Sources */,
 				721CFFCA1AA2F6E400484BAA /* AppDelegate.swift in Sources */,
 				721C002D1AA2FABE00484BAA /* UserModelObserver.swift in Sources */,
-				7220BA551AEA9FDC00F5DC85 /* LocationManager.swift in Sources */,
 				721CFFFC1AA2FA6000484BAA /* ConverterViewController.swift in Sources */,
 				72A9D4C81AA5246800A15E70 /* ConversionRateManager.swift in Sources */,
 				72B2EFAB1AF4C47E00E26FE4 /* OfflineEntry.swift in Sources */,
@@ -633,7 +619,6 @@
 			files = (
 				7239BB521AE960A10097CFA2 /* GPSLocationManager.swift in Sources */,
 				7266E4551AF947230032EF4C /* ConverterViewControllerTests.swift in Sources */,
-				7234759B1AEB6A120036E764 /* LocationManagerSub.swift in Sources */,
 				7239BB561AE962890097CFA2 /* LocaleCountryNameTuple.swift in Sources */,
 				7266E45B1AF948680032EF4C /* CountryTableViewController.swift in Sources */,
 				7239BB541AE9626A0097CFA2 /* LocaleUtils.swift in Sources */,
@@ -643,10 +628,8 @@
 				72B5B93F1AFF836F00C436D4 /* FileUtils.swift in Sources */,
 				7266E4591AF948550032EF4C /* MenuViewController.swift in Sources */,
 				7266E4581AF948400032EF4C /* FAComponents.swift in Sources */,
-				723475971AEB68E70036E764 /* LocationManagerTests.swift in Sources */,
 				7266E4571AF947D90032EF4C /* Extensions.swift in Sources */,
 				72B2EFAD1AF4C6C800E26FE4 /* OfflineEntry.swift in Sources */,
-				7239BB511AE9607D0097CFA2 /* GPSLocationManagerSub.swift in Sources */,
 				72A9D4C51AA5219C00A15E70 /* GPSLoctionManagerTests.swift in Sources */,
 				7239BB641AE9803C0097CFA2 /* ConversionRateManager.swift in Sources */,
 				7239BB681AE982A80097CFA2 /* UserModelObserver.swift in Sources */,
@@ -655,7 +638,6 @@
 				7239BB531AE960EA0097CFA2 /* UserModel.swift in Sources */,
 				723475A21AEB93BD0036E764 /* ConversionRateManagerSub.swift in Sources */,
 				72C10AF41AF93FCA00F68907 /* ConversionRateObject.swift in Sources */,
-				7220BA561AEA9FDC00F5DC85 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,4 @@
 
-import BrightFutures
 import Foundation
 import SwiftHTTP
 
@@ -8,84 +7,23 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     var statusCode:Int?
     var data:NSData?
-    var promiseInProgress:Bool = false
+    var userModel:UserModel!
 
     var configPath:String?
     internal var config:NSDictionary?
 
-    override init(){
+    init(userModel:UserModel){
         super.init()
         setConfigPath()
         config = self.loadConfig()
+        self.userModel = userModel
     }
     
     func setConfigPath(){
         configPath = NSBundle.mainBundle().pathForResource("config", ofType: "plist")
     }
     
-    func getConvertionRate(userModel:UserModel) -> Future<ConversionRateObject> {
-        var conversionRatePromise = Promise<ConversionRateObject>()
-        
-        if let homeLocale = userModel.homeLocale,  currentLocale = userModel.currentLocale {
-            let homeCurrency = homeLocale.objectForKey(NSLocaleCurrencyCode) as! String
-            let currentCurrency = currentLocale.objectForKey(NSLocaleCurrencyCode) as! String
-            
-            if let URL = getConversionURL(homeCurrency, currentCurrency: currentCurrency){
-                let request = HTTPTask()
-                request.requestSerializer = HTTPRequestSerializer()
-                request.responseSerializer = JSONResponseSerializer()
-                
-                request.GET(URL.description, parameters: nil,
-                    success: {
-                        (response: HTTPResponse) in
-                        
-                        if response.responseObject != nil {
-                            if let dict = response.responseObject as? Dictionary<String, AnyObject> {
-                                println("returning conversion rate")
-                                if let value = (dict["value"] as? NSString)?.doubleValue {
-                                    var timeStamp = dateFromUTCString(dict["timestamp"] as! String)
-                                    var convObj = ConversionRateObject(value: value, timestamp: timeStamp)
-                                    
-                                    conversionRatePromise.success(convObj)
-                                    return
-                                } else {
-                                    println("response does not contain conversion rate")
-                                }
-                            } else {
-                                println("unparseable response")
-                            }
-                        } else {
-                            println("empty response")
-                        }
-                        
-                        if let fallbackValue = self.getOfflineConversionRate(userModel, from: currentCurrency, to: homeCurrency) {
-                            println("returning fallback conversion rate")
-                            conversionRatePromise.success(fallbackValue)
-                            return
-                        } else {
-                            conversionRatePromise.failure(NSError(domain: "Got errorinous response", code: 400, userInfo: nil))
-                        }
-                    },
-                    failure: {(error: NSError, response: HTTPResponse?) in
-                        
-                        if let fallbackValue = self.getOfflineConversionRate(userModel, from: currentCurrency, to: homeCurrency) {
-                            println("returning fallback conversion rate")
-                            conversionRatePromise.success(fallbackValue)
-                        } else {
-                            conversionRatePromise.failure(error)
-                        }
-                })
-            } else {
-                conversionRatePromise.failure(NSError(domain: "failed to load url", code: 400, userInfo: nil))
-            }
-            
-        } else {
-            conversionRatePromise.failure(NSError(domain: "locales not set", code: 400, userInfo: nil))
-        }
-        return conversionRatePromise.future
-    }
-    
-    func getOfflineConversionRate(userModel:UserModel, from:String,to:String) -> ConversionRateObject? {
+    func getOfflineConversionRate(from:String,to:String) -> ConversionRateObject? {
         if let data = userModel.offlineData {
             var fromVal = data[from]?.value
             var toVal = data[to]?.value
@@ -98,8 +36,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         return nil
     }
     
-    func getAllCurrencies() -> Future<NSDictionary> {
-        var currenciesPromisee = Promise<NSDictionary>()
+    func updateAllCurrencies(success: ((Bool) -> Void)? = nil){
         
         let URL = getAllCurrenciesURL()!
         let request = HTTPTask()
@@ -111,17 +48,39 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             {(response: HTTPResponse) in
                 if response.responseObject != nil {
                     if let dict = response.responseObject as? Dictionary<String,AnyObject> {
-                        currenciesPromisee.success(dict)
+                        var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
+                        self.userModel.offlineData = offlineEntries
+                        saveDictionaryToDisk("data.dat", offlineEntries)
+                        self.userModel.updateingAllCurrenciesCounter -= 1
+                        if let callback = success {
+                            callback(true)
+                        }
                     }
                 } else {
-                        currenciesPromisee.failure(NSError(domain: "no data in response", code: 500, userInfo: nil))
+                    println("Failed to parse response from server")
+                    if let callback = success {
+                        callback(false)
+                    }
                 }
             },
             failure:
             {(error: NSError, response: HTTPResponse?) in
-                currenciesPromisee.failure(error)
+                        println("Got error: \(error)")
         })
-        return currenciesPromisee.future
+    }
+    
+    private func parseResult(dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]{
+        var resultDict:[String:OfflineEntry] = [:]
+        
+        for key in dict.keys {
+            var value = (dict[key]!["value"]! as NSString).doubleValue
+            var from = dict[key]!["unit_from"]!
+            var to = dict[key]!["unit_to"]!
+            var timestamp = dict[key]!["timestamp"]!
+            
+            resultDict[key] = OfflineEntry(timeStamp: dateFromUTCString(timestamp), unit_from: from, unit_to: to, value: value)
+        }
+        return resultDict
     }
     
     func getFileURL(fileName: String) -> NSURL {
@@ -171,14 +130,5 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             }
         }
         return nil
-    }
-    
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
     }
 }

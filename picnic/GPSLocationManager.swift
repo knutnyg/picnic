@@ -1,15 +1,12 @@
 
 import Foundation
 import CoreLocation
-import BrightFutures
 import CoreTelephony
 
 
 class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
-    var promise:Promise<NSLocale>?
-    var promiseInProgress:Bool = false
     var userModel:UserModel!
     
     init(userModel:UserModel) {
@@ -38,7 +35,6 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
                 }
             }
         )
-
     }
     
     func handleLocation(placemarks: [AnyObject]) {
@@ -47,12 +43,8 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         } else {
             
             let locale = getLocaleFromPlacemark(placemarks)
-            
-            if(promiseInProgress){
-                promiseInProgress = false
-                self.promise!.success(locale)
-            }
-            
+            userModel.updateCurrentLocale(locale)
+            userModel.updatingCurrentLocaleCounter = 0
             stopMonitoringGPS()
         }
         println("done handler")
@@ -63,13 +55,28 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         return LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
     }
 
-    func getUserCurrentLocale() -> Future<NSLocale> {
-        self.promise = Promise<NSLocale>()
-        self.promiseInProgress = true
-
+    func updateUserCurrentLocale() {
+        if userModel.shouldOverrideGPS {
+            userModel.updatingCurrentLocaleCounter = 0
+            return
+        }
         startMonitoringGPS()
-        return self.promise!.future
     }
+    
+    func updateUserHomeLocale() {
+        userModel.updatingHomeLocaleCounter = 0
+        if userModel.shouldOverrideLogical {
+            return
+        }
+        let countryCode:String =  getCountryCodeFromDevice()
+        userModel.updateHomeLocale(LocaleUtils.createLocaleFromCountryCode(countryCode))
+
+    }
+    
+    private func getCountryCodeFromDevice() -> String{
+        return NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
+    }
+
     
     internal func startMonitoringGPS(){
         locationManager.startUpdatingLocation()
@@ -87,5 +94,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error: " + error.localizedDescription)
+        locationManager.stopUpdatingLocation()
+        userModel.updatingCurrentLocaleCounter = 0
     }
 }
