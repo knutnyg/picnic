@@ -52,7 +52,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                         var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
                         self.userModel.offlineData = offlineEntries
                         saveDictionaryToDisk(self.storedFileName, offlineEntries)
-                        self.userModel.updateingAllCurrenciesCounter -= 1
+                        self.userModel.updateingAllCurrenciesCounter = 0
                         if let callback = success {
                             callback(true)
                         }
