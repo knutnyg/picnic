@@ -37,8 +37,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.backgroundColor = UIColor.whiteColor()
         
         setupNavigationBar()
-        println("reading offline from disk")
-        readOfflineDataFromDisk()
         
         gpsLocationManager = GPSLocationManager(userModel: userModel)
         conversionRateManager = ConversionRateManager(userModel: userModel)
@@ -234,7 +232,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     func refreshData(){
-        println("in refresh data")
         refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
 
         updateOfflineData()
@@ -376,7 +373,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         setBottomCountryText()
         setBottomCurrencyLabel()
         bottomAmountEdited(bottomTextField)
-
+        checkDataAge()
     }
     
     func homeLocaleHasChanged() {
@@ -429,6 +426,28 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func clearTextFields() {
         self.topTextField.text = ""
         self.bottomTextField.text = ""
+    }
+    
+    func checkDataAge(){
+        if let offlineData = userModel.offlineData {
+            if let entry = offlineData["USD"] {
+                if isDataOld(entry.timeStamp){
+                    self.dataAgeLabel.text = "Last updated: \(entry.timeStamp.mediumPrintable())"
+                } else {
+                    self.dataAgeLabel.text = ""
+                }
+            }
+        }
+    }
+    
+    func isDataOld(timestamp:NSDate) -> Bool{
+        var limit = NSDate().addDays(-2)
+        let res = timestamp.compare(limit)
+        
+        if res == NSComparisonResult.OrderedDescending {
+            return false
+        }
+        return true
     }
     
     func createTextField() -> UITextField{

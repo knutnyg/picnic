@@ -30,6 +30,10 @@ import Foundation
 
         super.init()
         self.setupUserLanguageLocale()
+        
+        if let data = readOfflineDateFromDisk("data.dat") {
+            offlineData = data
+        }
     }
     
     func setupUserLanguageLocale(){
