@@ -234,7 +234,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     func refreshData(){
-        refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        if !shouldRefreshContiniueSpinning() {
+           refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+        }
 
         updateOfflineData()
         updateUserHomeLocale()

@@ -59,6 +59,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                     }
                 } else {
                     println("Failed to parse response from server")
+                    self.userModel.updateingAllCurrenciesCounter = 0
                     if let callback = success {
                         callback(false)
                     }
@@ -66,7 +67,8 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             },
             failure:
             {(error: NSError, response: HTTPResponse?) in
-                        println("Got error: \(error)")
+                    self.userModel.updateingAllCurrenciesCounter = 0
+                    println("Got error: \(error)")
         })
     }
     
