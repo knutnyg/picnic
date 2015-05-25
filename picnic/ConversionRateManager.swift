@@ -8,6 +8,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     var statusCode:Int?
     var data:NSData?
     var userModel:UserModel!
+    var storedFileName = "data.dat"
 
     var configPath:String?
     internal var config:NSDictionary?
@@ -50,7 +51,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
                     if let dict = response.responseObject as? Dictionary<String,AnyObject> {
                         var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
                         self.userModel.offlineData = offlineEntries
-                        saveDictionaryToDisk("data.dat", offlineEntries)
+                        saveDictionaryToDisk(self.storedFileName, offlineEntries)
                         self.userModel.updateingAllCurrenciesCounter -= 1
                         if let callback = success {
                             callback(true)

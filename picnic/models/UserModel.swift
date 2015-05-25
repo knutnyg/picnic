@@ -86,7 +86,7 @@ import Foundation
         }
         
         if homeRate != 0 && curRate != 0 {
-            return curRate / homeRate
+            return homeRate / curRate
         }
         
         return nil

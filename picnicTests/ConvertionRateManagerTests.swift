@@ -13,7 +13,9 @@ class ConvertionRateManagerTests : XCTestCase {
         super.setUp()
         userModel = UserModel()
         conversionRateManagerIntegration = ConversionRateManager(userModel: userModel)
+        conversionRateManagerIntegration.storedFileName = "test.dat"
         conversionRateManagerSub = ConversionRateManagerSub(userModel: userModel)
+        conversionRateManagerSub.storedFileName = "test.dat"
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
@@ -29,19 +31,6 @@ class ConvertionRateManagerTests : XCTestCase {
     
         var conversionRate = conversionRateManagerSub.getConversionRateFromResponse(data)
         XCTAssertNil(conversionRate, "should be nil")
-    }
-    
-    func testGetURL(){
-        var crm = ConversionRateManager(userModel: userModel)
-        setBundleToTest(crm)
-        crm.config = crm.loadConfig()
-        
-        var url = crm.getConversionURL("NOK", currentCurrency: "DKK")?.description
-        XCTAssertNotNil(url, "url should not be nil")
-        
-        if let u = url {
-            XCTAssertEqual("http://example.com/api/exchange/NOK/DKK", url!, "URLS should match")
-        }
     }
     
     func testMissingConfigFileThrowsException(){

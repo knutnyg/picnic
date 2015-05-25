@@ -28,6 +28,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var conversionRateManager:ConversionRateManager!
 
     let userDefaults = NSUserDefaults.standardUserDefaults();
+    var storedFileName = "data.dat"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         gpsLocationManager = GPSLocationManager(userModel: userModel)
         conversionRateManager = ConversionRateManager(userModel: userModel)
+        conversionRateManager.storedFileName = storedFileName
         
         topCountryLabel = UILabel()
         topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -82,7 +84,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func readOfflineDataFromDisk() {
-        if let data = readOfflineDateFromDisk("data.dat"){
+        if let data = readOfflineDateFromDisk(storedFileName){
             userModel.offlineData = data
         }
     }
