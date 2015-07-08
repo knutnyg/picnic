@@ -5,16 +5,38 @@ import Foundation
     
     var observers:[UserModelObserver]
     var languageLocale:NSLocale!
-    var homeLocale:NSLocale?
-    var currentLocale:NSLocale?
+    var homeLocale:NSLocale!
+    var currentLocale:NSLocale!
     var homeAmount:Double?
     var currentAmount:Double?
     
-    var overrideGPSLocale:NSLocale?
-    var shouldOverrideGPS = false
+    var overrideGPSLocale:NSLocale? {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setValue(overrideGPSLocale!.localeIdentifier, forKey: "overrideGPSLocale")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
     
-    var overrideLogicalLocale:NSLocale?
-    var shouldOverrideLogical = false
+    var overrideLogicalLocale:NSLocale? {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setValue(overrideLogicalLocale!.localeIdentifier, forKey: "overrideLogicalLocale")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
+    
+    var shouldOverrideGPS = false {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setBool(shouldOverrideGPS, forKey: "shouldOverrideCurrentLocale")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
+    
+    var shouldOverrideLogical = false {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setBool(shouldOverrideLogical, forKey: "shouldOverrideHomeLocale")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
 
     var offlineMode:Bool = false
     var offlineData:Dictionary<String,OfflineEntry>?
@@ -34,6 +56,8 @@ import Foundation
         if let data = readOfflineDateFromDisk("data.dat") {
             offlineData = data
         }
+        
+        loadStateFromUserDefaults()
     }
     
     func setupUserLanguageLocale(){
@@ -46,14 +70,18 @@ import Foundation
     }
     
     func updateHomeLocale(locale:NSLocale){
-        self.homeLocale = locale
+        homeLocale = locale
+        NSUserDefaults.standardUserDefaults().setValue(homeLocale.localeIdentifier, forKey: "homeLocale")
+        NSUserDefaults.standardUserDefaults().synchronize()
         homeLocaleHasChanged()
     }
     
     func updateCurrentLocale(locale:NSLocale){
-        self.currentLocale = locale
+        currentLocale = locale
+        NSUserDefaults.standardUserDefaults().setValue(currentLocale.localeIdentifier, forKey: "currentLocale")
+        NSUserDefaults.standardUserDefaults().synchronize()
         currentLocaleHasChanged()
-    }
+    }    
     
     private func calculateConversionRate() -> Double?{
         
@@ -134,6 +162,7 @@ import Foundation
         for observer in self.observers {
             observer.homeLocaleHasChanged()
         }
+        
     }
     
     func currentLocaleHasChanged(){
@@ -144,5 +173,38 @@ import Foundation
     
     func isManualSetupActive() -> Bool{
         return shouldOverrideGPS || shouldOverrideLogical
+    }
+    
+    func loadStateFromUserDefaults(){
+        println("Loading state from userDefaults")
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+
+        if let current: AnyObject = userDefaults.valueForKey("currentLocale") {
+            currentLocale = NSLocale(localeIdentifier: current as! String)
+        }
+        
+        if let home: AnyObject = userDefaults.valueForKey("homeLocale") {
+            homeLocale = NSLocale(localeIdentifier: home as! String)
+        }
+        
+        if let overrideCurrent: AnyObject = userDefaults.valueForKey("overrideGPSLocale") {
+            overrideGPSLocale = NSLocale(localeIdentifier: overrideCurrent as! String)
+        }
+        
+        if let overrideHome: AnyObject = userDefaults.valueForKey("overrideLogicalLocale") {
+            overrideLogicalLocale = NSLocale(localeIdentifier: overrideHome as! String)
+        }
+        
+        shouldOverrideGPS = userDefaults.boolForKey("shouldOverrideCurrentLocale")
+        shouldOverrideLogical = userDefaults.boolForKey("shouldOverrideHomeLocale")
+    }
+    
+    func printUserModel(){
+        println("Current locale: \(LocaleUtils.createCountryNameFromLocale(currentLocale))")
+        println("shouldOverrideCurrentLocale: \(shouldOverrideGPS)")
+        println("currentAmount: \(currentAmount)")
+        println("Home locale: \(LocaleUtils.createCountryNameFromLocale(homeLocale))")
+        println("shouldOverrideHomeLocale: \(shouldOverrideLogical)")
+        println("homeAmount: \(homeAmount)")
     }
 }

@@ -80,7 +80,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":pointButton, "bottomIcon":houseButton, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
-
     }
     
     func readOfflineDataFromDisk() {
@@ -504,7 +503,5 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-
 }
 
