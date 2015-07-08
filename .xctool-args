@@ -1,5 +1,6 @@
 [
   "-workspace", "picnic.xcworkspace",
+  "-arch", "x86_64",
   "-scheme", "picnic",
   "-sdk", "iphonesimulator",
   "test"

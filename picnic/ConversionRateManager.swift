@@ -44,31 +44,29 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         request.requestSerializer = HTTPRequestSerializer()
         request.responseSerializer = JSONResponseSerializer()
         
-        request.GET(URL.description, parameters: nil,
-            success:
-            {(response: HTTPResponse) in
-                if response.responseObject != nil {
-                    if let dict = response.responseObject as? Dictionary<String,AnyObject> {
-                        var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
-                        self.userModel.offlineData = offlineEntries
-                        saveDictionaryToDisk(self.storedFileName, offlineEntries)
-                        self.userModel.updateingAllCurrenciesCounter = 0
-                        if let callback = success {
-                            callback(true)
-                        }
-                    }
-                } else {
-                    println("Failed to parse response from server")
+        request.GET(URL.description, parameters: nil, completionHandler: {(response: HTTPResponse) in
+            if let err = response.error {
+                self.userModel.updateingAllCurrenciesCounter = 0
+                println("Got error: \(err)")
+            }
+            
+            if response.responseObject != nil {
+                if let dict = response.responseObject as? Dictionary<String,AnyObject> {
+                    var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
+                    self.userModel.offlineData = offlineEntries
+                    saveDictionaryToDisk(self.storedFileName, offlineEntries)
                     self.userModel.updateingAllCurrenciesCounter = 0
                     if let callback = success {
-                        callback(false)
+                        callback(true)
                     }
                 }
-            },
-            failure:
-            {(error: NSError, response: HTTPResponse?) in
-                    self.userModel.updateingAllCurrenciesCounter = 0
-                    println("Got error: \(error)")
+            } else {
+                println("Failed to parse response from server")
+                self.userModel.updateingAllCurrenciesCounter = 0
+                if let callback = success {
+                    callback(false)
+                }
+            }
         })
     }
     
