@@ -1,6 +1,5 @@
 
 import Foundation
-import SwiftHTTP
 
 
 class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
@@ -40,31 +39,25 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     func updateAllCurrencies(success: ((Bool) -> Void)? = nil){
         
         let URL = getAllCurrenciesURL()!
-        let request = HTTPTask()
-        request.requestSerializer = HTTPRequestSerializer()
-        request.responseSerializer = JSONResponseSerializer()
+        var jsonError: NSError?
         
-        request.GET(URL.description, parameters: nil, completionHandler: {(response: HTTPResponse) in
-            if let err = response.error {
-                self.userModel.updateingAllCurrenciesCounter = 0
-                println("Got error: \(err)")
-            }
+        let request = NSURLRequest(URL: URL)
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response, data, error) in
             
-            if response.responseObject != nil {
-                if let dict = response.responseObject as? Dictionary<String,AnyObject> {
-                    var offlineEntries = self.parseResult(dict as! Dictionary<String, Dictionary<String, String>>)
-                    self.userModel.offlineData = offlineEntries
-                    saveDictionaryToDisk(self.storedFileName, offlineEntries)
-                    self.userModel.updateingAllCurrenciesCounter = 0
-                    if let callback = success {
-                        callback(true)
-                    }
-                }
-            } else {
-                println("Failed to parse response from server")
+            if error != nil {
                 self.userModel.updateingAllCurrenciesCounter = 0
-                if let callback = success {
-                    callback(false)
+                println("Got error: \(error)")
+            } else {
+                if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
+                    if let dict = json as? Dictionary<String,Dictionary<String, String>>{
+                        var offlineEntries = self.parseResult(dict)
+                        self.userModel.offlineData = offlineEntries
+                        saveDictionaryToDisk(self.storedFileName, offlineEntries)
+                        self.userModel.updateingAllCurrenciesCounter = 0
+                        if let callback = success {
+                            callback(true)
+                        }
+                    }
                 }
             }
         })
@@ -117,18 +110,6 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             return NSDictionary(contentsOfFile: path)
         } else {
             println("Error loading config")
-        }
-        return nil
-    }
-    
-    func getConversionRateFromResponse(data: NSData) -> Double? {
-        
-        if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) {
-            let dictionary = json as! NSDictionary
-            var value = dictionary.valueForKey("value")!.doubleValue
-            if value > 0 {
-                return value
-            }
         }
         return nil
     }

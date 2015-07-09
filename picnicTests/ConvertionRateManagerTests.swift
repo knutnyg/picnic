@@ -19,20 +19,6 @@ class ConvertionRateManagerTests : XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
-    func testDataParserFailsWithBadData(){
-        var conversionRate = conversionRateManagerSub.getConversionRateFromResponse(NSData())
-        XCTAssertNil(conversionRate, "should be nil")
-    }
-    
-    func testConversionRateWithIllegalResponseValueIsNil(){
-        var testbundle = NSBundle(forClass: ConvertionRateManagerTests.self)
-        var url = testbundle.URLForResource("invalid_json", withExtension: "txt")!
-        var data = NSData(contentsOfFile: url.path!)!
-    
-        var conversionRate = conversionRateManagerSub.getConversionRateFromResponse(data)
-        XCTAssertNil(conversionRate, "should be nil")
-    }
-    
     func testMissingConfigFileThrowsException(){
         var cvr = ConversionRateManagerSub(userModel: userModel)
         cvr.configPath = "wrong"
@@ -49,6 +35,17 @@ class ConvertionRateManagerTests : XCTestCase {
             })
         self.waitForExpectationsWithTimeout(10, handler: nil)
         XCTAssert(true, "finished without errors")
+    }
+    
+    func testGetAllCurrenciesIllegalResponse(){
+        var crm = ConversionRateManager(userModel: userModel)
+        setBundleToTest(crm)
+        crm.config = crm.loadConfig()
+        
+        var URL = crm.getAllCurrenciesURL()!
+        var expected = "http://example.com/api/currencies"
+        
+        XCTAssertEqual(URL.description,expected,"should be equal")
     }
     
     func testGetAllCurrenciesURL(){
