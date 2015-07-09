@@ -12,14 +12,14 @@ import Foundation
     
     var overrideGPSLocale:NSLocale? {
         didSet {
-            NSUserDefaults.standardUserDefaults().setValue(overrideGPSLocale!.localeIdentifier, forKey: "overrideGPSLocale")
+            NSUserDefaults.standardUserDefaults().setValue(overrideGPSLocale?.localeIdentifier, forKey: "overrideGPSLocale")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
     
     var overrideLogicalLocale:NSLocale? {
         didSet {
-            NSUserDefaults.standardUserDefaults().setValue(overrideLogicalLocale!.localeIdentifier, forKey: "overrideLogicalLocale")
+            NSUserDefaults.standardUserDefaults().setValue(overrideLogicalLocale?.localeIdentifier, forKey: "overrideLogicalLocale")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
