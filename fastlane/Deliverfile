@@ -29,7 +29,7 @@ skip_deploy true
 beta_ipa "../picnic.ipa"
 
 # The version of your app - remove this if you provide an ipa file
-#version "[[APP_VERSION]]"
+version "1.2"
 
 ###################### More Options ######################
 # If you want to have even more control, check out the documentation
