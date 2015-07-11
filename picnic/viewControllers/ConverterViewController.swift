@@ -51,10 +51,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         bottomCountryLabel = UILabel()
         bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-
+        
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
-
+        
         pointButton = createFAButton("\u{f124}")
         pointButton.addTarget(self, action: Selector("pointPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
         

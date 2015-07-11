@@ -136,12 +136,11 @@ import Foundation
         if let amount = val {
             currentAmount = amount
             calculateHomeAmount()
-            
-            for observer in self.observers {
-                observer.homeAmountChanged()
-            }
         } else {
             homeAmount = nil
+        }
+        for observer in self.observers {
+            observer.homeAmountChanged()
         }
         
     }
@@ -150,11 +149,12 @@ import Foundation
         if let amount = val {
             homeAmount = amount
             calculateCurrentAmount()
-            for observer in self.observers {
-                observer.currentAmountChanged()
-            }
         } else {
             currentAmount = nil
+        }
+        
+        for observer in self.observers {
+            observer.currentAmountChanged()
         }
     }
     
