@@ -1,4 +1,4 @@
-fastlane_version "0.12.4"
+fastlane_version "1.7.0"
 
 default_platform :ios
 
@@ -16,15 +16,7 @@ platform :ios do
     })
   end
 
-  desc "test"
-  lane :test do
-    slack({
-      message: "Starting fastlane test"
-      })
-    
-  end
-
-  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "Deploy a new Beta Build to Apple TestFlight"
   lane :deploy do
       slack({
         message: "Starting deploy"
@@ -39,6 +31,37 @@ platform :ios do
         message: "Finished deploying to appstore"
       })
   end
+
+desc "test"
+  lane :test do
+      slack({
+        message: "Snapshot"
+      })
+      snapshot
+      slack({
+        message: "Finished"
+      })
+  end
+
+
+  desc "Release a new Version on iTunes Connect"
+  lane :release do
+      slack({
+        message: "Starting release"
+      })
+      sh "../increment_version_number.sh"
+      ipa({
+        scheme: "picnic"
+        })
+
+      deliver
+      sh "../commit_release.sh"
+      slack({
+        message: "Finished deploying to appstore"
+      })
+  end
+
+
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
