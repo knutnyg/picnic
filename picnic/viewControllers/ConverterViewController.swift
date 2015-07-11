@@ -253,7 +253,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func updateUserCurrentLocale(){
-        userModel.updatingCurrentLocaleCounter += 1
+        userModel.updatingCurrentLocaleCounter = 1
         gpsLocationManager.updateUserCurrentLocale()
     }
     
