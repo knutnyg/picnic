@@ -5,6 +5,6 @@ hide_transporter_output
 skip_deploy true
 
 beta_ipa "../picnic.ipa"
-version "1.2"
+version "[[APP_VERSION]]"
 
 screenshots_path "../screenshots"

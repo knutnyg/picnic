@@ -5,3 +5,5 @@ buildNumber=$(($buildNumber + 1))
 echo Incrementing buildnumber from $((buildNumber-1)) to $buildNumber
 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" picnic/Info.plist
 
+export APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "picnic/Info.plist")
+
