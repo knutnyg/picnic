@@ -25,6 +25,7 @@ platform :ios do
       ipa({
         scheme: "picnic"
         })
+      snapshot
       deliver
       sh "../commit_release.sh"
       slack({
