@@ -124,17 +124,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         return textField
     }
-    
-    func gpsButtonSetAutomaticallyPressed(sender:UIButton!){
-        userModel.shouldOverrideGPS = false
-        navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
-    func logicalButtonSetAutomaticallyPressed(sender:UIButton!){
-        userModel.shouldOverrideLogical = false
-        navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
+        
     /* ----   Initializers   ----  */
     
     init(userModel:UserModel, selectorType:CountrySelectorType) {
