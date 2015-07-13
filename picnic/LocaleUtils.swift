@@ -25,6 +25,10 @@ class LocaleUtils {
         return nil
     }
     
+    class func createCurrencyCodeFromLocale(locale:NSLocale) -> NSString?{
+        return locale.objectForKey(NSLocaleCurrencyCode) as? String
+    }
+    
     class func createLocaleCountryNameTuple(locale:NSLocale, language:NSLocale) -> LocaleCountryNameTuple{
         var countryName = createCountryNameFromLocale(locale, languageLocale: language)!
         return LocaleCountryNameTuple(locale: locale, countryName: countryName)
