@@ -23,47 +23,46 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         configPath = NSBundle.mainBundle().pathForResource("config", ofType: "plist")
     }
     
-    func getOfflineConversionRate(from:String,to:String) -> ConversionRateObject? {
-        if let data = userModel.offlineData {
-            var fromVal = data[from]?.value
-            var toVal = data[to]?.value
-            var timestamp = data[from]?.timeStamp
-            
-            if let from = fromVal, to = toVal, ts = timestamp {
-                return ConversionRateObject(value: (from/to),timestamp: ts)
+    func updateAllCurrencies(success: ((Bool) -> Void)? = nil){
+        
+        let URL = getAllCurrenciesURL()!
+        let request = NSURLRequest(URL: URL)
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response, data, error) in
+                    self.handleHTTPResponse(response, data: data, error: error)
+                   })
+    }
+    
+    func handleHTTPResponse(response:NSURLResponse, data:NSData, error:NSError?){
+        if error != nil {
+            println("Got error: \(error)")
+        } else {
+            if let json = parseRawJSONToDict(data){
+                if let offlineEntries = parseJSONDictToOfflineEntries(json){
+                    storeOfflineEntries(offlineEntries)
+                    userModel.offlineData = offlineEntries
+                }
+            }
+        }
+        self.userModel.updateingAllCurrenciesCounter = 0
+    }
+    
+    private func storeOfflineEntries(offlineEntries:[String:OfflineEntry]){
+        if offlineEntries.count > 0 {
+            saveDictionaryToDisk(self.storedFileName, offlineEntries)
+        }
+    }
+
+    private func parseRawJSONToDict(data:NSData) -> Dictionary<String,Dictionary<String,String>>?{
+        var jsonError: NSError?
+        if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
+            if let dict = json as? Dictionary<String,Dictionary<String, String>>{
+                return dict
             }
         }
         return nil
     }
     
-    func updateAllCurrencies(success: ((Bool) -> Void)? = nil){
-        
-        let URL = getAllCurrenciesURL()!
-        var jsonError: NSError?
-        
-        let request = NSURLRequest(URL: URL)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response, data, error) in
-            
-            if error != nil {
-                self.userModel.updateingAllCurrenciesCounter = 0
-                println("Got error: \(error)")
-            } else {
-                if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
-                    if let dict = json as? Dictionary<String,Dictionary<String, String>>{
-                        var offlineEntries = self.parseResult(dict)
-                        self.userModel.offlineData = offlineEntries
-                        saveDictionaryToDisk(self.storedFileName, offlineEntries)
-                        self.userModel.updateingAllCurrenciesCounter = 0
-                        if let callback = success {
-                            callback(true)
-                        }
-                    }
-                }
-            }
-        })
-    }
-    
-    private func parseResult(dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]{
+    private func parseJSONDictToOfflineEntries(dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]?{
         var resultDict:[String:OfflineEntry] = [:]
         
         for key in dict.keys {

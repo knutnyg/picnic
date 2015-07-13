@@ -58,7 +58,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
 
     func updateUserCurrentLocale() {
-        if userModel.shouldOverrideGPS {
+        if userModel.overrideGPSLocale != nil {
             userModel.updatingCurrentLocaleCounter = 0
             return
         }
@@ -67,7 +67,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     func updateUserHomeLocale() {
         userModel.updatingHomeLocaleCounter = 0
-        if userModel.shouldOverrideLogical {
+        if userModel.overrideLogicalLocale != nil {
             return
         }
         let countryCode:String =  getCountryCodeFromDevice()

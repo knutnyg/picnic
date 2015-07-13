@@ -120,11 +120,9 @@ class CountryTableViewController: UITableViewController {
         switch selectorType! {
         case .HOME_COUNTRY:
             userModel.overrideLogicalLocale = localeCountryNameTupleList[indexPath.row].locale
-            userModel.shouldOverrideLogical = true
             break
         case .GPS:
             userModel.overrideGPSLocale = localeCountryNameTupleList[indexPath.row].locale
-            userModel.shouldOverrideGPS = true
             break
         }
         navigationController?.popToRootViewControllerAnimated(true)

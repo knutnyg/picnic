@@ -23,20 +23,6 @@ import Foundation
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
-    
-    var shouldOverrideGPS = false {
-        didSet {
-            NSUserDefaults.standardUserDefaults().setBool(shouldOverrideGPS, forKey: "shouldOverrideCurrentLocale")
-            NSUserDefaults.standardUserDefaults().synchronize()
-        }
-    }
-    
-    var shouldOverrideLogical = false {
-        didSet {
-            NSUserDefaults.standardUserDefaults().setBool(shouldOverrideLogical, forKey: "shouldOverrideHomeLocale")
-            NSUserDefaults.standardUserDefaults().synchronize()
-        }
-    }
 
     var offlineMode:Bool = false
     var offlineData:Dictionary<String,OfflineEntry>?
@@ -52,12 +38,12 @@ import Foundation
 
         super.init()
         self.setupUserLanguageLocale()
-        
+    }
+    
+    func loadOffLineData(){
         if let data = readOfflineDateFromDisk("data.dat") {
             offlineData = data
         }
-        
-        loadStateFromUserDefaults()
     }
     
     func setupUserLanguageLocale(){
@@ -81,54 +67,47 @@ import Foundation
         NSUserDefaults.standardUserDefaults().setValue(currentLocale.localeIdentifier, forKey: "currentLocale")
         NSUserDefaults.standardUserDefaults().synchronize()
         currentLocaleHasChanged()
-    }    
+    }
     
-    private func calculateConversionRate() -> Double?{
-        
-        var activeHomeLocale:NSLocale?
-        if shouldOverrideLogical {
-            activeHomeLocale = overrideLogicalLocale
+    func getActiveCurrentLocale() -> NSLocale{
+        if let locale = overrideGPSLocale {
+            return locale
         } else {
-            activeHomeLocale = homeLocale
+            return currentLocale
         }
-        
-        var activeCurrentLocale:NSLocale?
-        if shouldOverrideGPS {
-            activeCurrentLocale = overrideGPSLocale
+    }
+    
+    func getActiveHomeLocale() -> NSLocale{
+        if let locale = overrideLogicalLocale {
+            return locale
         } else {
-            activeCurrentLocale = currentLocale
+            return homeLocale
         }
-        
-        var homeRate:Double = 0
-        var curRate:Double = 0
-        if let locale:NSLocale = activeHomeLocale, cc:String = locale.objectForKey(NSLocaleCurrencyCode) as? String, od = offlineData {
-            if let rate = od[cc]?.value{
-                homeRate = rate
+    }
+    
+    func getConversionrate(fromLocale:NSLocale, toLocale:NSLocale) -> Double?{
+        if let data = offlineData {
+            var fromCountryCode = LocaleUtils.createCurrencyCodeFromLocale(fromLocale) as! String
+            var toCountryCode = LocaleUtils.createCurrencyCodeFromLocale(toLocale) as! String
+            var fromVal = data[fromCountryCode]?.value
+            var toVal = data[toCountryCode]?.value
+                
+            if let from = fromVal, to = toVal {
+                    return to/from
             }
         }
-        
-        if let locale:NSLocale = activeCurrentLocale, cc:String = locale.objectForKey(NSLocaleCurrencyCode) as? String, od = offlineData {
-            if let rate = od[cc]?.value{
-                curRate = rate
-            }
-        }
-        
-        if homeRate != 0 && curRate != 0 {
-            return homeRate / curRate
-        }
-        
         return nil
     }
     
     private func calculateHomeAmount(){
-        if let conv = calculateConversionRate() {
+        if let conv = getConversionrate(getActiveCurrentLocale(), toLocale: getActiveHomeLocale()) {
             homeAmount = currentAmount! * conv
         }
     }
     
     private func calculateCurrentAmount(){
-        if let conv = calculateConversionRate() {
-            currentAmount = homeAmount! * (1/conv)
+        if let conv = getConversionrate(getActiveHomeLocale(), toLocale: getActiveCurrentLocale()) {
+            currentAmount = homeAmount! * conv
         }
     }
     
@@ -172,7 +151,7 @@ import Foundation
     }
     
     func isManualSetupActive() -> Bool{
-        return shouldOverrideGPS || shouldOverrideLogical
+        return overrideGPSLocale != nil || overrideLogicalLocale != nil
     }
     
     func loadStateFromUserDefaults(){
@@ -194,17 +173,12 @@ import Foundation
         if let overrideHome: AnyObject = userDefaults.valueForKey("overrideLogicalLocale") {
             overrideLogicalLocale = NSLocale(localeIdentifier: overrideHome as! String)
         }
-        
-        shouldOverrideGPS = userDefaults.boolForKey("shouldOverrideCurrentLocale")
-        shouldOverrideLogical = userDefaults.boolForKey("shouldOverrideHomeLocale")
     }
     
     func printUserModel(){
         println("Current locale: \(LocaleUtils.createCountryNameFromLocale(currentLocale))")
-        println("shouldOverrideCurrentLocale: \(shouldOverrideGPS)")
         println("currentAmount: \(currentAmount)")
         println("Home locale: \(LocaleUtils.createCountryNameFromLocale(homeLocale))")
-        println("shouldOverrideHomeLocale: \(shouldOverrideLogical)")
         println("homeAmount: \(homeAmount)")
     }
 }

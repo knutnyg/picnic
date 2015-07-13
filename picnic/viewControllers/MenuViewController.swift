@@ -124,8 +124,8 @@ class MenuViewController : UIViewController {
     }
     
     func autoSetupPressed(sender:UIButton!){
-        userModel.shouldOverrideGPS = false
-        userModel.shouldOverrideLogical = false
+        userModel.overrideGPSLocale = nil
+        userModel.overrideLogicalLocale = nil
         navigationController?.popViewControllerAnimated(true)
     }
     
@@ -150,11 +150,11 @@ class MenuViewController : UIViewController {
     
     func setActiveButtonStyle() {
         
-        if userModel.shouldOverrideGPS {
+        if userModel.overrideGPSLocale != nil {
             pointButton.setType(BButtonType.Success)
         }
         
-        if userModel.shouldOverrideLogical {
+        if userModel.overrideLogicalLocale != nil {
             houseButton.setType(BButtonType.Success)
         }
         

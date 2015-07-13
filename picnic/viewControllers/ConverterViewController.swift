@@ -33,6 +33,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     override func viewDidLoad() {
         super.viewDidLoad()
         userModel = UserModel()
+        userModel.loadOffLineData()
+        userModel.loadStateFromUserDefaults()
         
         userModel.addObserver(self)
         view.backgroundColor = UIColor.whiteColor()
@@ -263,10 +265,6 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         userModel.homeLocale = userModel.currentLocale
         userModel.currentLocale = tempLocale
         
-        var tempBool = userModel.shouldOverrideGPS
-        userModel.shouldOverrideGPS = userModel.shouldOverrideLogical
-        userModel.shouldOverrideLogical = tempBool
-        
         var tempOverrideLocal = userModel.overrideGPSLocale
         userModel.overrideGPSLocale = userModel.overrideLogicalLocale
         userModel.overrideLogicalLocale = tempOverrideLocal
@@ -292,56 +290,24 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func setBottomCountryText(){
-        var activeHomeLocale:NSLocale? = nil
-        if userModel.shouldOverrideLogical {
-            activeHomeLocale = userModel.overrideLogicalLocale
-        } else {
-            activeHomeLocale = userModel.homeLocale
-        }
-        if let locale = activeHomeLocale {
-            let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
-            var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-            bottomCountryLabel.text = country
-        }
+        let countryCode:String = userModel.getActiveHomeLocale().objectForKey(NSLocaleCountryCode) as! String
+        var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        bottomCountryLabel.text = country
+        
     }
     
-    func setTopCountryText() {
-        var activeCurrentLocale:NSLocale? = nil
-        if userModel.shouldOverrideGPS {
-            activeCurrentLocale = userModel.overrideGPSLocale
-        } else {
-            activeCurrentLocale = userModel.currentLocale
-        }
-        
-        if let locale = activeCurrentLocale {
-            let countryCode:String = locale.objectForKey(NSLocaleCountryCode) as! String
-            var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
-            topCountryLabel.text = country
-        }
+    func setTopCountryText() {        
+        let countryCode:String = userModel.getActiveCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
+        var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        topCountryLabel.text = country
     }
     
     func setBottomCurrencyLabel() {
-        var activeHomeLocale:NSLocale? = nil
-        if userModel.shouldOverrideLogical {
-            activeHomeLocale = userModel.overrideLogicalLocale
-        } else {
-            activeHomeLocale = userModel.homeLocale
-        }
-        if let locale = activeHomeLocale {
-            bottomTextField.placeholder = locale.objectForKey(NSLocaleCurrencyCode) as? String
-        }
+        bottomTextField.placeholder = userModel.getActiveHomeLocale().objectForKey(NSLocaleCurrencyCode) as? String
     }
 
     func setTopCurrencyLabel() {
-        var activeCurrentLocale:NSLocale? = nil
-        if userModel.shouldOverrideGPS {
-            activeCurrentLocale = userModel.overrideGPSLocale
-        } else {
-            activeCurrentLocale = userModel.currentLocale
-        }
-        if let loc = activeCurrentLocale {
-            topTextField.placeholder = loc.objectForKey(NSLocaleCurrencyCode) as? String
-        }
+        topTextField.placeholder = userModel.getActiveCurrentLocale().objectForKey(NSLocaleCurrencyCode) as? String
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
