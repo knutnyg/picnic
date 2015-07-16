@@ -7,18 +7,18 @@ import Foundation
 import UIKit
 
 func createFALabel(unicode:String) -> UILabel{
-    var label = UILabel()
-    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
     label.text = unicode
     label.textAlignment = NSTextAlignment.Center
     return label
 }
 
 func createfontAwesomeButton(unicode:String) -> UIButton{
-    var font = UIFont(name: "FontAwesome", size: 22)!
+    let font = UIFont(name: "FontAwesome", size: 22)!
     let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
 
-    var button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+    let button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
     button.setTitle(unicode, forState: .Normal)
     button.titleLabel!.font = font
     button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -28,8 +28,8 @@ func createfontAwesomeButton(unicode:String) -> UIButton{
 }
 
 func createFAButton(unicode:String) -> UIButton{
-    var button = UIButton()
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
     button.setTitle(unicode, forState: .Normal)
     button.setTitleColor(UIColor.blackColor(), forState: .Normal)
     button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)

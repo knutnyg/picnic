@@ -47,8 +47,9 @@ import Foundation
     }
     
     func setupUserLanguageLocale(){
-        var userLanguage = NSLocale.preferredLanguages().description
-        languageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as [NSObject : AnyObject]))
+        let userLanguage = NSLocale.preferredLanguages().description
+        print("userlanguage: \(userLanguage)")
+        self.languageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as! [String : String]))
     }
     
     func addObserver(observer:UserModelObserver){
@@ -87,10 +88,10 @@ import Foundation
     
     func getConversionrate(fromLocale:NSLocale, toLocale:NSLocale) -> Double?{
         if let data = offlineData {
-            var fromCountryCode = LocaleUtils.createCurrencyCodeFromLocale(fromLocale) as! String
-            var toCountryCode = LocaleUtils.createCurrencyCodeFromLocale(toLocale) as! String
-            var fromVal = data[fromCountryCode]?.value
-            var toVal = data[toCountryCode]?.value
+            let fromCountryCode = LocaleUtils.createCurrencyCodeFromLocale(fromLocale) as! String
+            let toCountryCode = LocaleUtils.createCurrencyCodeFromLocale(toLocale) as! String
+            let fromVal = data[fromCountryCode]?.value
+            let toVal = data[toCountryCode]?.value
                 
             if let from = fromVal, to = toVal {
                     return to/from
@@ -155,7 +156,7 @@ import Foundation
     }
     
     func loadStateFromUserDefaults(){
-        println("Loading state from userDefaults")
+        print("Loading state from userDefaults")
         let userDefaults = NSUserDefaults.standardUserDefaults()
 
         if let current: AnyObject = userDefaults.valueForKey("currentLocale") {
@@ -176,9 +177,9 @@ import Foundation
     }
     
     func printUserModel(){
-        println("Current locale: \(LocaleUtils.createCountryNameFromLocale(currentLocale))")
-        println("currentAmount: \(currentAmount)")
-        println("Home locale: \(LocaleUtils.createCountryNameFromLocale(homeLocale))")
-        println("homeAmount: \(homeAmount)")
+        print("Current locale: \(LocaleUtils.createCountryNameFromLocale(currentLocale))")
+        print("currentAmount: \(currentAmount)")
+        print("Home locale: \(LocaleUtils.createCountryNameFromLocale(homeLocale))")
+        print("homeAmount: \(homeAmount)")
     }
 }

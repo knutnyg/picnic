@@ -46,13 +46,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         conversionRateManager.storedFileName = storedFileName
         
         topCountryLabel = UILabel()
-        topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        topCountryLabel.translatesAutoresizingMaskIntoConstraints = false
         
         topTextField = createTextField()
         topTextField.addTarget(self, action: Selector("topAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         bottomCountryLabel = UILabel()
-        bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        bottomCountryLabel.translatesAutoresizingMaskIntoConstraints = false
         
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
@@ -78,7 +78,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(houseButton)
         view.addSubview(dataAgeLabel)
         
-        let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
+        let views: [String : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":pointButton, "bottomIcon":houseButton, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
@@ -100,12 +100,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func setupNavigationBar(){
         navigationController?.navigationBar.barTintColor = UIColor(netHex: 0x19B5FE)
         
-        var font = UIFont(name: "Verdana", size:22)!
-        var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        let font = UIFont(name: "Verdana", size:22)!
+        let attributes:[String : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
         navigationItem.title = "Picnic Currency"
-        navigationController?.navigationBar.titleTextAttributes = attributes
+        navigationController!.navigationBar.titleTextAttributes = attributes
         
-        var verticalOffset = 1.5 as CGFloat;
+        let verticalOffset = 1.5 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
         
         refreshButton = createfontAwesomeButton("\u{f021}")
@@ -121,21 +121,21 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     
-    func setConstraints(views: [NSObject:AnyObject]){
+    func setConstraints(views: [String:AnyObject]){
         
-        var swapMargin = getSwapButtonMarginBasedOnDevice()
-        var keyboardHeight = getKeyboardHeightBasedOnDevice()
+        let swapMargin = getSwapButtonMarginBasedOnDevice()
+        let keyboardHeight = getKeyboardHeightBasedOnDevice()
         
-        var screenSize = Double(view.bounds.height)
-        var textFieldHeight = Int(screenSize * 0.10)
-        var topTextFieldMarginTop = Int(screenSize * 0.14)
-        var swapButtonMarginTopAndBottom = Int(screenSize * swapMargin)
-        var countryLabelDistanceFromTextField = Int(screenSize * 0.003)
-        var distanceFromEdge = Int(screenSize * 0.01)
+        let screenSize = Double(view.bounds.height)
+        let textFieldHeight = Int(screenSize * 0.10)
+
+        let swapButtonMarginTopAndBottom = Int(screenSize * swapMargin)
+        let countryLabelDistanceletmTextField = Int(screenSize * 0.003)
+        let distanceFromEdge = Int(screenSize * 0.01)
         
-        var textFieldFontSize = CGFloat(screenSize * 0.033)
-        var swapButtonFontSize = CGFloat(screenSize * 0.082)
-        var iconFontSize = CGFloat(screenSize * 0.045)
+        let textFieldFontSize = CGFloat(screenSize * 0.033)
+        let swapButtonFontSize = CGFloat(screenSize * 0.082)
+        let iconFontSize = CGFloat(screenSize * 0.045)
         
         self.topTextField.font = UIFont(name: "Verdana", size: textFieldFontSize)
         self.swapButton.titleLabel!.font = UIFont(name: "FontAwesome", size: swapButtonFontSize)
@@ -150,14 +150,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             textFieldHeight,
             keyboardHeight)
         
-        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        
+        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
         visualFormat = String(format: "V:[topCountryLabel]-%d-[topTextField]",
-            countryLabelDistanceFromTextField)
+            countryLabelDistanceletmTextField)
         
         let topCountrylabelSpaceToTextField = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
         view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: topTextField, attribute: .CenterY, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: bottomTextField, attribute: .CenterY, multiplier: 1, constant: 0))
@@ -168,33 +168,30 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
             distanceFromEdge,
             distanceFromEdge)
         
-        let swapButtonWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
-        
         let swapButtonHorizontalAlign = NSLayoutConstraint(item: swapButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
     
         view.addConstraint(NSLayoutConstraint(item: bottomCountryLabel, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: bottomTextField, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0))
         
         visualFormat = String(format: "V:[bottomCountryLabel]-%d-[bottomTextField]",
-            countryLabelDistanceFromTextField)
+            countryLabelDistanceletmTextField)
         
         let bottomCountrylabelbottomConst = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
         let size: CGSize = houseButton.titleLabel!.text!.sizeWithAttributes([NSFontAttributeName: houseButton.titleLabel!.font])
-        var labelWidth = size.width + CGFloat(2*distanceFromEdge)
+        let labelWidth = size.width + CGFloat(2*distanceFromEdge)
         
         visualFormat = String(format: "H:|-%d-[topIcon(\(size.width))]-%d-[topTextField]-\(labelWidth)-|",
             distanceFromEdge,distanceFromEdge)
         
         let topTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
         visualFormat = String(format: "H:|-%d-[bottomIcon(\(size.width))]-%d-[bottomTextField]-\(labelWidth)-|",
             distanceFromEdge,distanceFromEdge)
         
         let bottomTextFieldWidthConst = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
         view.addConstraint(NSLayoutConstraint(item: dataAgeLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0))
         
@@ -236,7 +233,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     func refreshData(){
         if !shouldRefreshContiniueSpinning() {
-           refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+           refreshButton.rotate360Degrees(2, completionDelegate: self)
         }
 
         updateOfflineData()
@@ -261,11 +258,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func swapButtonPressed(sender:UIButton){
         self.view.endEditing(true)
-        var tempLocale = userModel.homeLocale
+        let tempLocale = userModel.homeLocale
         userModel.homeLocale = userModel.currentLocale
         userModel.currentLocale = tempLocale
         
-        var tempOverrideLocal = userModel.overrideGPSLocale
+        let tempOverrideLocal = userModel.overrideGPSLocale
         userModel.overrideGPSLocale = userModel.overrideLogicalLocale
         userModel.overrideLogicalLocale = tempOverrideLocal
         
@@ -276,12 +273,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func housePressed(sender:UIButton){
-        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func pointPressed(sender:UIButton){
-        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -291,14 +288,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func setBottomCountryText(){
         let countryCode:String = userModel.getActiveHomeLocale().objectForKey(NSLocaleCountryCode) as! String
-        var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        let country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         bottomCountryLabel.text = country
         
     }
     
     func setTopCountryText() {        
         let countryCode:String = userModel.getActiveCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
-        var country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
+        let country: String = userModel.languageLocale.displayNameForKey(NSLocaleCountryCode, value: countryCode)!
         topCountryLabel.text = country
     }
     
@@ -315,7 +312,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return true;
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }
     
@@ -324,13 +321,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func displayFailedToResolveCurrencyError(){
-        var alert2 = UIAlertController(title: "Error", message: "Unable to access obtain the convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert2 = UIAlertController(title: "Error", message: "Unable to access obtain the convertionrate. Please check your internet connection and try again later.", preferredStyle: UIAlertControllerStyle.Alert)
         alert2.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert2, animated: true, completion: nil)
     }
     
     func displayFailedToCurrentLocation(){
-        var alert = UIAlertController(title: "Error", message: "Unable to detect your location. Please make sure Picnic is allowed the use of GPS under general settings.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Error", message: "Unable to detect your location. Please make sure Picnic is allowed the use of GPS under general settings.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -354,7 +351,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func topAmountEdited(theTextField:UITextField) -> Void {
-        let normalizedNumber:NSString = self.normalizeText(topTextField.text)
+        let normalizedNumber:NSString = self.normalizeText(topTextField.text!)
         if normalizedNumber == "" {
             userModel.updateCurrentAmount(nil)
         } else {
@@ -364,7 +361,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func bottomAmountEdited(theTextField:UITextField) -> Void {
-        let normalizedNumber:NSString = self.normalizeText(bottomTextField.text)
+        let normalizedNumber:NSString = self.normalizeText(bottomTextField.text!)
             if normalizedNumber == "" {
                 userModel.updateHomeAmount(nil)
             } else {
@@ -410,7 +407,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func isDataOld(timestamp:NSDate) -> Bool{
-        var limit = NSDate().addDays(-2)
+        let limit = NSDate().addDays(-2)
         let res = timestamp.compare(limit)
         
         if res == NSComparisonResult.OrderedDescending {
@@ -420,10 +417,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func createTextField() -> UITextField{
-        var textField = UITextField()
+        let textField = UITextField()
         
         textField.delegate = self
-        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = UITextBorderStyle.RoundedRect
         textField.placeholder = "USD"
         textField.textAlignment = NSTextAlignment.Center
@@ -434,8 +431,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func createSwapButton() -> UIButton{
-        var swapButton = UIButton()
-        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        let swapButton = UIButton()
+        swapButton.translatesAutoresizingMaskIntoConstraints = false
         swapButton.setTitle("\u{f0ec}", forState: .Normal)
         swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
@@ -445,10 +442,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return swapButton
     }
     
-    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
-        var val = shouldRefreshContiniueSpinning()
+    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        let val = shouldRefreshContiniueSpinning()
         if val {
-            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+            refreshButton.rotate360Degrees(2, completionDelegate: self)
         }
     }
     
@@ -457,7 +454,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func shouldRefreshContiniueSpinning() -> Bool{
-        println("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
+        print("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
         
         return userModel.updateingAllCurrenciesCounter > 0 ||
         userModel.updatingCurrentLocaleCounter > 0 ||

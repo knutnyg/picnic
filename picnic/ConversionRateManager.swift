@@ -27,14 +27,18 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         
         let URL = getAllCurrenciesURL()!
         let request = NSURLRequest(URL: URL)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response, data, error) in
-                    self.handleHTTPResponse(response, data: data, error: error)
-                   })
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request){
+            (data:NSData?, response:NSURLResponse?, error:NSError?) in
+                self.handleHTTPResponse(response!, data: data!, error: error)
+            }
+        task?.resume()
     }
-    
+
     func handleHTTPResponse(response:NSURLResponse, data:NSData, error:NSError?){
         if error != nil {
-            println("Got error: \(error)")
+            print("Got error: \(error)")
         } else {
             if let json = parseRawJSONToDict(data){
                 if let offlineEntries = parseJSONDictToOfflineEntries(json){
@@ -48,16 +52,20 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     private func storeOfflineEntries(offlineEntries:[String:OfflineEntry]){
         if offlineEntries.count > 0 {
-            saveDictionaryToDisk(self.storedFileName, offlineEntries)
+            saveDictionaryToDisk(self.storedFileName, dict: offlineEntries)
         }
     }
 
     private func parseRawJSONToDict(data:NSData) -> Dictionary<String,Dictionary<String,String>>?{
         var jsonError: NSError?
-        if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
+        do {
+            let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: [])
             if let dict = json as? Dictionary<String,Dictionary<String, String>>{
                 return dict
             }
+        } catch let error as NSError {
+            jsonError = error
+            print("Error: \(jsonError)")
         }
         return nil
     }
@@ -66,10 +74,10 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         var resultDict:[String:OfflineEntry] = [:]
         
         for key in dict.keys {
-            var value = (dict[key]!["value"]! as NSString).doubleValue
-            var from = dict[key]!["unit_from"]!
-            var to = dict[key]!["unit_to"]!
-            var timestamp = dict[key]!["timestamp"]!
+            let value = (dict[key]!["value"]! as NSString).doubleValue
+            let from = dict[key]!["unit_from"]!
+            let to = dict[key]!["unit_to"]!
+            let timestamp = dict[key]!["timestamp"]!
             
             resultDict[key] = OfflineEntry(timeStamp: dateFromUTCString(timestamp), unit_from: from, unit_to: to, value: value)
         }
@@ -78,29 +86,34 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     func getFileURL(fileName: String) -> NSURL {
         let manager = NSFileManager.defaultManager()
-        let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
+        let dirURL: NSURL?
+        do {
+            dirURL = try manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
+        } catch _ {
+            dirURL = nil
+        }
         return dirURL!.URLByAppendingPathComponent(fileName)
     }
     
     func getConversionURL(homeCurrency:String, currentCurrency:String) -> NSURL?{
         if let conf = config {
-            var url: String? = conf.valueForKey("api_url") as? String
+            let url: String? = conf.valueForKey("api_url") as? String
             if let baseurl = url {
                 return NSURL(string: "\(baseurl)exchange/\(homeCurrency)/\(currentCurrency)")
             }
         }
-        println("Error creating url from properties")
+        print("Error creating url from properties")
         return nil
     }
     
     func getAllCurrenciesURL() -> NSURL?{
         if let conf = config {
-            var url: String? = conf.valueForKey("api_url") as? String
+            let url: String? = conf.valueForKey("api_url") as? String
             if let baseurl = url {
                 return NSURL(string: "\(baseurl)currencies")
             }
         }
-        println("Error creating url from properties")
+        print("Error creating url from properties")
         return nil
     }
     
@@ -108,7 +121,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         if let path = configPath {
             return NSDictionary(contentsOfFile: path)
         } else {
-            println("Error loading config")
+            print("Error loading config")
         }
         return nil
     }

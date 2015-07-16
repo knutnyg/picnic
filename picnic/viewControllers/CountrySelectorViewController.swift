@@ -27,29 +27,27 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
-        countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        countryTableView.view.translatesAutoresizingMaskIntoConstraints = false
         
         self.addChildViewController(countryTableView)
         
         view.addSubview(topFilterField)
         view.addSubview(countryTableView.view)
         
-        let views:[NSObject : AnyObject] = ["countryTable":countryTableView.view, "topFilter":topFilterField]
+        let views:[String : AnyObject] = ["countryTable":countryTableView.view, "topFilter":topFilterField]
         
-        var visualFormat = String(format: "V:|-74-[topFilter(40)]-[countryTable]-0-|")
+        let visualFormat = String(format: "V:|-74-[topFilter(40)]-[countryTable]-0-|")
         
-        var verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(0), metrics: nil, views: views)
+        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
+            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[countryTable]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[countryTable]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         view.addConstraints(verticalLayout)  
     }
     
     
     func setupNavigationBar(){
-        var font = UIFont(name: "Verdana", size:22)!
-        var attributes:[NSObject : AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
         
         switch selectorType! {
         case .HOME_COUNTRY:
@@ -58,7 +56,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
             navigationItem.title = "Current Location"
     }
         
-        var verticalOffset = 3 as CGFloat;
+        let verticalOffset = 3 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
         
         backButton = createfontAwesomeButton("\u{f060}")
@@ -67,13 +65,13 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         navigationItem.leftBarButtonItem = backButtonItem
     }
     
-    func back(UIEvent) {
+    func back(_: UIEvent) {
         navigationController?.popViewControllerAnimated(true)
     }
     
     func createInstructionLabel() -> UILabel{
-        var label = UILabel()
-        label.setTranslatesAutoresizingMaskIntoConstraints(false)
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = NSTextAlignment.Center
         label.numberOfLines = 4
         
@@ -88,15 +86,15 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
 
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }
     
     func topFilterTextEdited(theTextField:UITextField) -> Void {
-        if(theTextField.text.isEmpty){
-            countryTableView.setCountryArray(countryTableView.createCountryNameList())
+        if let text = theTextField.text {
+            countryTableView.setCountryArray(countryTableView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(text.lowercaseString)} )
         } else {
-            countryTableView.setCountryArray(countryTableView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(theTextField.text.lowercaseString)} )
+            countryTableView.setCountryArray(countryTableView.createCountryNameList())
         }
         
     }
@@ -111,10 +109,10 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     }
     
     func createTextField() -> UITextField{
-        var textField = UITextField()
+        let textField = UITextField()
         
         textField.delegate = self
-        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = UITextBorderStyle.RoundedRect
         textField.placeholder = "Filter"
         textField.autocorrectionType = UITextAutocorrectionType.No

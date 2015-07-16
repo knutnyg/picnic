@@ -35,7 +35,7 @@ class CountryTableViewController: UITableViewController {
 
     func scrollToCurrentLocaleIfSet() {
         if let loc = self.locale {
-            var calculatedLocaleCountryName = LocaleUtils.createCountryNameFromLocale(loc)
+            let calculatedLocaleCountryName = LocaleUtils.createCountryNameFromLocale(loc)
             
             var counter = 0
             for tuple in localeCountryNameTupleList {
@@ -55,27 +55,26 @@ class CountryTableViewController: UITableViewController {
         }
         
         var localeCountryNameTupleList:[LocaleCountryNameTuple] = []
-        var localeList:[NSLocale] = []
         
-        var currencies = readFileAsString("supported_currencies", "txt")
-        var currencyList = split(currencies!) {$0 == "\n"}
+        var currencies = readFileAsString("supported_currencies", ofType: "txt")
+        let currencyList = split((currencies!).characters) {$0 == "\n"}.map { String($0) }
         
         //finn alle land
-        var rawCountryList = NSLocale.ISOCountryCodes() as! [String]
+        let rawCountryList = NSLocale.ISOCountryCodes() as [String]
 
         //lag locale objecter
-        var rawLocaleList:[NSLocale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
+        let rawLocaleList:[NSLocale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
 
         //filtrer land der currency finnes i støttet liste
-        var filteredList = rawLocaleList.filter({locale in
-            return contains(currencyList, (locale.objectForKey(NSLocaleCurrencyCode) as! String))
+        let filteredList = rawLocaleList.filter({locale in
+            return currencyList.contains((locale.objectForKey(NSLocaleCurrencyCode) as! String))
             })
         
         for locale in filteredList {
             localeCountryNameTupleList += [LocaleUtils.createLocaleCountryNameTuple(locale, language: userModel.languageLocale)]
         }
         
-        let result = localeCountryNameTupleList.sorted { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
+        let result = localeCountryNameTupleList.sort { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
         self.rawCountryNameList = result
         return result
     }
@@ -89,7 +88,7 @@ class CountryTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.None
 
         let countryName = localeCountryNameTupleList[indexPath.row].countryName
@@ -107,11 +106,11 @@ class CountryTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
+        let selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
         
-        var cellCount = self.tableView.numberOfRowsInSection(0)
+        let cellCount = self.tableView.numberOfRowsInSection(0)
         for i in 0...cellCount {
-            var cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0))
+            let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0))
             cell?.accessoryType = UITableViewCellAccessoryType.None
         }
         

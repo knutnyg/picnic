@@ -13,49 +13,45 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     init(userModel:UserModel) {
         super.init()
-        
-        var timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: Selector("update"), userInfo: nil, repeats: true)
+    
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         self.locationManager.requestWhenInUseAuthorization()
         self.userModel = userModel
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-            handleLocationUpdate(manager)
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            handleLocationUpdate(locations)
     }
     
-    internal func handleLocationUpdate(manager:CLLocationManager){
-        if shouldReportNextLocale {
-            CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
+    internal func handleLocationUpdate(locations:[CLLocation]){
+            CLGeocoder().reverseGeocodeLocation(locations[0], completionHandler:
                 {
                     (placemarks, error)->Void in
                     if error != nil {
                         self.handleError(error)
                     } else {
-                        self.handleLocation(placemarks)
+                        self.handleLocation(placemarks!)
                     }
                 }
             )
-        }
     }
     
     func handleLocation(placemarks: [AnyObject]) {
         if placemarks.isEmpty {
-            println("Error with the data.")
+            print("Error with the data.")
         } else {
             let locale = getLocaleFromPlacemark(placemarks)
-            println("Updating current locale: \(LocaleUtils.createCountryNameFromLocale(locale, languageLocale: nil))")
+            print("Updating current locale: \(LocaleUtils.createCountryNameFromLocale(locale, languageLocale: nil))")
             userModel.updateCurrentLocale(locale)
             shouldReportNextLocale = false
             userModel.updatingCurrentLocaleCounter = 0
-            locationManager.stopUpdatingLocation()
         }
     }
     
     internal func getLocaleFromPlacemark(placemarks:[AnyObject]) -> NSLocale{
         let pm:CLPlacemark = placemarks.first as! CLPlacemark
-        return LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode)
+        return LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode!)
     }
 
     func updateUserCurrentLocale() {
@@ -63,9 +59,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             userModel.updatingCurrentLocaleCounter = 0
             return
         }
-        locationManager.stopUpdatingLocation()
-        locationManager.startUpdatingLocation()
-        shouldReportNextLocale = true
+        locationManager.requestLocation()
     }
     
     func updateUserHomeLocale() {
@@ -84,10 +78,10 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     func handleError(error : NSError!) {
         //This error is usually bad data preceeding good data. So we just skip it.
-        println(error)
+        print(error)
     }
 
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        println("Error: " + error.localizedDescription)
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error: " + error.localizedDescription)
     }
 }

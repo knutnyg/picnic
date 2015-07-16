@@ -40,21 +40,21 @@ extension UIView {
 extension NSDate {
     
     func shortPrintable()-> String{
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "dd.MM"
         
         return dateFormatter.stringFromDate(self)
     }
     
     func mediumPrintable() -> String {
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "dd. MMMM YYYY"
         
         return dateFormatter.stringFromDate(self)
     }
     
     func utcFormat() -> String {
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         
         return dateFormatter.stringFromDate(self)
@@ -62,8 +62,8 @@ extension NSDate {
     
     func addDays(daysToAdd : Int) -> NSDate
     {
-        var secondsInDays : NSTimeInterval = Double(daysToAdd) * 60 * 60 * 24
-        var dateWithDaysAdded : NSDate = self.dateByAddingTimeInterval(secondsInDays)
+        let secondsInDays : NSTimeInterval = Double(daysToAdd) * 60 * 60 * 24
+        let dateWithDaysAdded : NSDate = self.dateByAddingTimeInterval(secondsInDays)
         
         //Return Result
         return dateWithDaysAdded
@@ -71,8 +71,8 @@ extension NSDate {
     
     func addHours(hoursToAdd : Int) -> NSDate
     {
-        var secondsInHours : NSTimeInterval = Double(hoursToAdd) * 60 * 60
-        var dateWithHoursAdded : NSDate = self.dateByAddingTimeInterval(secondsInHours)
+        let secondsInHours : NSTimeInterval = Double(hoursToAdd) * 60 * 60
+        let dateWithHoursAdded : NSDate = self.dateByAddingTimeInterval(secondsInHours)
         
         //Return Result
         return dateWithHoursAdded

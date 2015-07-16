@@ -55,14 +55,14 @@ class MenuViewController : UIViewController {
         self.view.addSubview(pointButton)
         self.view.addSubview(houseButton)
         
-        var views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton]
+        let views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton]
         
-        var screenHeight = view.bounds.height
-        var marginTop = Int((screenHeight - 24 - 120) / 2) - 66
+        let screenHeight = view.bounds.height
+        let marginTop = Int((screenHeight - 24 - 120) / 2) - 66
         
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         
         view.addConstraint(NSLayoutConstraint(item: houseButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
         view.addConstraint(NSLayoutConstraint(item: pointButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
@@ -76,8 +76,8 @@ class MenuViewController : UIViewController {
     }
     
     func createReloadButton() -> UIButton{
-        var button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        let button = UIButton(type: UIButtonType.System)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Reload", forState: .Normal)
         button.titleLabel!.font = UIFont(name:"Helvetica", size:30)
         return button
@@ -87,10 +87,10 @@ class MenuViewController : UIViewController {
         var resultDict:[String:OfflineEntry] = [:]
     
         for key in dict.keys {
-            var value = (dict[key]!["value"]! as NSString).doubleValue
-            var from = dict[key]!["unit_from"]!
-            var to = dict[key]!["unit_to"]!
-            var timestamp = dict[key]!["timestamp"]!
+            let value = (dict[key]!["value"]! as NSString).doubleValue
+            let from = dict[key]!["unit_from"]!
+            let to = dict[key]!["unit_to"]!
+            let timestamp = dict[key]!["timestamp"]!
             
             resultDict[key] = OfflineEntry(timeStamp: dateFromUTCString(timestamp), unit_from: from, unit_to: to, value: value)
         }
@@ -99,12 +99,12 @@ class MenuViewController : UIViewController {
     
     func setupNavigationBar() {
 
-        var font = UIFont(name: "Verdana", size: 22)!
-        var attributes: [NSObject:AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        let font = UIFont(name: "Verdana", size: 22)!
+        let attributes: [String:AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
         navigationItem.title = "Menu"
-        navigationController?.navigationBar.titleTextAttributes = attributes
+        navigationController!.navigationBar.titleTextAttributes = attributes
 
-        var verticalOffset = 3 as CGFloat;
+        let verticalOffset = 3 as CGFloat;
         navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
 
         backButton = createfontAwesomeButton("\u{f060}")
@@ -113,7 +113,7 @@ class MenuViewController : UIViewController {
         navigationItem.leftBarButtonItem = backButtonItem
     }
     
-    func back(UIEvent) {
+    func back(_: UIEvent) {
         navigationController?.popViewControllerAnimated(true)
     }
     
@@ -130,18 +130,18 @@ class MenuViewController : UIViewController {
     }
     
     func pointPressed(sender:UIButton){
-        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func housePressed(sender:UIButton){
-        var vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func createBButton(title:String) -> BButton{
-        var button = BButton()
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        let button = BButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(title, forState: .Normal)
         button.setType(BButtonType.Info)
 

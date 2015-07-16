@@ -10,7 +10,12 @@ import Foundation
 
 func getFileURL(fileName: String) -> NSURL {
     let manager = NSFileManager.defaultManager()
-    let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
+    let dirURL: NSURL?
+    do {
+        dirURL = try manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
+    } catch _ {
+        dirURL = nil
+    }
     return dirURL!.URLByAppendingPathComponent(fileName)
 }
 
@@ -20,7 +25,7 @@ func saveDictionaryToDisk(fileName:String, dict:Dictionary<String,AnyObject>){
 }
 
 func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
-    println("Reading offline data from disk")
+    print("Reading offline data from disk")
     if let filePath = getFileURL(fileName).path {
         if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String:OfflineEntry] {
             return dict
@@ -30,9 +35,14 @@ func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
 }
 
 func readFileAsString(filename:String, ofType:String) -> String?{
-    var fileRoot = NSBundle.mainBundle().pathForResource(filename, ofType: ofType)
+    let fileRoot = NSBundle.mainBundle().pathForResource(filename, ofType: ofType)
     if let root = fileRoot {
-        var contents = NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding, error: nil)
+        var contents: NSString?
+        do {
+            contents = try NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding)
+        } catch _ {
+            contents = nil
+        }
         return contents as? String
     }
     
