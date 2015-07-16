@@ -7,4 +7,4 @@ skip_deploy true
 beta_ipa "../picnic.ipa"
 version "1.2"
 
-screenshots_path "../screenshots"
+screenshots_path "./screenshots"

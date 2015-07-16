@@ -8,15 +8,16 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
     var userModel:UserModel!
+    var lastLocation:CLLocation?
     var shouldReportNextLocale:Bool = false
     
     init(userModel:UserModel) {
         super.init()
-
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: Selector("update"), userInfo: nil, repeats: true)
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         self.locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
         self.userModel = userModel
     }
     
@@ -25,30 +26,30 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     internal func handleLocationUpdate(manager:CLLocationManager){
-        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
-            {
-                (placemarks, error)->Void in
-                
-                if error != nil {
-                    self.handleError(error)
-                } else {
-                    self.handleLocation(placemarks)
+        if shouldReportNextLocale {
+            CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler:
+                {
+                    (placemarks, error)->Void in
+                    if error != nil {
+                        self.handleError(error)
+                    } else {
+                        self.handleLocation(placemarks)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
     
     func handleLocation(placemarks: [AnyObject]) {
-        if shouldReportNextLocale {
-            if placemarks.isEmpty {
-                println("Error with the data.")
-            } else {
-                let locale = getLocaleFromPlacemark(placemarks)
-                println("Updating current locale: \(LocaleUtils.createCountryNameFromLocale(locale, languageLocale: nil))")
-                userModel.updateCurrentLocale(locale)
-                shouldReportNextLocale = false
-                userModel.updatingCurrentLocaleCounter = 0
-            }
+        if placemarks.isEmpty {
+            println("Error with the data.")
+        } else {
+            let locale = getLocaleFromPlacemark(placemarks)
+            println("Updating current locale: \(LocaleUtils.createCountryNameFromLocale(locale, languageLocale: nil))")
+            userModel.updateCurrentLocale(locale)
+            shouldReportNextLocale = false
+            userModel.updatingCurrentLocaleCounter = 0
+            locationManager.stopUpdatingLocation()
         }
     }
     
@@ -62,6 +63,8 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             userModel.updatingCurrentLocaleCounter = 0
             return
         }
+        locationManager.stopUpdatingLocation()
+        locationManager.startUpdatingLocation()
         shouldReportNextLocale = true
     }
     
