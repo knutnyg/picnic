@@ -25,6 +25,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     internal func handleLocationUpdate(locations:[CLLocation]){
+            shouldReportNextLocale = false
             CLGeocoder().reverseGeocodeLocation(locations[0], completionHandler:
                 {
                     (placemarks, error)->Void in
@@ -46,6 +47,12 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             userModel.updateCurrentLocale(locale)
             shouldReportNextLocale = false
             userModel.updatingCurrentLocaleCounter = 0
+            
+            if #available(iOS 9.0, *) {
+                
+            } else {
+               locationManager.stopUpdatingLocation()
+            }
         }
     }
     
@@ -59,7 +66,13 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             userModel.updatingCurrentLocaleCounter = 0
             return
         }
-        locationManager.requestLocation()
+        
+        shouldReportNextLocale = true
+        if #available(iOS 9.0, *) {
+            locationManager.requestLocation()
+        } else {
+            locationManager.startUpdatingLocation()
+        }
     }
     
     func updateUserHomeLocale() {

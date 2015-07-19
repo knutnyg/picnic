@@ -771,6 +771,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.apmsolutions.E9A359GGU4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -787,6 +788,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.apmsolutions.E9A359GGU4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
