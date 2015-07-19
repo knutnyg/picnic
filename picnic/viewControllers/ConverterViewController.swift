@@ -1,8 +1,9 @@
 
 import Foundation
 import UIKit
+import iAd
 
-class ConverterViewController: UIViewController, UserModelObserver, UITextFieldDelegate {
+class ConverterViewController: UIViewController, UserModelObserver, UITextFieldDelegate, ADBannerViewDelegate {
 
     // -- UI Elements -- //
     var topCountryLabel:UILabel!
@@ -29,6 +30,12 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     let userDefaults = NSUserDefaults.standardUserDefaults();
     var storedFileName = "data.dat"
+    
+    var adBannerView:ADBannerView!
+    var adBannerConstraint:[NSLayoutConstraint]!
+    
+    var interAd:ADInterstitialAd!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +75,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         swapButton = createFAButton("\u{f0ec}")
         swapButton.transform = CGAffineTransformMakeRotation(3.14/2)
         swapButton.addTarget(self, action: "swapButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        
+
         view.addSubview(topCountryLabel)
         view.addSubview(topTextField)
         view.addSubview(swapButton)
@@ -95,6 +102,31 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         clearTextFields()
         redraw()
         refreshData()
+        
+        if(!userModel.skipAds) {
+            addBanner()
+        }
+    }
+    
+    func addBanner(){
+        adBannerView = ADBannerView()
+        adBannerView.translatesAutoresizingMaskIntoConstraints=false
+        adBannerView.delegate = self
+        view.addSubview(adBannerView)
+        adBannerConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[adBanner]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["adBanner":adBannerView])
+        view.addConstraints(adBannerConstraint)
+    }
+    
+    func removeBanner(){
+        adBannerView.removeFromSuperview()
+        view.removeConstraints(adBannerConstraint)
+        adBannerView.delegate = nil
+        adBannerView = nil
+    }
+    
+    func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
+        print("Error: \(error)")
+        banner.hidden = true
     }
     
     func setupNavigationBar(){
@@ -454,7 +486,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func shouldRefreshContiniueSpinning() -> Bool{
-        print("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
+//        print("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
         
         return userModel.updateingAllCurrenciesCounter > 0 ||
         userModel.updatingCurrentLocaleCounter > 0 ||
@@ -464,7 +496,17 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func settings(sender:UIButton!) {
         let vc = MenuViewController(userModel: userModel)
         vc.delegate = self
+
+        if !userModel.skipAds {
+            interstitialPresentationPolicy = ADInterstitialPresentationPolicy.Manual
+            requestInterstitialAdPresentation()
+        }
+
+        if adBannerView != nil {
+            removeBanner()
+        }
         navigationController?.pushViewController(vc, animated: true)
+
     }
 }
 

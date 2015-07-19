@@ -23,6 +23,13 @@ import Foundation
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
+    
+    var skipAds:Bool {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setBool(skipAds, forKey: "skipAds")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
 
     var offlineMode:Bool = false
     var offlineData:Dictionary<String,OfflineEntry>?
@@ -36,8 +43,11 @@ import Foundation
         self.homeLocale = NSLocale(localeIdentifier: "en_US")
         self.currentLocale = NSLocale(localeIdentifier: "en_US")
 
+        self.skipAds = NSUserDefaults.standardUserDefaults().boolForKey("skipAds")
+        
         super.init()
         self.setupUserLanguageLocale()
+        
     }
     
     func loadOffLineData(){

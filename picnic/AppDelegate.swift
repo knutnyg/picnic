@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController: UINavigationController = UINavigationController(rootViewController: rootViewController)
         window!.rootViewController = navigationController
         window!.makeKeyAndVisible()
+        UIViewController.prepareInterstitialAds()
         return true
     }
 
@@ -44,7 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
 
 }
 
