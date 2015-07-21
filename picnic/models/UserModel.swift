@@ -1,7 +1,8 @@
 
 import Foundation
+import StoreKit
 
- class UserModel : NSObject {
+ class UserModel : NSObject, SKProductsRequestDelegate {
     
     var observers:[UserModelObserver]
     var languageLocale:NSLocale!
@@ -9,6 +10,8 @@ import Foundation
     var currentLocale:NSLocale!
     var homeAmount:Double?
     var currentAmount:Double?
+    var priceString:String?
+    var removeAdProduct:SKProduct?
     
     var overrideGPSLocale:NSLocale? {
         didSet {
@@ -47,7 +50,13 @@ import Foundation
         
         super.init()
         self.setupUserLanguageLocale()
-        
+        requestProducts()
+    }
+    
+    func requestProducts(){
+        let request = SKProductsRequest(productIdentifiers: NSSet(objects: "1") as! Set<String>)
+        request.delegate = self
+        request.start()
     }
     
     func loadOffLineData(){
@@ -192,4 +201,11 @@ import Foundation
         print("Home locale: \(LocaleUtils.createCountryNameFromLocale(homeLocale))")
         print("homeAmount: \(homeAmount)")
     }
+    
+    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+        if response.products.count > 0 {
+            removeAdProduct = response.products[0]
+        }
+    }
+
 }

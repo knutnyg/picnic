@@ -92,6 +92,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     func handleError(error : NSError!) {
         //This error is usually bad data preceeding good data. So we just skip it.
         print(error)
+        userModel.updatingCurrentLocaleCounter = 0
     }
 
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {

@@ -31,16 +31,22 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request){
             (data:NSData?, response:NSURLResponse?, error:NSError?) in
-                self.handleHTTPResponse(response!, data: data!, error: error)
+                self.handleHTTPResponse(response, data: data, error: error)
             }
-        task?.resume()
+        if let t = task {
+            t.resume()
+        }
     }
 
-    func handleHTTPResponse(response:NSURLResponse, data:NSData, error:NSError?){
+    func handleHTTPResponse(response:NSURLResponse?, data:NSData?, error:NSError?){
         if error != nil {
             print("Got error: \(error)")
-        } else {
-            if let json = parseRawJSONToDict(data){
+            self.userModel.updateingAllCurrenciesCounter = 0
+            return
+        }
+        
+        if let dat = data {
+            if let json = parseRawJSONToDict(dat) {
                 if let offlineEntries = parseJSONDictToOfflineEntries(json){
                     storeOfflineEntries(offlineEntries)
                     userModel.offlineData = offlineEntries

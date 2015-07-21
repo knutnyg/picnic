@@ -11,7 +11,7 @@ import UIKit
 import BButton
 import StoreKit
 
-class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKProductsRequestDelegate{
+class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     
     var gpsButton:BButton!
     var countrySetup:BButton!
@@ -27,14 +27,10 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKPro
     
     var backButtonItem:UIBarButtonItem!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigationBar()
-        
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
 
         self.view.backgroundColor = UIColor.whiteColor()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
@@ -54,11 +50,24 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKPro
         houseButton.addAwesomeIcon(FAIcon.FAHome, beforeTitle: true)
         houseButton.addTarget(self, action: Selector("housePressed:"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        removeAdsButton = createBButton(" Remove ads")
-        removeAdsButton.setType(BButtonType.Danger)
-        removeAdsButton.addAwesomeIcon(FAIcon.FAUsd, beforeTitle: true)
-        removeAdsButton.addTarget(self, action: Selector("removeAdsPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+        removeAdsButton = createBButton("Temp")
+        removeAdsButton.hidden = true
         
+        if !userModel.skipAds {
+            if let product = userModel.removeAdProduct {
+                removeAdsButton.hidden = false
+                removeAdsButton.setType(BButtonType.Inverse)
+                removeAdsButton.titleLabel!.font = UIFont.boldSystemFontOfSize(15)
+                removeAdsButton.addTarget(self, action: Selector("removeAdsPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                let formatter = NSNumberFormatter()
+                formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+                formatter.locale = product.priceLocale
+                
+                removeAdsButton.setTitle("Remove Ads: \(formatter.stringFromNumber(product.price)!)", forState: .Normal)
+            }
+        }
+    
         setActiveButtonStyle()
         
         view.addSubview(instructionAutomaticLabel)
@@ -71,9 +80,9 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKPro
         let views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton, "removeAdsButton":removeAdsButton]
         
         let screenHeight = view.bounds.height
-        let marginTop = Int((screenHeight - 24 - 120) / 2) - 66
+        let marginTop = Int((screenHeight - 24 - 160) / 2) - 66
         
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]-51-[removeAdsButton(40)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]-51-[removeAdsButton(45)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         
@@ -86,10 +95,18 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKPro
         view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
         view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
-        
         view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
+        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 200))
 
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
     
     func createReloadButton() -> UIButton{
@@ -186,79 +203,30 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver, SKPro
     /* ----   Remove Ads   ----  */
     
     func removeAdsPressed(sender:UIButton){
-        getProductInfo()
-    }
-    
-    func getProductInfo(){
-        if SKPaymentQueue.canMakePayments() {
-            print("can make payments")
-            let request = SKProductsRequest(productIdentifiers: NSSet(objects: "1") as! Set<String>)
-            request.delegate = self
-            request.start()
-        } else {
-            print("cannot make payments")
-            //Add warning with request to enable in app purchase
+        if let product = userModel.removeAdProduct {
+            let payment = SKPayment(product: product)
+            SKPaymentQueue.defaultQueue().addPayment(payment)
         }
     }
     
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]){
         for transaction in transactions {
-            print("in unlocked transaction")
             
             switch transaction.transactionState {
             case .Purchased:
-                print("in purchased")
                 unlockFeature()
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Failed:
-                print("in failed")
-                print(transaction.error!)
-                print(transaction.transactionIdentifier)
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             default:
                 break
             }
         }
-        
     }
-    
     
     func unlockFeature(){
         userModel.skipAds = true
     }
-    
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
-        print("got response")
-        var products = response.products
-        
-        if products.count > 0 {
-            //Has the product
-            removeAdsProduct = products[0]
-            print("we have the product")
-            let alertController = UIAlertController(title: products[0].localizedTitle, message: products[0].localizedDescription, preferredStyle: UIAlertControllerStyle.ActionSheet)
-            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) -> () in
-                if let product = self.removeAdsProduct {
-                    self.buyStuff(self.removeAdsProduct!)
-                }
-                }))
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-            
-        } else {
-            print("we dont have hte product")
-            //Product not found
-        }
-        
-        if response.invalidProductIdentifiers.count > 0 {
-            //We hav some invalid product indentifiers
-        }
-    }
-    
-    func buyStuff(product:SKProduct){
-        let payment = SKPayment(product: product)
-        SKPaymentQueue.defaultQueue().addPayment(payment)
-    }
-
     
     /* ----   Initializers   ----  */
     

@@ -34,7 +34,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var adBannerView:ADBannerView!
     var adBannerConstraint:[NSLayoutConstraint]!
     
-    var interAd:ADInterstitialAd!
+    var interAd:ADInterstitialAd?
     
     
     override func viewDidLoad() {
@@ -90,7 +90,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         
         self.setConstraints(views)
     }
-    
+
     func readOfflineDataFromDisk() {
         if let data = readOfflineDateFromDisk(storedFileName){
             userModel.offlineData = data
@@ -266,6 +266,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func refreshData(){
         if !shouldRefreshContiniueSpinning() {
            refreshButton.rotate360Degrees(2, completionDelegate: self)
+        }
+        
+        if userModel.removeAdProduct == nil {
+            userModel.requestProducts()
         }
 
         updateOfflineData()
