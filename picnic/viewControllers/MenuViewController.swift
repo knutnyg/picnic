@@ -20,12 +20,14 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     var userModel:UserModel!
     var delegate:ConverterViewController!
     var backButton:UIButton!
+    var aboutButton:UIButton!
     var pointButton:BButton!
     var houseButton:BButton!
     var removeAdsButton:BButton!
     var removeAdsProduct:SKProduct?
     
     var backButtonItem:UIBarButtonItem!
+    var aboutButtonItem:UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,10 +147,22 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
         backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
         backButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backButtonItem
+        
+        aboutButton = createfontAwesomeButton("\u{f128}")
+        aboutButton.addTarget(self, action: "about:", forControlEvents: UIControlEvents.TouchUpInside)
+        aboutButtonItem = UIBarButtonItem(customView: aboutButton)
+        navigationItem.rightBarButtonItem = aboutButtonItem
+        
     }
     
     func back(_: UIEvent) {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func about(_:UIEvent) {
+        let alertController = UIAlertController(title: "About Picnic", message: "Exchange rate data is provided by various sources with public-facing APIs. Data is refreshed approximately every 24h. \n\nRates are never 100% accurate and should never be relied on for serious financial decisions.", preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func setupButtonPressed(sender:UIButton!){

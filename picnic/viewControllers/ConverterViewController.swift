@@ -433,23 +433,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func checkDataAge(){
         if let offlineData = userModel.offlineData {
             if let entry = offlineData["USD"] {
-                if isDataOld(entry.timeStamp){
-                    self.dataAgeLabel.text = "Last updated: \(entry.timeStamp.mediumPrintable())"
-                } else {
-                    self.dataAgeLabel.text = ""
-                }
+                    self.dataAgeLabel.text = "Last updated: \(entry.timeStamp.relativePrintalbe())"
             }
         }
-    }
-    
-    func isDataOld(timestamp:NSDate) -> Bool{
-        let limit = NSDate().addDays(-2)
-        let res = timestamp.compare(limit)
-        
-        if res == NSComparisonResult.OrderedDescending {
-            return false
-        }
-        return true
     }
     
     func createTextField() -> UITextField{
