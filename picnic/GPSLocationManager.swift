@@ -21,7 +21,9 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if shouldReportNextLocale {
             handleLocationUpdate(locations)
+        }
     }
     
     internal func handleLocationUpdate(locations:[CLLocation]){
@@ -97,5 +99,6 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
 
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error: " + error.localizedDescription)
+        userModel.updatingCurrentLocaleCounter = 0
     }
 }
