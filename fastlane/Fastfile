@@ -25,7 +25,7 @@ platform :ios do
       ipa({
         scheme: "picnic"
         })
-      # snapshot
+      snapshot
       deliver
       sh "../commit_release.sh"
       slack({
@@ -62,6 +62,10 @@ desc "test"
       })
   end
 
+  desc "snapshot"
+    lane:snapshot do
+      snapshot
+    end
 
 
   after_all do |lane|

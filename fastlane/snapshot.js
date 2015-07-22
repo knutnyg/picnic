@@ -11,7 +11,7 @@ UIATarget.onAlert = function onAlert(alert) {
     return true;
 }
 
-target.delay(2)
+target.delay(3)
 
 var inputField = window.textFields()[0];
 inputField.setValue("100");
@@ -21,21 +21,12 @@ captureLocalizedScreenshot("01Main-View");
 var settingsButton = window.navigationBar().buttons()[2];
 settingsButton.tap()
 target.delay(1)
-captureLocalizedScreenshot("02Settings");
+captureLocalizedScreenshot("03Settings");
 
 window.buttons()[1].tap()
 target.delay(1)
-captureLocalizedScreenshot("03Country-Picker");
+captureLocalizedScreenshot("04Country-Picker");
 
 window.navigationBar().buttons()[1].tap();
 target.delay(1)
 window.buttons()[0].tap()
-
-
-
-
-
-
-
-
-
