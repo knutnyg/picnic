@@ -20,15 +20,16 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         self.userModel = userModel
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         if shouldReportNextLocale {
             handleLocationUpdate(locations)
         }
     }
     
-    internal func handleLocationUpdate(locations:[CLLocation]){
-            shouldReportNextLocale = false
-            CLGeocoder().reverseGeocodeLocation(locations[0], completionHandler:
+    internal func handleLocationUpdate(locations:[AnyObject]){
+        shouldReportNextLocale = false
+        var loc = locations[0] as! CLLocation
+        CLGeocoder().reverseGeocodeLocation(loc, completionHandler:
                 {
                     (placemarks, error)->Void in
                     if error != nil {
@@ -50,11 +51,8 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             shouldReportNextLocale = false
             userModel.updatingCurrentLocaleCounter = 0
             
-            if #available(iOS 9.0, *) {
-                
-            } else {
-               locationManager.stopUpdatingLocation()
-            }
+           locationManager.stopUpdatingLocation()
+
         }
     }
     
@@ -70,11 +68,8 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         }
         
         shouldReportNextLocale = true
-        if #available(iOS 9.0, *) {
-            locationManager.requestLocation()
-        } else {
-            locationManager.startUpdatingLocation()
-        }
+        locationManager.startUpdatingLocation()
+
     }
     
     func updateUserHomeLocale() {

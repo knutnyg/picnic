@@ -32,7 +32,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     var storedFileName = "data.dat"
     
     var adBannerView:ADBannerView!
-    var adBannerConstraint:[NSLayoutConstraint]!
+    var adBannerConstraint:[AnyObject]!
     
     var interAd:ADInterstitialAd?
     
@@ -53,13 +53,13 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         conversionRateManager.storedFileName = storedFileName
         
         topCountryLabel = UILabel()
-        topCountryLabel.translatesAutoresizingMaskIntoConstraints = false
+        topCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         topTextField = createTextField()
         topTextField.addTarget(self, action: Selector("topAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         bottomCountryLabel = UILabel()
-        bottomCountryLabel.translatesAutoresizingMaskIntoConstraints = false
+        bottomCountryLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         bottomTextField = createTextField()
         bottomTextField.addTarget(self, action: Selector("bottomAmountEdited:"), forControlEvents: UIControlEvents.EditingChanged)
@@ -85,7 +85,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         view.addSubview(houseButton)
         view.addSubview(dataAgeLabel)
         
-        let views: [String : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
+        let views: [NSObject : AnyObject] = ["topCountryLabel":topCountryLabel, "bottomCountryLabel":bottomCountryLabel,
             "topTextField":topTextField, "bottomTextField":bottomTextField, "swapButton":swapButton, "topIcon":pointButton, "bottomIcon":houseButton, "dataAgeLabel":dataAgeLabel]
         
         self.setConstraints(views)
@@ -110,10 +110,11 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func addBanner(){
         adBannerView = ADBannerView()
-        adBannerView.translatesAutoresizingMaskIntoConstraints=false
+        adBannerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         adBannerView.delegate = self
         view.addSubview(adBannerView)
-        adBannerConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[adBanner]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["adBanner":adBannerView])
+        let views:[NSObject:AnyObject] = ["adBanner":adBannerView]
+        adBannerConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[adBanner]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: views)
         view.addConstraints(adBannerConstraint)
     }
     
@@ -153,7 +154,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     
-    func setConstraints(views: [String:AnyObject]){
+    func setConstraints(views: [NSObject:AnyObject]){
         
         let swapMargin = getSwapButtonMarginBasedOnDevice()
         let keyboardHeight = getKeyboardHeightBasedOnDevice()
@@ -265,7 +266,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     func refreshData(){
         if !shouldRefreshContiniueSpinning() {
-           refreshButton.rotate360Degrees(2, completionDelegate: self)
+           refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
         }
         
         if userModel.removeAdProduct == nil {
@@ -348,7 +349,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         return true;
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }
     
@@ -446,7 +447,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         let textField = UITextField()
         
         textField.delegate = self
-        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
         textField.borderStyle = UITextBorderStyle.RoundedRect
         textField.placeholder = "USD"
         textField.textAlignment = NSTextAlignment.Center
@@ -458,7 +459,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func createSwapButton() -> UIButton{
         let swapButton = UIButton()
-        swapButton.translatesAutoresizingMaskIntoConstraints = false
+        swapButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         swapButton.setTitle("\u{f0ec}", forState: .Normal)
         swapButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         swapButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
@@ -471,7 +472,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         let val = shouldRefreshContiniueSpinning()
         if val {
-            refreshButton.rotate360Degrees(2, completionDelegate: self)
+            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
         }
     }
     

@@ -10,12 +10,8 @@ import Foundation
 
 func getFileURL(fileName: String) -> NSURL {
     let manager = NSFileManager.defaultManager()
-    let dirURL: NSURL?
-    do {
-        dirURL = try manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
-    } catch _ {
-        dirURL = nil
-    }
+    
+    let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
     return dirURL!.URLByAppendingPathComponent(fileName)
 }
 
@@ -37,15 +33,7 @@ func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
 func readFileAsString(filename:String, ofType:String) -> String?{
     let fileRoot = NSBundle.mainBundle().pathForResource(filename, ofType: ofType)
     if let root = fileRoot {
-        var contents: NSString?
-        do {
-            contents = try NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding)
-        } catch _ {
-            contents = nil
-        }
-        return contents as? String
+        return NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding, error:nil) as String?
     }
-    
     return nil
-    
 }

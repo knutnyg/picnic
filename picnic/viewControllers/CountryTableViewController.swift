@@ -56,25 +56,25 @@ class CountryTableViewController: UITableViewController {
         
         var localeCountryNameTupleList:[LocaleCountryNameTuple] = []
         
-        var currencies = readFileAsString("supported_currencies", ofType: "txt")
-        let currencyList = split((currencies!).characters) {$0 == "\n"}.map { String($0) }
+        var currencies = readFileAsString("supported_currencies","txt")
+        var currencyList = split(currencies!) {$0 == "\n"}
         
         //finn alle land
-        let rawCountryList = NSLocale.ISOCountryCodes() as [String]
+        let rawCountryList = NSLocale.ISOCountryCodes() as! [String]
 
         //lag locale objecter
         let rawLocaleList:[NSLocale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
 
         //filtrer land der currency finnes i støttet liste
-        let filteredList = rawLocaleList.filter({locale in
-            return currencyList.contains((locale.objectForKey(NSLocaleCurrencyCode) as! String))
-            })
+        var filteredList = rawLocaleList.filter({locale in
+            return contains(currencyList, (locale.objectForKey(NSLocaleCurrencyCode) as! String))
+                })
         
         for locale in filteredList {
             localeCountryNameTupleList += [LocaleUtils.createLocaleCountryNameTuple(locale, language: userModel.languageLocale)]
         }
         
-        let result = localeCountryNameTupleList.sort { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
+        let result = localeCountryNameTupleList.sorted { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
         self.rawCountryNameList = result
         return result
     }
@@ -88,7 +88,7 @@ class CountryTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.None
 
         let countryName = localeCountryNameTupleList[indexPath.row].countryName

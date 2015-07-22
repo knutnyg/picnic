@@ -33,9 +33,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             (data:NSData?, response:NSURLResponse?, error:NSError?) in
                 self.handleHTTPResponse(response, data: data, error: error)
             }
-        if let t = task {
-            t.resume()
-        }
+        task.resume()
     }
 
     func handleHTTPResponse(response:NSURLResponse?, data:NSData?, error:NSError?){
@@ -58,20 +56,19 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     private func storeOfflineEntries(offlineEntries:[String:OfflineEntry]){
         if offlineEntries.count > 0 {
-            saveDictionaryToDisk(self.storedFileName, dict: offlineEntries)
+            saveDictionaryToDisk(self.storedFileName, offlineEntries)
         }
     }
 
     private func parseRawJSONToDict(data:NSData) -> Dictionary<String,Dictionary<String,String>>?{
         var jsonError: NSError?
-        do {
-            let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+        
+        if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
             if let dict = json as? Dictionary<String,Dictionary<String, String>>{
                 return dict
             }
-        } catch let error as NSError {
-            jsonError = error
-            print("Error: \(jsonError)")
+        } else {
+            print("Error: parsing JSON")
         }
         return nil
     }
@@ -88,17 +85,6 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             resultDict[key] = OfflineEntry(timeStamp: dateFromUTCString(timestamp), unit_from: from, unit_to: to, value: value)
         }
         return resultDict
-    }
-    
-    func getFileURL(fileName: String) -> NSURL {
-        let manager = NSFileManager.defaultManager()
-        let dirURL: NSURL?
-        do {
-            dirURL = try manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
-        } catch _ {
-            dirURL = nil
-        }
-        return dirURL!.URLByAppendingPathComponent(fileName)
     }
     
     func getConversionURL(homeCurrency:String, currentCurrency:String) -> NSURL?{

@@ -214,7 +214,7 @@ import StoreKit
     
     func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         if response.products.count > 0 {
-            removeAdProduct = response.products[0]
+            removeAdProduct = (response.products[0] as! SKProduct)
         }
     }
 

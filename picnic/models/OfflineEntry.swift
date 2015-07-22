@@ -28,7 +28,7 @@ class OfflineEntry : NSObject, NSCoding{
         aCoder.encodeObject(value, forKey: "value")
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         self.timeStamp = aDecoder.decodeObjectForKey("timestamp") as! NSDate
         self.unit_from = aDecoder.decodeObjectForKey("unit_from") as! String
         self.unit_to = aDecoder.decodeObjectForKey("unit_to") as! String
