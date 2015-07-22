@@ -386,6 +386,10 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         redraw()
     }
     
+    func offlineDataHasChanged() {
+        redraw()
+    }
+    
     func topAmountEdited(theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(topTextField.text!)
         if normalizedNumber == "" {

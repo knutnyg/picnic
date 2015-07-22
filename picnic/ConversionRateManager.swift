@@ -49,7 +49,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
             if let json = parseRawJSONToDict(dat) {
                 if let offlineEntries = parseJSONDictToOfflineEntries(json){
                     storeOfflineEntries(offlineEntries)
-                    userModel.offlineData = offlineEntries
+                    userModel.updateOfflineData(offlineEntries)
                 }
             }
         }

@@ -89,6 +89,16 @@ import StoreKit
         currentLocaleHasChanged()
     }
     
+    func updateOfflineData(data:[String:OfflineEntry]) {
+        offlineData = data
+    }
+    
+    func offlineDataHasChanged(){
+        for observer in observers {
+            observer.offlineDataHasChanged()
+        }
+    }
+    
     func getActiveCurrentLocale() -> NSLocale{
         if let locale = overrideGPSLocale {
             return locale
