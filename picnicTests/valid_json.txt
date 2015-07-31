@@ -1,1 +1,0 @@
-{"timestamp":"2015-04-25T05:01:01Z","unit_from":"NOK","unit_to":"DKK","value":"0.8822196004885642"}

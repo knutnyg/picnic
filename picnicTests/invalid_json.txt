@@ -1,1 +1,0 @@
-{"timestamp":"2015-04-25T05:01:01Z","unit_from":"NOK","unit_to":"DKK","value":"AS@#$^AWD"}
