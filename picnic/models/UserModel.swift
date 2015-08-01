@@ -46,8 +46,7 @@ import StoreKit
         self.homeLocale = NSLocale(localeIdentifier: "en_US")
         self.currentLocale = NSLocale(localeIdentifier: "en_US")
 
-//        self.skipAds = NSUserDefaults.standardUserDefaults().boolForKey("skipAds")
-        self.skipAds = true
+        self.skipAds = NSUserDefaults.standardUserDefaults().boolForKey("skipAds")
         
         super.init()
         self.setupUserLanguageLocale()
