@@ -20,7 +20,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         self.userModel = userModel
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if shouldReportNextLocale {
             handleLocationUpdate(locations)
         }
@@ -28,7 +28,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
     
     internal func handleLocationUpdate(locations:[AnyObject]){
         shouldReportNextLocale = false
-        var loc = locations[0] as! CLLocation
+        let loc = locations[0] as! CLLocation
         CLGeocoder().reverseGeocodeLocation(loc, completionHandler:
                 {
                     (placemarks, error)->Void in

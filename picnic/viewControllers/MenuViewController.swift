@@ -112,8 +112,8 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     }
     
     func createReloadButton() -> UIButton{
-        let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        let button = UIButton(type: UIButtonType.System)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Reload", forState: .Normal)
         button.titleLabel!.font = UIFont(name:"Helvetica", size:30)
         return button
@@ -189,7 +189,7 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     
     func createBButton(title:String) -> BButton{
         let button = BButton()
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(title, forState: .Normal)
         button.setType(BButtonType.Info)
 
@@ -223,9 +223,9 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
         }
     }
     
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [AnyObject]!){
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]){
         for transaction in transactions {
-            let trans = transaction as! SKPaymentTransaction
+            let trans = transaction
             switch trans.transactionState {
             case .Purchased:
                 unlockFeature()

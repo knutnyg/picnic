@@ -27,7 +27,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
         
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
-        countryTableView.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        countryTableView.view.translatesAutoresizingMaskIntoConstraints = false
         
         self.addChildViewController(countryTableView)
         
@@ -71,7 +71,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     func createInstructionLabel() -> UILabel{
         let label = UILabel()
-        label.setTranslatesAutoresizingMaskIntoConstraints(false)
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = NSTextAlignment.Center
         label.numberOfLines = 4
         
@@ -86,7 +86,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
 
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent?) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }
     
@@ -112,7 +112,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         let textField = UITextField()
         
         textField.delegate = self
-        textField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = UITextBorderStyle.RoundedRect
         textField.placeholder = "Filter"
         textField.autocorrectionType = UITextAutocorrectionType.No

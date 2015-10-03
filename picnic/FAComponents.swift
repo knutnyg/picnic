@@ -8,7 +8,7 @@ import UIKit
 
 func createFALabel(unicode:String) -> UILabel{
     let label = UILabel()
-    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.translatesAutoresizingMaskIntoConstraints = false
     label.text = unicode
     label.textAlignment = NSTextAlignment.Center
     return label
@@ -29,7 +29,7 @@ func createfontAwesomeButton(unicode:String) -> UIButton{
 
 func createFAButton(unicode:String) -> UIButton{
     let button = UIButton()
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
+    button.translatesAutoresizingMaskIntoConstraints = false
     button.setTitle(unicode, forState: .Normal)
     button.setTitleColor(UIColor.blackColor(), forState: .Normal)
     button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)

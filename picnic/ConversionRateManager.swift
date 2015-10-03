@@ -2,7 +2,7 @@
 import Foundation
 
 
-class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
+class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, NSURLSessionDelegate{
     
     var statusCode:Int?
     var data:NSData?
@@ -25,17 +25,28 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     func updateAllCurrencies(success: ((Bool) -> Void)? = nil){
         
+        
+        // Fix to trust self signed certificate
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: configuration, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        
         let URL = getAllCurrenciesURL()!
         let request = NSURLRequest(URL: URL)
         
-        let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request){
             (data:NSData?, response:NSURLResponse?, error:NSError?) in
+                print(response)
                 self.handleHTTPResponse(response, data: data, error: error)
             }
         task.resume()
     }
-
+    
+    func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: challenge.protectionSpace.serverTrust!))
+    }
+    
+    
+    
     func handleHTTPResponse(response:NSURLResponse?, data:NSData?, error:NSError?){
         if error != nil {
             print("Got error: \(error)")
@@ -45,6 +56,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
         
         if let dat = data {
             if let json = parseRawJSONToDict(dat) {
+                print (json)
                 if let offlineEntries = parseJSONDictToOfflineEntries(json){
                     storeOfflineEntries(offlineEntries)
                     userModel.updateOfflineData(offlineEntries)
@@ -56,20 +68,22 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate{
     
     private func storeOfflineEntries(offlineEntries:[String:OfflineEntry]){
         if offlineEntries.count > 0 {
-            saveDictionaryToDisk(self.storedFileName, offlineEntries)
+            saveDictionaryToDisk(self.storedFileName, dict: offlineEntries)
         }
     }
 
     private func parseRawJSONToDict(data:NSData) -> Dictionary<String,Dictionary<String,String>>?{
-        var jsonError: NSError?
-        
-        if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError){
-            if let dict = json as? Dictionary<String,Dictionary<String, String>>{
-                return dict
+        do {
+            let json:AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+            if let dict = json as? Dictionary<String,AnyObject>{
+                if let currenciesDict = dict["currencies"] as? Dictionary<String,Dictionary<String,String>> {
+                    return currenciesDict
+                }
             }
-        } else {
+        } catch {
             print("Error: parsing JSON")
         }
+        print("Error: Failed to parse JSON")
         return nil
     }
     

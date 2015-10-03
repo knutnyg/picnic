@@ -44,7 +44,7 @@ func dateFromUTCString(dateOnUTC:String) -> NSDate{
 
 func createLabel(text:String) -> UILabel{
     let label = UILabel()
-    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.translatesAutoresizingMaskIntoConstraints = false
     label.text = text
     label.textAlignment = NSTextAlignment.Center
     label.numberOfLines = 2

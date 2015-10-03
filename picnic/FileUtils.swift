@@ -8,22 +8,26 @@
 
 import Foundation
 
-func getFileURL(fileName: String) -> NSURL {
-    let manager = NSFileManager.defaultManager()
-    
-    let dirURL = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
-    return dirURL!.URLByAppendingPathComponent(fileName)
+func getFileURL(fileName: String) -> NSURL? {
+    do {
+        return  try NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent(fileName)
+    }
+    catch {
+        print("Error loading file from device...")
+    }
+    return nil
 }
 
 func saveDictionaryToDisk(fileName:String, dict:Dictionary<String,AnyObject>){
-    let filePath = getFileURL(fileName).path!
-    NSKeyedArchiver.archiveRootObject(dict, toFile: filePath)
+    if let filePath = getFileURL(fileName) {
+        NSKeyedArchiver.archiveRootObject(dict, toFile: filePath.path!)
+    }
 }
 
 func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
     print("Reading offline data from disk")
-    if let filePath = getFileURL(fileName).path {
-        if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String:OfflineEntry] {
+    if let filePath = getFileURL(fileName) {
+        if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath.path!) as? [String:OfflineEntry] {
             return dict
         }
     }
@@ -31,9 +35,12 @@ func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
 }
 
 func readFileAsString(filename:String, ofType:String) -> String?{
-    let fileRoot = NSBundle.mainBundle().pathForResource(filename, ofType: ofType)
-    if let root = fileRoot {
-        return NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding, error:nil) as String?
+    if let root = NSBundle.mainBundle().pathForResource(filename, ofType: ofType) {
+        do{
+            return try NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding) as String
+        } catch {
+            print("failed reading file...")
+        }
     }
     return nil
 }

@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>api_url</key>
-	<string>http://picnic.logisk.org/api/</string>
+	<string>https://picnic.logisk.org/api/</string>
 </dict>
 </plist>

@@ -70,7 +70,7 @@ class ConvertionRateManagerTests : XCTestCase {
     func testSavingAndLoadingOfflineDataFile(){
         var dict:[String:OfflineEntry] = [:]
         dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 2)
-        saveDictionaryToDisk("test.dat", dict)
+        saveDictionaryToDisk("test.dat", dict: dict)
         
         let loadedDict = readOfflineDateFromDisk("test.dat")
         XCTAssertNotNil(loadedDict, "shouldNotBeNil")
