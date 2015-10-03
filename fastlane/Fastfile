@@ -1,4 +1,4 @@
-fastlane_version "1.13.1"
+#fastlane_version "1.13.1"
 
 default_platform :ios
 
@@ -6,7 +6,7 @@ platform :ios do
 
   before_all do
     	cocoapods
-	sh "../extract_supported_currencies.py"
+#	sh "../extract_supported_currencies.py"
 
       xctest({
         workspace: "picnic.xcworkspace",
@@ -22,9 +22,7 @@ platform :ios do
         message: "Starting deploy"
       })
       sh "../increment_build_number.sh"
-      ipa({
-        scheme: "picnic"
-        })
+	gym
 #      snapshot
       deliver
       sh "../commit_release.sh"
