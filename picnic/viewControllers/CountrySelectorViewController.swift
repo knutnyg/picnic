@@ -19,12 +19,12 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         
         setupNavigationBar()
         
         topFilterField = createTextField()
-        topFilterField.addTarget(self, action: Selector("topFilterTextEdited:"), forControlEvents: UIControlEvents.EditingChanged)
+        topFilterField.addTarget(self, action: #selector(CountrySelectorViewController.topFilterTextEdited(_:)), for: UIControlEvents.editingChanged)
         
         countryTableView = CountryTableViewController(userModel: userModel, selectorType: selectorType)
         countryTableView.view.translatesAutoresizingMaskIntoConstraints = false
@@ -38,11 +38,11 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         let visualFormat = String(format: "V:|-74-[topFilter(40)]-[countryTable]-0-|")
         
-        let verticalLayout = NSLayoutConstraint.constraintsWithVisualFormat(
-            visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+        let verticalLayout = NSLayoutConstraint.constraints(
+            withVisualFormat: visualFormat, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[countryTable]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[topFilter]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[countryTable]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[topFilter]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         view.addConstraints(verticalLayout)  
     }
     
@@ -50,62 +50,62 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
     func setupNavigationBar(){
         
         switch selectorType! {
-        case .HOME_COUNTRY:
+        case .home_COUNTRY:
             navigationItem.title = "Home Country"
-        case .GPS:
+        case .gps:
             navigationItem.title = "Current Location"
     }
         
         let verticalOffset = 3 as CGFloat;
-        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
+        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, for: UIBarMetrics.default)
         
         backButton = createfontAwesomeButton("\u{f060}")
-        backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButton.addTarget(self, action: #selector(CountrySelectorViewController.back(_:)), for: UIControlEvents.touchUpInside)
         backButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backButtonItem
     }
     
     func back(_: UIEvent) {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func createInstructionLabel() -> UILabel{
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = NSTextAlignment.Center
+        label.textAlignment = NSTextAlignment.center
         label.numberOfLines = 4
         
         switch selectorType! {
-        case .HOME_COUNTRY:
+        case .home_COUNTRY:
             label.text = "Please set your preferred home country or use the one detected:"
             break
-        case .GPS:
+        case .gps:
             label.text = "Please set your preferred current country or use the one detected:"
         }
         return label
 
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
-    func topFilterTextEdited(theTextField:UITextField) -> Void {
+    func topFilterTextEdited(_ theTextField:UITextField) -> Void {
         if let text = theTextField.text {
-            countryTableView.setCountryArray(countryTableView.createCountryNameList().filter{$0.countryName.lowercaseString.contains(text.lowercaseString)} )
+            countryTableView.setCountryArray(countryTableView.createCountryNameList().filter{$0.countryName.lowercased().contains(text.lowercased())} )
         } else {
             countryTableView.setCountryArray(countryTableView.createCountryNameList())
         }
         
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true;
     }
     
-    func backButtonPressed(notification: NSNotification) {
-        navigationController?.popViewControllerAnimated(true)
+    func backButtonPressed(_ notification: Notification) {
+        navigationController?.popViewController(animated: true)
     }
     
     func createTextField() -> UITextField{
@@ -113,12 +113,12 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.borderStyle = UITextBorderStyle.RoundedRect
+        textField.borderStyle = UITextBorderStyle.roundedRect
         textField.placeholder = "Filter"
-        textField.autocorrectionType = UITextAutocorrectionType.No
-        textField.textAlignment = NSTextAlignment.Center
-        textField.keyboardType = UIKeyboardType.Default
-        textField.returnKeyType = UIReturnKeyType.Done
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.textAlignment = NSTextAlignment.center
+        textField.keyboardType = UIKeyboardType.default
+        textField.returnKeyType = UIReturnKeyType.done
         
         return textField
     }
@@ -131,7 +131,7 @@ class CountrySelectorViewController : UIViewController, UITextFieldDelegate {
         self.selectorType = selectorType
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     

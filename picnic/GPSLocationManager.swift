@@ -20,20 +20,20 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         self.userModel = userModel
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if shouldReportNextLocale {
             handleLocationUpdate(locations)
         }
     }
     
-    internal func handleLocationUpdate(locations:[AnyObject]){
+    internal func handleLocationUpdate(_ locations:[AnyObject]){
         shouldReportNextLocale = false
         let loc = locations[0] as! CLLocation
         CLGeocoder().reverseGeocodeLocation(loc, completionHandler:
                 {
                     (placemarks, error)->Void in
                     if error != nil {
-                        self.handleError(error)
+                        self.handleError(error as NSError!)
                     } else {
                         self.handleLocation(placemarks!)
                     }
@@ -41,7 +41,7 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             )
     }
     
-    func handleLocation(placemarks: [AnyObject]) {
+    func handleLocation(_ placemarks: [AnyObject]) {
         if placemarks.isEmpty {
             print("Error with the data.")
         } else {
@@ -56,9 +56,9 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
         }
     }
     
-    internal func getLocaleFromPlacemark(placemarks:[AnyObject]) -> NSLocale{
-        let pm:CLPlacemark = placemarks.first as! CLPlacemark
-        return LocaleUtils.createLocaleFromCountryCode(pm.ISOcountryCode!)
+    internal func getLocaleFromPlacemark(_ placemarks:[AnyObject]) -> Locale{
+        let a:CLPlacemark = placemarks.first as! CLPlacemark
+        return LocaleUtils.createLocaleFromCountryCode(a.isoCountryCode! as NSString)
     }
 
     func updateUserCurrentLocale() {
@@ -78,21 +78,21 @@ class GPSLocationManager : NSObject, CLLocationManagerDelegate {
             return
         }
         let countryCode:String =  getCountryCodeFromDevice()
-        userModel.updateHomeLocale(LocaleUtils.createLocaleFromCountryCode(countryCode))
+        userModel.updateHomeLocale(LocaleUtils.createLocaleFromCountryCode(countryCode as NSString))
 
     }
     
-    private func getCountryCodeFromDevice() -> String{
-        return NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleCountryCode) as! String
+    fileprivate func getCountryCodeFromDevice() -> String{
+        return (Locale.autoupdatingCurrent as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
     }
     
-    func handleError(error : NSError!) {
+    func handleError(_ error : NSError!) {
         //This error is usually bad data preceeding good data. So we just skip it.
         print(error)
         userModel.updatingCurrentLocaleCounter = 0
     }
 
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Error: " + error.localizedDescription)
         userModel.updatingCurrentLocaleCounter = 0
     }

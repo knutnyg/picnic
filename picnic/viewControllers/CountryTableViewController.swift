@@ -10,7 +10,7 @@ import UIKit
 
 class CountryTableViewController: UITableViewController {
     
-    var locale:NSLocale?
+    var locale:Locale?
     var country:NSString?
     var selectorType:CountrySelectorType!
     var localeCountryNameTupleList:[LocaleCountryNameTuple]!
@@ -21,15 +21,15 @@ class CountryTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
         self.localeCountryNameTupleList = createCountryNameList()
         
         switch selectorType! {
-        case .GPS:
-            locale = userModel.currentLocale
-        case .HOME_COUNTRY:
-            locale = userModel.homeLocale
+        case .gps:
+            locale = userModel.currentLocale as Locale?
+        case .home_COUNTRY:
+            locale = userModel.homeLocale as Locale?
         }
     }
 
@@ -40,9 +40,9 @@ class CountryTableViewController: UITableViewController {
             var counter = 0
             for tuple in localeCountryNameTupleList {
                 if  tuple.countryName == calculatedLocaleCountryName {
-                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: counter, inSection: 0), atScrollPosition: UITableViewScrollPosition.Middle, animated: false)
+                    self.tableView.scrollToRow(at: IndexPath(row: counter, section: 0), at: UITableViewScrollPosition.middle, animated: false)
                 }
-                counter++
+                counter += 1
             }
         }
     }
@@ -61,74 +61,74 @@ class CountryTableViewController: UITableViewController {
         let currencyList = currencies.map({$0 + "\n"})
         
         //finn alle land
-        let rawCountryList = NSLocale.ISOCountryCodes()
+        let rawCountryList = Locale.isoRegionCodes
 
         //lag locale objecter
-        let rawLocaleList:[NSLocale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode)})
+        let rawLocaleList:[Locale] = rawCountryList.map({countryCode in LocaleUtils.createLocaleFromCountryCode(countryCode as NSString)})
 
         //filtrer land der currency finnes i støttet liste
         let filteredList = rawLocaleList.filter({locale in
-            return (currencyList?.contains(locale.objectForKey(NSLocaleCurrencyCode) as! String))!
+            return (currencyList?.contains((locale as NSLocale).object(forKey: NSLocale.Key.currencyCode) as! String))!
                 })
         
         for locale in filteredList {
             localeCountryNameTupleList += [LocaleUtils.createLocaleCountryNameTuple(locale, language: userModel.languageLocale)]
         }
         
-        let result = localeCountryNameTupleList.sort { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  NSComparisonResult.OrderedAscending }
+        let result = localeCountryNameTupleList.sorted { $0.countryName.localizedCaseInsensitiveCompare($1.countryName) ==  ComparisonResult.orderedAscending }
         self.rawCountryNameList = result
         return result
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.localeCountryNameTupleList.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-        cell.accessoryType = UITableViewCellAccessoryType.None
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        cell.accessoryType = UITableViewCellAccessoryType.none
 
-        let countryName = localeCountryNameTupleList[indexPath.row].countryName
+        let countryName = localeCountryNameTupleList[(indexPath as NSIndexPath).row].countryName
         
         cell.textLabel?.text = countryName
         
         if let locale = self.locale {
             if let logicalLocaleCountryName = LocaleUtils.createCountryNameFromLocale(locale){
                 if logicalLocaleCountryName == countryName {
-                    cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                    cell.accessoryType = UITableViewCellAccessoryType.checkmark
                 }
             }
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selectedCell = self.tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = self.tableView.cellForRow(at: indexPath)
         
-        let cellCount = self.tableView.numberOfRowsInSection(0)
+        let cellCount = self.tableView.numberOfRows(inSection: 0)
         for i in 0...cellCount {
-            let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0))
-            cell?.accessoryType = UITableViewCellAccessoryType.None
+            let cell = self.tableView.cellForRow(at: IndexPath(row: i, section: 0))
+            cell?.accessoryType = UITableViewCellAccessoryType.none
         }
         
-        selectedCell!.accessoryType = UITableViewCellAccessoryType.Checkmark
+        selectedCell!.accessoryType = UITableViewCellAccessoryType.checkmark
         
         switch selectorType! {
-        case .HOME_COUNTRY:
-            userModel.overrideLogicalLocale = localeCountryNameTupleList[indexPath.row].locale
+        case .home_COUNTRY:
+            userModel.overrideLogicalLocale = localeCountryNameTupleList[(indexPath as NSIndexPath).row].locale
             break
-        case .GPS:
-            userModel.overrideGPSLocale = localeCountryNameTupleList[indexPath.row].locale
+        case .gps:
+            userModel.overrideGPSLocale = localeCountryNameTupleList[(indexPath as NSIndexPath).row].locale
             break
         }
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
 
-    func setCountryArray(localeCountryNameTuple:[LocaleCountryNameTuple]) {
+    func setCountryArray(_ localeCountryNameTuple:[LocaleCountryNameTuple]) {
         self.localeCountryNameTupleList = localeCountryNameTuple
         self.tableView.reloadData()
     }
@@ -152,7 +152,7 @@ class CountryTableViewController: UITableViewController {
         super.init(style: style)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     

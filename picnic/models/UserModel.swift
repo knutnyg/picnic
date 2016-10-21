@@ -5,32 +5,32 @@ import StoreKit
  class UserModel : NSObject, SKProductsRequestDelegate {
     
     var observers:[UserModelObserver]
-    var languageLocale:NSLocale!
-    var homeLocale:NSLocale!
-    var currentLocale:NSLocale!
+    var languageLocale:Locale!
+    var homeLocale:Locale!
+    var currentLocale:Locale!
     var homeAmount:Double?
     var currentAmount:Double?
     var priceString:String?
     var removeAdProduct:SKProduct?
     
-    var overrideGPSLocale:NSLocale? {
+    var overrideGPSLocale:Locale? {
         didSet {
-            NSUserDefaults.standardUserDefaults().setValue(overrideGPSLocale?.localeIdentifier, forKey: "overrideGPSLocale")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.setValue(overrideGPSLocale?.identifier, forKey: "overrideGPSLocale")
+            UserDefaults.standard.synchronize()
         }
     }
     
-    var overrideLogicalLocale:NSLocale? {
+    var overrideLogicalLocale:Locale? {
         didSet {
-            NSUserDefaults.standardUserDefaults().setValue(overrideLogicalLocale?.localeIdentifier, forKey: "overrideLogicalLocale")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.setValue(overrideLogicalLocale?.identifier, forKey: "overrideLogicalLocale")
+            UserDefaults.standard.synchronize()
         }
     }
     
     var skipAds:Bool {
         didSet {
-            NSUserDefaults.standardUserDefaults().setBool(skipAds, forKey: "skipAds")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set(skipAds, forKey: "skipAds")
+            UserDefaults.standard.synchronize()
         }
     }
 
@@ -43,10 +43,10 @@ import StoreKit
     
     override init(){
         self.observers = []
-        self.homeLocale = NSLocale(localeIdentifier: "en_US")
-        self.currentLocale = NSLocale(localeIdentifier: "en_US")
+        self.homeLocale = Locale(identifier: "en_US")
+        self.currentLocale = Locale(identifier: "en_US")
 
-        self.skipAds = NSUserDefaults.standardUserDefaults().boolForKey("skipAds")
+        self.skipAds = UserDefaults.standard.bool(forKey: "skipAds")
         
         super.init()
         self.setupUserLanguageLocale()
@@ -66,30 +66,30 @@ import StoreKit
     }
     
     func setupUserLanguageLocale(){
-        let userLanguage = NSLocale.preferredLanguages().description
+        let userLanguage = Locale.preferredLanguages.description
         print("userlanguage: \(userLanguage)")
-        self.languageLocale = NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents(NSDictionary(object: userLanguage, forKey: NSLocaleLanguageCode) as! [String : String]))
+        self.languageLocale = Locale(identifier: Locale.identifier(fromComponents: NSDictionary(object: userLanguage, forKey: NSLocale.Key.languageCode as NSCopying) as! [String : String]))
     }
     
-    func addObserver(observer:UserModelObserver){
+    func addObserver(_ observer:UserModelObserver){
         observers.append(observer)
     }
     
-    func updateHomeLocale(locale:NSLocale){
+    func updateHomeLocale(_ locale:Locale){
         homeLocale = locale
-        NSUserDefaults.standardUserDefaults().setValue(homeLocale.localeIdentifier, forKey: "homeLocale")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.setValue(homeLocale.identifier, forKey: "homeLocale")
+        UserDefaults.standard.synchronize()
         homeLocaleHasChanged()
     }
     
-    func updateCurrentLocale(locale:NSLocale){
+    func updateCurrentLocale(_ locale:Locale){
         currentLocale = locale
-        NSUserDefaults.standardUserDefaults().setValue(currentLocale.localeIdentifier, forKey: "currentLocale")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.setValue(currentLocale.identifier, forKey: "currentLocale")
+        UserDefaults.standard.synchronize()
         currentLocaleHasChanged()
     }
     
-    func updateOfflineData(data:[String:OfflineEntry]) {
+    func updateOfflineData(_ data:[String:OfflineEntry]) {
         offlineData = data
     }
     
@@ -99,7 +99,7 @@ import StoreKit
         }
     }
     
-    func getActiveCurrentLocale() -> NSLocale{
+    func getActiveCurrentLocale() -> Locale{
         if let locale = overrideGPSLocale {
             return locale
         } else {
@@ -107,7 +107,7 @@ import StoreKit
         }
     }
     
-    func getActiveHomeLocale() -> NSLocale{
+    func getActiveHomeLocale() -> Locale{
         if let locale = overrideLogicalLocale {
             return locale
         } else {
@@ -115,33 +115,33 @@ import StoreKit
         }
     }
     
-    func getConversionrate(fromLocale:NSLocale, toLocale:NSLocale) -> Double?{
+    func getConversionrate(_ fromLocale:Locale, toLocale:Locale) -> Double?{
         if let data = offlineData {
             let fromCountryCode = LocaleUtils.createCurrencyCodeFromLocale(fromLocale) as! String
             let toCountryCode = LocaleUtils.createCurrencyCodeFromLocale(toLocale) as! String
             let fromVal = data[fromCountryCode]?.value
             let toVal = data[toCountryCode]?.value
                 
-            if let from = fromVal, to = toVal {
+            if let from = fromVal, let to = toVal {
                     return to/from
             }
         }
         return nil
     }
     
-    private func calculateHomeAmount(){
+    fileprivate func calculateHomeAmount(){
         if let conv = getConversionrate(getActiveCurrentLocale(), toLocale: getActiveHomeLocale()) {
             homeAmount = currentAmount! * conv
         }
     }
     
-    private func calculateCurrentAmount(){
+    fileprivate func calculateCurrentAmount(){
         if let conv = getConversionrate(getActiveHomeLocale(), toLocale: getActiveCurrentLocale()) {
             currentAmount = homeAmount! * conv
         }
     }
     
-    func updateCurrentAmount(val:Double?){
+    func updateCurrentAmount(_ val:Double?){
         if let amount = val {
             currentAmount = amount
             calculateHomeAmount()
@@ -154,7 +154,7 @@ import StoreKit
         
     }
     
-    func updateHomeAmount(val:Double?){
+    func updateHomeAmount(_ val:Double?){
         if let amount = val {
             homeAmount = amount
             calculateCurrentAmount()
@@ -186,22 +186,22 @@ import StoreKit
     
     func loadStateFromUserDefaults(){
         print("Loading state from userDefaults")
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
 
-        if let current: AnyObject = userDefaults.valueForKey("currentLocale") {
-            currentLocale = NSLocale(localeIdentifier: current as! String)
+        if let current: AnyObject = userDefaults.value(forKey: "currentLocale") as AnyObject? {
+            currentLocale = Locale(identifier: current as! String)
         }
         
-        if let home: AnyObject = userDefaults.valueForKey("homeLocale") {
-            homeLocale = NSLocale(localeIdentifier: home as! String)
+        if let home: AnyObject = userDefaults.value(forKey: "homeLocale") as AnyObject? {
+            homeLocale = Locale(identifier: home as! String)
         }
         
-        if let overrideCurrent: AnyObject = userDefaults.valueForKey("overrideGPSLocale") {
-            overrideGPSLocale = NSLocale(localeIdentifier: overrideCurrent as! String)
+        if let overrideCurrent: AnyObject = userDefaults.value(forKey: "overrideGPSLocale") as AnyObject? {
+            overrideGPSLocale = Locale(identifier: overrideCurrent as! String)
         }
         
-        if let overrideHome: AnyObject = userDefaults.valueForKey("overrideLogicalLocale") {
-            overrideLogicalLocale = NSLocale(localeIdentifier: overrideHome as! String)
+        if let overrideHome: AnyObject = userDefaults.value(forKey: "overrideLogicalLocale") as AnyObject? {
+            overrideLogicalLocale = Locale(identifier: overrideHome as! String)
         }
     }
     
@@ -212,7 +212,7 @@ import StoreKit
         print("homeAmount: \(homeAmount)")
     }
     
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if response.products.count > 0 {
             removeAdProduct = (response.products[0] )
         }

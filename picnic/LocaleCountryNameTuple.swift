@@ -9,10 +9,10 @@
 import Foundation
 
 class LocaleCountryNameTuple {
-    let locale:NSLocale!
+    let locale:Locale!
     let countryName:String!
     
-    init(locale:NSLocale, countryName:String){
+    init(locale:Locale, countryName:String){
         self.locale = locale
         self.countryName = countryName
     }

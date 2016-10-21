@@ -10,9 +10,9 @@ import Foundation
 
 class ConversionRateObject {
     var value:Double!
-    var timestamp:NSDate!
+    var timestamp:Date!
     
-    init(value:Double, timestamp:NSDate){
+    init(value:Double, timestamp:Date){
         self.value = value
         self.timestamp = timestamp
     }

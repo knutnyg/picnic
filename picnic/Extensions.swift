@@ -18,39 +18,39 @@ extension UIColor {
 
 extension String {
     
-    func contains(find: String) -> Bool{
-        return self.rangeOfString(find) != nil
+    func contains(_ find: String) -> Bool{
+        return self.range(of: find) != nil
     }
 }
 
 extension UIView {
-    func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+    func rotate360Degrees(_ duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0
         rotateAnimation.toValue = CGFloat(M_PI * 2.0)
         rotateAnimation.duration = duration
         
-        if let delegate: AnyObject = completionDelegate {
+        if let delegate: CAAnimationDelegate = completionDelegate as! CAAnimationDelegate? {
             rotateAnimation.delegate = delegate
         }
-        self.layer.addAnimation(rotateAnimation, forKey: nil)
+        self.layer.add(rotateAnimation, forKey: nil)
     }
 }
 
-extension NSDate {
+extension Date {
     
     func shortPrintable()-> String{
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM"
         
-        return dateFormatter.stringFromDate(self)
+        return dateFormatter.string(from: self)
     }
     
     func mediumPrintable() -> String {
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd. MMMM YYYY"
         
-        return dateFormatter.stringFromDate(self)
+        return dateFormatter.string(from: self)
     }
     
     func relativePrintalbe() -> String {
@@ -66,25 +66,25 @@ extension NSDate {
     }
     
     func utcFormat() -> String {
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         
-        return dateFormatter.stringFromDate(self)
+        return dateFormatter.string(from: self)
     }
     
-    func addDays(daysToAdd : Int) -> NSDate
+    func addDays(_ daysToAdd : Int) -> Date
     {
-        let secondsInDays : NSTimeInterval = Double(daysToAdd) * 60 * 60 * 24
-        let dateWithDaysAdded : NSDate = self.dateByAddingTimeInterval(secondsInDays)
+        let secondsInDays : TimeInterval = Double(daysToAdd) * 60 * 60 * 24
+        let dateWithDaysAdded : Date = self.addingTimeInterval(secondsInDays)
         
         //Return Result
         return dateWithDaysAdded
     }
     
-    func addHours(hoursToAdd : Int) -> NSDate
+    func addHours(_ hoursToAdd : Int) -> Date
     {
-        let secondsInHours : NSTimeInterval = Double(hoursToAdd) * 60 * 60
-        let dateWithHoursAdded : NSDate = self.dateByAddingTimeInterval(secondsInHours)
+        let secondsInHours : TimeInterval = Double(hoursToAdd) * 60 * 60
+        let dateWithHoursAdded : Date = self.addingTimeInterval(secondsInHours)
         
         //Return Result
         return dateWithHoursAdded

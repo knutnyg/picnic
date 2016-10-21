@@ -8,9 +8,9 @@
 
 import Foundation
 
-func getFileURL(fileName: String) -> NSURL? {
+func getFileURL(_ fileName: String) -> URL? {
     do {
-        return  try NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false).URLByAppendingPathComponent(fileName)
+        return  try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(fileName)
     }
     catch {
         print("Error loading file from device...")
@@ -18,26 +18,26 @@ func getFileURL(fileName: String) -> NSURL? {
     return nil
 }
 
-func saveDictionaryToDisk(fileName:String, dict:Dictionary<String,AnyObject>){
+func saveDictionaryToDisk(_ fileName:String, dict:Dictionary<String,AnyObject>){
     if let filePath = getFileURL(fileName) {
-        NSKeyedArchiver.archiveRootObject(dict, toFile: filePath.path!)
+        NSKeyedArchiver.archiveRootObject(dict, toFile: filePath.path)
     }
 }
 
-func readOfflineDateFromDisk(fileName:String) -> [String:OfflineEntry]? {
+func readOfflineDateFromDisk(_ fileName:String) -> [String:OfflineEntry]? {
     print("Reading offline data from disk")
     if let filePath = getFileURL(fileName) {
-        if let dict = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath.path!) as? [String:OfflineEntry] {
+        if let dict = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.path) as? [String:OfflineEntry] {
             return dict
         }
     }
     return nil
 }
 
-func readFileAsString(filename:String, ofType:String) -> String?{
-    if let root = NSBundle.mainBundle().pathForResource(filename, ofType: ofType) {
+func readFileAsString(_ filename:String, ofType:String) -> String?{
+    if let root = Bundle.main.path(forResource: filename, ofType: ofType) {
         do{
-            return try NSString(contentsOfFile: root, encoding: NSUTF8StringEncoding) as String
+            return try NSString(contentsOfFile: root, encoding: String.Encoding.utf8.rawValue) as String
         } catch {
             print("failed reading file...")
         }

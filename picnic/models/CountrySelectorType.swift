@@ -2,6 +2,6 @@
 import Foundation
 
 enum CountrySelectorType {
-    case GPS
-    case HOME_COUNTRY
+    case gps
+    case home_COUNTRY
 }

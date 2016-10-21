@@ -34,39 +34,39 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
         
         setupNavigationBar()
 
-        self.view.backgroundColor = UIColor.whiteColor()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "backButtonPressed:", name: "backPressed", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupComplete:", name: "setupComplete", object: nil)
+        self.view.backgroundColor = UIColor.white
+        NotificationCenter.default.addObserver(self, selector: "backButtonPressed:", name: NSNotification.Name(rawValue: "backPressed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: "setupComplete:", name: NSNotification.Name(rawValue: "setupComplete"), object: nil)
 
         instructionAutomaticLabel = createLabel("Let Picnic guess where you are:")
         instructionManualLabel = createLabel("or you decide:")
 
         gpsButton = createBButton(" Automatic setup")
-        gpsButton.addTarget(self, action: "autoSetupPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        gpsButton.addTarget(self, action: #selector(MenuViewController.autoSetupPressed(_:)), for: UIControlEvents.touchUpInside)
         
         pointButton = createBButton(" Set location")
         pointButton.addAwesomeIcon(FAIcon.FALocationArrow, beforeTitle: true)
-        pointButton.addTarget(self, action: Selector("pointPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+        pointButton.addTarget(self, action: #selector(MenuViewController.pointPressed(_:)), for: UIControlEvents.touchUpInside)
 
         houseButton = createBButton(" Set home")
         houseButton.addAwesomeIcon(FAIcon.FAHome, beforeTitle: true)
-        houseButton.addTarget(self, action: Selector("housePressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+        houseButton.addTarget(self, action: #selector(MenuViewController.housePressed(_:)), for: UIControlEvents.touchUpInside)
         
         removeAdsButton = createBButton("Temp")
-        removeAdsButton.hidden = true
+        removeAdsButton.isHidden = true
         
         if !userModel.skipAds {
             if let product = userModel.removeAdProduct {
-                removeAdsButton.hidden = false
-                removeAdsButton.setType(BButtonType.Inverse)
-                removeAdsButton.titleLabel!.font = UIFont.boldSystemFontOfSize(15)
-                removeAdsButton.addTarget(self, action: Selector("removeAdsPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+                removeAdsButton.isHidden = false
+                removeAdsButton.setType(BButtonType.inverse)
+                removeAdsButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 15)
+                removeAdsButton.addTarget(self, action: #selector(MenuViewController.removeAdsPressed(_:)), for: UIControlEvents.touchUpInside)
                 
-                let formatter = NSNumberFormatter()
-                formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+                let formatter = NumberFormatter()
+                formatter.numberStyle = NumberFormatter.Style.currency
                 formatter.locale = product.priceLocale
                 
-                removeAdsButton.setTitle("Remove Ads: \(formatter.stringFromNumber(product.price)!)", forState: .Normal)
+                removeAdsButton.setTitle("Remove Ads: \(formatter.string(from: product.price)!)", for: UIControlState())
             }
         }
     
@@ -79,47 +79,47 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
         view.addSubview(houseButton)
         view.addSubview(removeAdsButton)
         
-        let views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton, "removeAdsButton":removeAdsButton]
+        let views = ["gps":gpsButton, "instructionsAuto":instructionAutomaticLabel, "instructionsManual":instructionManualLabel, "pointButton":pointButton, "houseButton":houseButton, "removeAdsButton":removeAdsButton] as [String : Any]
         
         let screenHeight = view.bounds.height
         let marginTop = Int((screenHeight - 24 - 160) / 2) - 66
         
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]-51-[removeAdsButton(45)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(marginTop)-[instructionsAuto]-[gps(40)]-40-[instructionsManual]-[pointButton(40)]-18-[houseButton(40)]-51-[removeAdsButton(45)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[instructionsAuto]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         
-        view.addConstraint(NSLayoutConstraint(item: houseButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
-        view.addConstraint(NSLayoutConstraint(item: pointButton.titleLabel!, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 115))
-        view.addConstraint(NSLayoutConstraint(item: instructionManualLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 180))
-        view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
-        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 145))
-        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 200))
+        view.addConstraint(NSLayoutConstraint(item: houseButton.titleLabel!, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 115))
+        view.addConstraint(NSLayoutConstraint(item: pointButton.titleLabel!, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 115))
+        view.addConstraint(NSLayoutConstraint(item: instructionManualLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 180))
+        view.addConstraint(NSLayoutConstraint(item: gpsButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: pointButton, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 145))
+        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: houseButton, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 145))
+        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: removeAdsButton, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 200))
 
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+    override func viewDidAppear(_ animated: Bool) {
+        SKPaymentQueue.default().add(self)
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
+    override func viewDidDisappear(_ animated: Bool) {
+        SKPaymentQueue.default().remove(self)
     }
     
     func createReloadButton() -> UIButton{
-        let button = UIButton(type: UIButtonType.System)
+        let button = UIButton(type: UIButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Reload", forState: .Normal)
+        button.setTitle("Reload", for: UIControlState())
         button.titleLabel!.font = UIFont(name:"Helvetica", size:30)
         return button
     }
     
-    func parseResult(dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]{
+    func parseResult(_ dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]{
         var resultDict:[String:OfflineEntry] = [:]
     
         for key in dict.keys {
@@ -136,62 +136,62 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     func setupNavigationBar() {
 
         let font = UIFont(name: "Verdana", size: 22)!
-        let attributes: [String:AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()]
+        let attributes: [String:AnyObject] = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white]
         navigationItem.title = "Menu"
         navigationController?.navigationBar.titleTextAttributes = attributes
 
         let verticalOffset = 3 as CGFloat;
-        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, forBarMetrics: UIBarMetrics.Default)
+        navigationController?.navigationBar.setTitleVerticalPositionAdjustment(verticalOffset, for: UIBarMetrics.default)
 
         backButton = createfontAwesomeButton("\u{f060}")
-        backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButton.addTarget(self, action: #selector(MenuViewController.back(_:)), for: UIControlEvents.touchUpInside)
         backButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backButtonItem
         
         aboutButton = createfontAwesomeButton("\u{f128}")
-        aboutButton.addTarget(self, action: "about:", forControlEvents: UIControlEvents.TouchUpInside)
+        aboutButton.addTarget(self, action: #selector(MenuViewController.about(_:)), for: UIControlEvents.touchUpInside)
         aboutButtonItem = UIBarButtonItem(customView: aboutButton)
         navigationItem.rightBarButtonItem = aboutButtonItem
         
     }
     
     func back(_: UIEvent) {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func about(_:UIEvent) {
-        let alertController = UIAlertController(title: "About Picnic", message: "Exchange rate data is provided by various sources with public-facing APIs. Data is refreshed approximately every 24h. \n\nRates are never 100% accurate and should never be relied on for serious financial decisions.", preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "About Picnic", message: "Exchange rate data is provided by various sources with public-facing APIs. Data is refreshed approximately every 24h. \n\nRates are never 100% accurate and should never be relied on for serious financial decisions.", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
     
-    func setupButtonPressed(sender:UIButton!){
-        let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+    func setupButtonPressed(_ sender:UIButton!){
+        let vc = CountrySelectorViewController(userModel: self.userModel, selectorType: CountrySelectorType.home_COUNTRY)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func autoSetupPressed(sender:UIButton!){
+    func autoSetupPressed(_ sender:UIButton!){
         userModel.overrideGPSLocale = nil
         userModel.overrideLogicalLocale = nil
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
-    func pointPressed(sender:UIButton){
-        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.GPS)
+    func pointPressed(_ sender:UIButton){
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.gps)
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func housePressed(sender:UIButton){
-        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.HOME_COUNTRY)
+    func housePressed(_ sender:UIButton){
+        let vc = CountrySelectorViewController(userModel: userModel, selectorType: CountrySelectorType.home_COUNTRY)
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func createBButton(title:String) -> BButton{
+    func createBButton(_ title:String) -> BButton{
         let button = BButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(title, forState: .Normal)
-        button.setType(BButtonType.Info)
+        button.setTitle(title, for: UIControlState())
+        button.setType(BButtonType.info)
 
         return button
     }
@@ -199,15 +199,15 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
     func setActiveButtonStyle() {
         
         if userModel.overrideGPSLocale != nil {
-            pointButton.setType(BButtonType.Success)
+            pointButton.setType(BButtonType.success)
         }
         
         if userModel.overrideLogicalLocale != nil {
-            houseButton.setType(BButtonType.Success)
+            houseButton.setType(BButtonType.success)
         }
         
         if !userModel.isManualSetupActive() {
-            gpsButton.setType(BButtonType.Success)
+            gpsButton.setType(BButtonType.success)
             gpsButton.addAwesomeIcon(FAIcon.FACheck, beforeTitle: true)
         }
     }
@@ -216,22 +216,22 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
 
     /* ----   Remove Ads   ----  */
     
-    func removeAdsPressed(sender:UIButton){
+    func removeAdsPressed(_ sender:UIButton){
         if let product = userModel.removeAdProduct {
             let payment = SKPayment(product: product)
-            SKPaymentQueue.defaultQueue().addPayment(payment)
+            SKPaymentQueue.default().add(payment)
         }
     }
     
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]){
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]){
         for transaction in transactions {
             let trans = transaction
             switch trans.transactionState {
-            case .Purchased:
+            case .purchased:
                 unlockFeature()
-                SKPaymentQueue.defaultQueue().finishTransaction(trans)
-            case .Failed:
-                SKPaymentQueue.defaultQueue().finishTransaction(trans)
+                SKPaymentQueue.default().finishTransaction(trans)
+            case .failed:
+                SKPaymentQueue.default().finishTransaction(trans)
             default:
                 break
             }
@@ -249,7 +249,7 @@ class MenuViewController : UIViewController, SKPaymentTransactionObserver{
         self.userModel = userModel
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     

@@ -48,13 +48,13 @@ class ConvertionRateManagerTests : XCTestCase {
         let userModel = UserModel()
         
         var dict:[String:OfflineEntry] = [:]
-        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 8)
-        dict["USD"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "USD", value: 1)
-        dict["SEK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "SEK", value: 10)
+        dict["NOK"] = OfflineEntry(timeStamp: Date(), unit_from: "USD", unit_to: "NOK", value: 8)
+        dict["USD"] = OfflineEntry(timeStamp: Date(), unit_from: "USD", unit_to: "USD", value: 1)
+        dict["SEK"] = OfflineEntry(timeStamp: Date(), unit_from: "USD", unit_to: "SEK", value: 10)
         
-        let norLocale = NSLocale(localeIdentifier: "nb_NO")
-        let usdLocale = NSLocale(localeIdentifier: "en_US")
-        let seLocale = NSLocale(localeIdentifier: "se_SE")
+        let norLocale = Locale(identifier: "nb_NO")
+        let usdLocale = Locale(identifier: "en_US")
+        let seLocale = Locale(identifier: "se_SE")
         
         userModel.offlineData = dict
         let conversionRateUSDNOK = userModel.getConversionrate(norLocale, toLocale: usdLocale)
@@ -69,7 +69,7 @@ class ConvertionRateManagerTests : XCTestCase {
     
     func testSavingAndLoadingOfflineDataFile(){
         var dict:[String:OfflineEntry] = [:]
-        dict["NOK"] = OfflineEntry(timeStamp: NSDate(), unit_from: "USD", unit_to: "NOK", value: 2)
+        dict["NOK"] = OfflineEntry(timeStamp: Date(), unit_from: "USD", unit_to: "NOK", value: 2)
         saveDictionaryToDisk("test.dat", dict: dict)
         
         let loadedDict = readOfflineDateFromDisk("test.dat")
@@ -81,9 +81,9 @@ class ConvertionRateManagerTests : XCTestCase {
         XCTAssertNil(result, "should be nil!")
     }
     
-    func setBundleToTest(crm:ConversionRateManager){
-        let bundle = NSBundle(forClass: ConvertionRateManagerTests.self)
-        crm.configPath = bundle.pathForResource("config_test", ofType: "plist")
+    func setBundleToTest(_ crm:ConversionRateManager){
+        let bundle = Bundle(for: ConvertionRateManagerTests.self)
+        crm.configPath = bundle.path(forResource: "config_test", ofType: "plist")
     }
     
 }

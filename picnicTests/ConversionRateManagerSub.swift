@@ -3,9 +3,9 @@ import Foundation
 
 class ConversionRateManagerSub : ConversionRateManager {
     
-    override func getConversionURL(homeCurrency: String, currentCurrency: String) -> NSURL? {
-        let baseUrl = config!.valueForKey("api_url") as! String
-        return NSURL(string: "\(baseUrl)/BITCOIN/FAKEGOLDCOIN")
+    override func getConversionURL(_ homeCurrency: String, currentCurrency: String) -> URL? {
+        let baseUrl = config!.value(forKey: "api_url") as! String
+        return URL(string: "\(baseUrl)/BITCOIN/FAKEGOLDCOIN")
     }
     
 }

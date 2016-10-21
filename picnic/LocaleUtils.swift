@@ -5,48 +5,48 @@ import UIKit
 
 class LocaleUtils {
     
-    class func createLocaleFromCountryCode(countryCode:NSString)->NSLocale {
-        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCountryCode:countryCode.uppercaseString]))
+    class func createLocaleFromCountryCode(_ countryCode:NSString)->Locale {
+        return Locale(identifier: Locale.identifier(fromComponents: [NSLocale.Key.countryCode.rawValue:countryCode.uppercased]))
     }
     
-    class func createLocaleFromCurrencyCode(currencyCode:String) -> NSLocale {
-        return NSLocale(localeIdentifier: NSLocale.localeIdentifierFromComponents([NSLocaleCurrencyCode:currencyCode.uppercaseString]))
+    class func createLocaleFromCurrencyCode(_ currencyCode:String) -> Locale {
+        return Locale(identifier: Locale.identifier(fromComponents: [NSLocale.Key.currencyCode.rawValue:currencyCode.uppercased()]))
     }
     
-    class func createCountryNameFromLocale(locale:NSLocale, languageLocale:NSLocale? = nil) -> String? {
-        let countryCode: String? = locale.objectForKey(NSLocaleCountryCode) as? String
+    class func createCountryNameFromLocale(_ locale:Locale, languageLocale:Locale? = nil) -> String? {
+        let countryCode: String? = (locale as NSLocale).object(forKey: NSLocale.Key.countryCode) as? String
         if let cc = countryCode {
             if let loc = languageLocale {
-                return loc.displayNameForKey(NSLocaleCountryCode, value: cc)
+                return (loc as NSLocale).displayName(forKey: NSLocale.Key.countryCode, value: cc)
             } else {
-                return NSLocale(localeIdentifier: "en_US").displayNameForKey(NSLocaleCountryCode, value: cc)
+                return (Locale(identifier: "en_US") as NSLocale).displayName(forKey: NSLocale.Key.countryCode, value: cc)
             }
         }
         return nil
     }
     
-    class func createCurrencyCodeFromLocale(locale:NSLocale) -> NSString?{
-        return locale.objectForKey(NSLocaleCurrencyCode) as? String
+    class func createCurrencyCodeFromLocale(_ locale:Locale) -> NSString?{
+        return (locale as NSLocale).object(forKey: NSLocale.Key.currencyCode) as? String as NSString?
     }
     
-    class func createLocaleCountryNameTuple(locale:NSLocale, language:NSLocale) -> LocaleCountryNameTuple{
+    class func createLocaleCountryNameTuple(_ locale:Locale, language:Locale) -> LocaleCountryNameTuple{
         let countryName = createCountryNameFromLocale(locale, languageLocale: language)!
         return LocaleCountryNameTuple(locale: locale, countryName: countryName)
     }
 }
 
-func dateFromUTCString(dateOnUTC:String) -> NSDate{
-    let dateFormatter = NSDateFormatter()
+func dateFromUTCString(_ dateOnUTC:String) -> Date{
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-    return dateFormatter.dateFromString(dateOnUTC)!
+    return dateFormatter.date(from: dateOnUTC)!
 }
 
 
-func createLabel(text:String) -> UILabel{
+func createLabel(_ text:String) -> UILabel{
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.text = text
-    label.textAlignment = NSTextAlignment.Center
+    label.textAlignment = NSTextAlignment.center
     label.numberOfLines = 2
     return label
 }

@@ -6,32 +6,32 @@
 import Foundation
 import UIKit
 
-func createFALabel(unicode:String) -> UILabel{
+func createFALabel(_ unicode:String) -> UILabel{
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.text = unicode
-    label.textAlignment = NSTextAlignment.Center
+    label.textAlignment = NSTextAlignment.center
     return label
 }
 
-func createfontAwesomeButton(unicode:String) -> UIButton{
+func createfontAwesomeButton(_ unicode:String) -> UIButton{
     let font = UIFont(name: "FontAwesome", size: 22)!
-    let size: CGSize = unicode.sizeWithAttributes([NSFontAttributeName: font])
+    let size: CGSize = unicode.size(attributes: [NSFontAttributeName: font])
 
     let button = UIButton(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-    button.setTitle(unicode, forState: .Normal)
+    button.setTitle(unicode, for: UIControlState())
     button.titleLabel!.font = font
-    button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-    button.setTitleColor(UIColor(netHex: 0x19B5FE), forState: .Highlighted)
+    button.setTitleColor(UIColor.white, for: UIControlState())
+    button.setTitleColor(UIColor(netHex: 0x19B5FE), for: .highlighted)
 
     return button
 }
 
-func createFAButton(unicode:String) -> UIButton{
+func createFAButton(_ unicode:String) -> UIButton{
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
-    button.setTitle(unicode, forState: .Normal)
-    button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-    button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+    button.setTitle(unicode, for: UIControlState())
+    button.setTitleColor(UIColor.black, for: UIControlState())
+    button.setTitleColor(UIColor.white, for: .highlighted)
     return button
 }

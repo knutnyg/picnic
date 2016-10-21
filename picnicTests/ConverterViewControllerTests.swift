@@ -28,18 +28,18 @@ class ConverterViewControllerTests: XCTestCase {
     }
     
     func testDateAddDayExtension(){
-        let date1 = NSDate().addDays(2)
-        let date2 = NSDate()
+        let date1 = Date().addDays(2)
+        let date2 = Date()
         
-        let interval = date1.timeIntervalSinceDate(date2)
+        let interval = date1.timeIntervalSince(date2)
         XCTAssertGreaterThan(interval, 10000, "2 days is greater than 10000 ms")
     }
     
     func testDateSubtractDayExtension(){
-        let date1 = NSDate().addDays(-2)
-        let date2 = NSDate()
+        let date1 = Date().addDays(-2)
+        let date2 = Date()
         
-        let interval = date2.timeIntervalSinceDate(date1)
+        let interval = date2.timeIntervalSince(date1)
         XCTAssertGreaterThan(interval, 10000, "2 days is greater than 10000 ms")
     }
 }
