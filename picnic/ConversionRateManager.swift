@@ -26,19 +26,19 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
     func updateAllCurrencies(_ success: ((Bool) -> Void)? = nil){
         
         
-        // Fix to trust self signed certificate
-        let configuration = URLSessionConfiguration.default
-        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
-        
-        let URL = getAllCurrenciesURL()!
-        let request = URLRequest(url: URL)
-        
-        let task = session.dataTask(with: request, completionHandler: {
-            (data:Data?, response:URLResponse?, error:NSError?) in
-                print(response)
-                self.handleHTTPResponse(response, data: data, error: error)
-            } as! (Data?, URLResponse?, Error?) -> Void)
-        task.resume()
+//        // Fix to trust self signed certificate
+//        let configuration = URLSessionConfiguration.default
+//        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
+//        
+//        let URL = getAllCurrenciesURL()!
+//        let request = URLRequest(url: URL)
+//        
+//        let task = session.dataTask(with: request, completionHandler: {
+//            (data:Data?, response:URLResponse?, error:NSError?) in
+//                print(response)
+//                self.handleHTTPResponse(response, data: data, error: error)
+//            } as! (Data?, URLResponse?, Error?) -> Void)
+//        task.resume()
     }
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {

@@ -30,10 +30,11 @@ extension UIView {
         rotateAnimation.toValue = CGFloat(M_PI * 2.0)
         rotateAnimation.duration = duration
         
-        if let delegate: CAAnimationDelegate = completionDelegate as! CAAnimationDelegate? {
-            rotateAnimation.delegate = delegate
+        if let delegate = completionDelegate {
+//            rotateAnimation.delegate = delegate
+            self.layer.add(rotateAnimation, forKey: nil)
         }
-        self.layer.add(rotateAnimation, forKey: nil)
+        
     }
 }
 

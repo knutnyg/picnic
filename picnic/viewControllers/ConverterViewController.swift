@@ -266,7 +266,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
 
     func refreshData(){
         if !shouldRefreshContiniueSpinning() {
-           refreshButton.rotate360Degrees(2, completionDelegate: self)
+//           refreshButton.rotate360Degrees(2, completionDelegate: self)
         }
         
         if userModel.removeAdProduct == nil {
@@ -325,14 +325,14 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     func setBottomCountryText(){
         let countryCode:String = (userModel.getActiveHomeLocale() as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
-        let country: String = userModel.languageLocale.localizedString(forIdentifier: countryCode)!
+        let country: String = (userModel.languageLocale as NSLocale).displayName(forKey: NSLocale.Key.countryCode, value: countryCode)!
         bottomCountryLabel.text = country
         
     }
     
     func setTopCountryText() {        
         let countryCode:String = (userModel.getActiveCurrentLocale() as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
-        let country: String = userModel.languageLocale.localizedString(forIdentifier: countryCode)!
+        let country: String = (userModel.languageLocale as NSLocale).displayName(forKey: NSLocale.Key.countryCode, value: countryCode)!
         topCountryLabel.text = country
     }
     
@@ -474,7 +474,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         let val = shouldRefreshContiniueSpinning()
         if val {
-            refreshButton.rotate360Degrees(2, completionDelegate: self)
+//            refreshButton.rotate360Degrees(2, completionDelegate: self)
         }
     }
     
