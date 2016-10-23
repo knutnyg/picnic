@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		324F458A1EA809936436364F /* FAComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324F4A701F24E1C27D5CA52D /* FAComponents.swift */; };
-		347CA579E3E5FCDD7A832FF9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */; };
-		6A8147FF45982E03D5DE020B /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		721C000E1AA2FA6900484BAA /* childs-transparant.png in Resources */ = {isa = PBXBuildFile; fileRef = 721C00001AA2FA6900484BAA /* childs-transparant.png */; };
 		721C00101AA2FA6900484BAA /* childs.xcf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00021AA2FA6900484BAA /* childs.xcf */; };
 		721C00111AA2FA6900484BAA /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00031AA2FA6900484BAA /* fontawesome-webfont.ttf */; };
@@ -77,7 +75,6 @@
 		72FEF43A1AD461950057F388 /* CountrySelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */; };
 		86BD0C53C7231FFB7E0064CD /* Pods_picnicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB248906B3726681FD720E80 /* Pods_picnicTests.framework */; };
 		8C66A180FE31664AA408BD81 /* Pods_picnic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2555CA28AD9C0A5725444104 /* Pods_picnic.framework */; };
-		C0C9B664DCE1AE79BDA4DAA2 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,9 +165,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0C9B664DCE1AE79BDA4DAA2 /* (null) in Frameworks */,
-				347CA579E3E5FCDD7A832FF9 /* (null) in Frameworks */,
-				6A8147FF45982E03D5DE020B /* (null) in Frameworks */,
 				86BD0C53C7231FFB7E0064CD /* Pods_picnicTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +172,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		324F4293DF490EB72DDC1482 /* rest */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = rest;
+			sourceTree = "<group>";
+		};
 		721C00041AA2FA6900484BAA /* icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +252,7 @@
 				721CFFC71AA2F6E400484BAA /* Supporting Files */,
 				723475A31AEB94090036E764 /* config.plist */,
 				72B5B93A1AFF828600C436D4 /* supported_currencies.txt */,
+				324F4293DF490EB72DDC1482 /* rest */,
 			);
 			path = picnic;
 			sourceTree = "<group>";

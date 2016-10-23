@@ -31,7 +31,7 @@ import StoreKit
         didSet {
             UserDefaults.standard.set(skipAds, forKey: "skipAds")
             UserDefaults.standard.synchronize()
-        }
+    }
     }
 
     var offlineMode:Bool = false

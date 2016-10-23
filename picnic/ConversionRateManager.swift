@@ -1,5 +1,8 @@
 
 import Foundation
+import SwiftHTTP
+import BrightFutures
+import JSONJoy
 
 
 class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionDelegate{
@@ -23,22 +26,39 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
         configPath = Bundle.main.path(forResource: "config", ofType: "plist")
     }
     
-    func updateAllCurrencies(_ success: ((Bool) -> Void)? = nil){
-        
-        
-//        // Fix to trust self signed certificate
-//        let configuration = URLSessionConfiguration.default
-//        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
-//        
-//        let URL = getAllCurrenciesURL()!
-//        let request = URLRequest(url: URL)
-//        
-//        let task = session.dataTask(with: request, completionHandler: {
-//            (data:Data?, response:URLResponse?, error:NSError?) in
-//                print(response)
-//                self.handleHTTPResponse(response, data: data, error: error)
-//            } as! (Data?, URLResponse?, Error?) -> Void)
-//        task.resume()
+    func updateAllCurrencies() -> Promise<String, NSError>{
+
+        let URL = getAllCurrenciesURL()!.absoluteString
+        let promise = Promise<String, NSError>()
+
+        do {
+            let request = try HTTP.GET(URL)
+
+            request.start {
+                (response:Response) in
+                if let err = response.error {
+                    print("PicnicAPI: Response contains error: \(err)")
+                    promise.failure(err)
+                    return
+                }
+
+                if let json = self.parseRawJSONToDict(response.data) {
+                        print (json)
+                        if let offlineEntries = self.parseJSONDictToOfflineEntries(json){
+                            self.storeOfflineEntries(offlineEntries)
+                            self.userModel.updateOfflineData(offlineEntries)
+                        }
+                }
+
+                self.userModel.updateingAllCurrenciesCounter = 0
+
+                return promise.success("yey")
+            }
+        } catch {
+            print("Unexpected error in PicnicAPI")
+        }
+            return promise
+
     }
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
@@ -66,13 +86,13 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
         self.userModel.updateingAllCurrenciesCounter = 0
     }
     
-    fileprivate func storeOfflineEntries(_ offlineEntries:[String:OfflineEntry]){
+    func storeOfflineEntries(_ offlineEntries:[String:OfflineEntry]){
         if offlineEntries.count > 0 {
             saveDictionaryToDisk(self.storedFileName, dict: offlineEntries)
         }
     }
 
-    fileprivate func parseRawJSONToDict(_ data:Data) -> Dictionary<String,Dictionary<String,String>>?{
+    func parseRawJSONToDict(_ data:Data) -> Dictionary<String,Dictionary<String,String>>?{
         do {
             let json:Any = try JSONSerialization.jsonObject(with: data, options: [])
             if let dict = json as? Dictionary<String,AnyObject>{
@@ -87,7 +107,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
         return nil
     }
     
-    fileprivate func parseJSONDictToOfflineEntries(_ dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]?{
+    func parseJSONDictToOfflineEntries(_ dict:Dictionary<String, Dictionary<String,String>>) -> [String:OfflineEntry]?{
         var resultDict:[String:OfflineEntry] = [:]
         
         for key in dict.keys {
@@ -131,4 +151,44 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
         }
         return nil
     }
+
+
 }
+
+//struct Currencies : JSONJoy {
+//    let currencies: [String:Currency]
+//
+//    init(_ decoder: JSONDecoder) {
+//        let curs = try! decoder["currencies"].dictionary!
+//        var collect = [String:Currency]()
+//        for curDecoder in curs {
+//            collect.append(Currency(curDecoder))
+//        }
+//        currencies = collect
+//    }
+//}
+//
+//struct Entry: JSONJoy {
+//    let key:String
+//    let currency:Currency
+//
+//    init(_ decoder: JSONDecoder) {
+//        key =
+//    }
+//}
+//
+//
+//
+//struct Currency: JSONJoy {
+//    let timestamp: String
+//    let unit_from: String
+//    let unit_to: String
+//    let value: Double
+//
+//    init(_ decoder: JSONDecoder) {
+//        timestamp = try! decoder["timestamp"].getString()
+//        unit_from = try! decoder["unit_from"].getString()
+//        unit_to = try! decoder["unit_to"].getString()
+//        value = try! decoder["value"].getDouble()
+//    }
+//}
