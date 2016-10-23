@@ -38,6 +38,7 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
                 (response:Response) in
                 if let err = response.error {
                     print("PicnicAPI: Response contains error: \(err)")
+                    self.userModel.updateingAllCurrenciesCounter = 0
                     promise.failure(err)
                     return
                 }
@@ -48,9 +49,10 @@ class ConversionRateManager : NSObject, NSURLConnectionDataDelegate, URLSessionD
                             self.storeOfflineEntries(offlineEntries)
                             self.userModel.updateOfflineData(offlineEntries)
                         }
+                    self.userModel.updateingAllCurrenciesCounter = 0
                 }
 
-                self.userModel.updateingAllCurrenciesCounter = 0
+
 
                 return promise.success("yey")
             }

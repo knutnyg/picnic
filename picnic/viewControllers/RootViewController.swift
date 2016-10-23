@@ -3,8 +3,7 @@ import Foundation
 import UIKit
 
 class RootViewController: UIViewController {
-    
-//    var topBannerView:TopBannerViewController!
+
     var converterView:ConverterViewController!
     var userModel:UserModel!
     
@@ -73,7 +72,9 @@ class RootViewController: UIViewController {
     
     override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
         if self.shouldRefreshContiniueSpinning {
-            refreshButton.rotate360Degrees(duration: 2, completionDelegate: self)
+            refreshButton.animateWithDuration(2.0, animations: {
+                self.view.transform = CGAffineTransformMakeRotation((180.0 * CGFloat(M_PI)) / 180.0)
+            })
         }
     }
     

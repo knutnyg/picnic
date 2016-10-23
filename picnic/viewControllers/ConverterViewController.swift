@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 import iAd
 
-class ConverterViewController: UIViewController, UserModelObserver, UITextFieldDelegate, ADBannerViewDelegate {
+class ConverterViewController: UIViewController, UserModelObserver, UITextFieldDelegate, ADBannerViewDelegate, CAAnimationDelegate {
 
     // -- UI Elements -- //
     var topCountryLabel:UILabel!
@@ -265,8 +265,9 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
 
     func refreshData(){
+
         if !shouldRefreshContiniueSpinning() {
-//           refreshButton.rotate360Degrees(2, completionDelegate: self)
+            refreshButton.rotate360(2.0, completionDelegate: self)
         }
         
         if userModel.removeAdProduct == nil {
@@ -391,7 +392,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
         redraw()
     }
     
-    func topAmountEdited(_ theTextField:UITextField) -> Void {
+func topAmountEdited(_ theTextField:UITextField) -> Void {
         let normalizedNumber:NSString = self.normalizeText(topTextField.text!)
         if normalizedNumber == "" {
             userModel.updateCurrentAmount(nil)
@@ -472,9 +473,8 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        let val = shouldRefreshContiniueSpinning()
-        if val {
-//            refreshButton.rotate360Degrees(2, completionDelegate: self)
+        if shouldRefreshContiniueSpinning() {
+            refreshButton.rotate360(2, completionDelegate: self)
         }
     }
     
@@ -483,7 +483,7 @@ class ConverterViewController: UIViewController, UserModelObserver, UITextFieldD
     }
     
     func shouldRefreshContiniueSpinning() -> Bool{
-//        print("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
+        print("\(userModel.updateingAllCurrenciesCounter) \(userModel.updatingHomeLocaleCounter) \(userModel.updatingCurrentLocaleCounter)")
         
         return userModel.updateingAllCurrenciesCounter > 0 ||
         userModel.updatingCurrentLocaleCounter > 0 ||
