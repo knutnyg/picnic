@@ -450,6 +450,7 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = E9A359GGU4;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -800,7 +801,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Knut Nygaard (5GK5JYF47Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Knut Nygaard (5GK5JYF47Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = E9A359GGU4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
@@ -808,8 +809,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nygaard.picnic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f855cd11-f99f-4b3f-844c-0669b72e0f91";
-				PROVISIONING_PROFILE_SPECIFIER = picnic;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "picnic-Bridgeing-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -823,7 +824,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = E9A359GGU4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
@@ -831,8 +832,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nygaard.picnic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f855cd11-f99f-4b3f-844c-0669b72e0f91";
-				PROVISIONING_PROFILE_SPECIFIER = picnic;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "picnic-Bridgeing-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
