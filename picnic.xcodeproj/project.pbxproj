@@ -451,9 +451,8 @@
 				TargetAttributes = {
 					721CFFC31AA2F6E400484BAA = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = E9A359GGU4;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -806,7 +805,7 @@
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Knut Nygaard (5GK5JYF47Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = E9A359GGU4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -829,7 +828,7 @@
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Knut Nygaard (E9A359GGU4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = E9A359GGU4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = picnic/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
