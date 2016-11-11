@@ -37,7 +37,7 @@ class LocaleUtils {
 
 func dateFromUTCString(_ dateOnUTC:String) -> Date{
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
     return dateFormatter.date(from: dateOnUTC)!
 }
 
