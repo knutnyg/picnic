@@ -5,15 +5,9 @@ default_platform :ios
 platform :ios do
 
   before_all do
+	ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
     	cocoapods
 #	sh "../extract_supported_currencies.py"
-
-      xctest({
-        workspace: "picnic.xcworkspace",
-        scheme: "picnic",
-        sdk: "iphonesimulator",
-        destination: "platform=iOS Simulator,name=iPhone 6,OS=latest"
-    })
   end
 
   desc "Deploy a new Beta Build to Apple TestFlight"
@@ -33,10 +27,12 @@ platform :ios do
 
 desc "test"
   lane :test do
-      slack({
-        message: "Snapshot"
-      })
-      snapshot
+    xctest({
+        workspace: "picnic.xcworkspace",
+        scheme: "picnic",
+        sdk: "iphonesimulator",
+        destination: "platform=iOS Simulator,name=iPhone 6,OS=latest"
+    })
       slack({
         message: "Finished"
       })
@@ -59,21 +55,6 @@ desc "test"
         message: "Finished deploying to appstore"
       })
   end
-
-  desc "snapshot"
-    lane:snapshot do
-      snapshot
-    end
-
-
-  after_all do |lane|
-    # This block is called, only if the executed lane was successful
-    
-    # slack({
-    #   message: "Successfully deployed new App Update."
-    # })
-  end
-
 
   error do |lane, exception|
      slack({
