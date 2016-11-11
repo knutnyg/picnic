@@ -10,6 +10,7 @@
 		324F458A1EA809936436364F /* FAComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324F4A701F24E1C27D5CA52D /* FAComponents.swift */; };
 		324F4F7CA15FCAA8CE3EF204 /* greenhouse_incrementbuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 324F4AC7A150DEC9259D0E21 /* greenhouse_incrementbuild.sh */; };
 		39E4C1141AB5EF63001B310D /* CountryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */; };
+		699FAAE2D000F9CD11DC8B55 /* Pods_picnicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61D4E4C50A75CABF8647BC54 /* Pods_picnicTests.framework */; };
 		721C000E1AA2FA6900484BAA /* childs-transparant.png in Resources */ = {isa = PBXBuildFile; fileRef = 721C00001AA2FA6900484BAA /* childs-transparant.png */; };
 		721C00101AA2FA6900484BAA /* childs.xcf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00021AA2FA6900484BAA /* childs.xcf */; };
 		721C00111AA2FA6900484BAA /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 721C00031AA2FA6900484BAA /* fontawesome-webfont.ttf */; };
@@ -74,8 +75,8 @@
 		72F307561AA3A3D00066F2A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72F307551AA3A3D00066F2A1 /* Images.xcassets */; };
 		72FEF4381AD461560057F388 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4371AD461560057F388 /* MenuViewController.swift */; };
 		72FEF43A1AD461950057F388 /* CountrySelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */; };
-		86BD0C53C7231FFB7E0064CD /* Pods_picnicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB248906B3726681FD720E80 /* Pods_picnicTests.framework */; };
-		8C66A180FE31664AA408BD81 /* Pods_picnic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2555CA28AD9C0A5725444104 /* Pods_picnic.framework */; };
+		97B546FFC0E3270167C78AC3 /* dateUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B5461CAEDAD4B95144C4A1 /* dateUtilTests.swift */; };
+		D6D34AB40B617EF4DEF3EA73 /* Pods_picnic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ABA29C21DEFA82D692AEEE7 /* Pods_picnic.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,12 +91,11 @@
 
 /* Begin PBXFileReference section */
 		2326EA8B6F41A14BBE61FF07 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2555CA28AD9C0A5725444104 /* Pods_picnic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_picnic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		324F4A701F24E1C27D5CA52D /* FAComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAComponents.swift; sourceTree = "<group>"; };
 		324F4AC7A150DEC9259D0E21 /* greenhouse_incrementbuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = greenhouse_incrementbuild.sh; sourceTree = SOURCE_ROOT; };
-		36BB9453BFB4F30B1868D8A6 /* Pods-picnic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnic.release.xcconfig"; path = "Pods/Target Support Files/Pods-picnic/Pods-picnic.release.xcconfig"; sourceTree = "<group>"; };
 		39E4C1131AB5EF63001B310D /* CountryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryTableViewController.swift; sourceTree = "<group>"; };
-		4E267E451B046B8A7C67E352 /* Pods-picnicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnicTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests.release.xcconfig"; sourceTree = "<group>"; };
+		61D4E4C50A75CABF8647BC54 /* Pods_picnicTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_picnicTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65F45A1C6BE41B7A9FDF992A /* Pods-picnic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-picnic/Pods-picnic.debug.xcconfig"; sourceTree = "<group>"; };
 		721C00001AA2FA6900484BAA /* childs-transparant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "childs-transparant.png"; sourceTree = "<group>"; };
 		721C00011AA2FA6900484BAA /* childs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = childs.png; sourceTree = "<group>"; };
 		721C00021AA2FA6900484BAA /* childs.xcf */ = {isa = PBXFileReference; lastKnownFileType = file; path = childs.xcf; sourceTree = "<group>"; };
@@ -148,9 +148,11 @@
 		72F307551AA3A3D00066F2A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72FEF4371AD461560057F388 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		72FEF4391AD461950057F388 /* CountrySelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountrySelectorViewController.swift; sourceTree = "<group>"; };
-		96356E8ACBFC581BACE7DA08 /* Pods-picnic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-picnic/Pods-picnic.debug.xcconfig"; sourceTree = "<group>"; };
-		D7D9A7346477D485DD3EB53A /* Pods-picnicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnicTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests.debug.xcconfig"; sourceTree = "<group>"; };
-		FB248906B3726681FD720E80 /* Pods_picnicTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_picnicTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F64FDC87DFBDD685672F419 /* Pods-picnicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnicTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests.release.xcconfig"; sourceTree = "<group>"; };
+		97B5461CAEDAD4B95144C4A1 /* dateUtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateUtilTests.swift; sourceTree = "<group>"; };
+		9ABA29C21DEFA82D692AEEE7 /* Pods_picnic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_picnic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB9E5F005A99891F7924FAD1 /* Pods-picnicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnicTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BBE6888FE1F61C2FD7452259 /* Pods-picnic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-picnic.release.xcconfig"; path = "Pods/Target Support Files/Pods-picnic/Pods-picnic.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72A465D91B5C03EB0037E922 /* StoreKit.framework in Frameworks */,
-				8C66A180FE31664AA408BD81 /* Pods_picnic.framework in Frameworks */,
+				D6D34AB40B617EF4DEF3EA73 /* Pods_picnic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86BD0C53C7231FFB7E0064CD /* Pods_picnicTests.framework in Frameworks */,
+				699FAAE2D000F9CD11DC8B55 /* Pods_picnicTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,7 +227,7 @@
 				721CFFC51AA2F6E400484BAA /* Products */,
 				A2265EA50607EF73DB222C36 /* Frameworks */,
 				721CFFDC1AA2F6E400484BAA /* picnicTests */,
-				EFD1B73D0BBB3CFEF9880911 /* Pods */,
+				DF6646EC9A76625D8B60039E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -242,7 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				72A465D71B5C03D90037E922 /* picnic.entitlements */,
-				725DDD9B1AC8081E00FA6ED5 /* managers */,
+				725DDD9B1AC8081E00FA6ED5 /* service */,
 				7263533C1AC7DCB200F4F4A5 /* util */,
 				721C00231AA2FABE00484BAA /* models */,
 				721C001D1AA2FA7B00484BAA /* Base.lproj */,
@@ -276,6 +278,8 @@
 				723475B01AEBC6E20036E764 /* managers */,
 				7239BB4F1AE960620097CFA2 /* Subclasses */,
 				721CFFDD1AA2F6E400484BAA /* Supporting Files */,
+				97B545719227A5DBFD529CDA /* extentions */,
+				97B54984939588A91C25203C /* util */,
 			);
 			path = picnicTests;
 			sourceTree = "<group>";
@@ -339,13 +343,13 @@
 			name = Subclasses;
 			sourceTree = "<group>";
 		};
-		725DDD9B1AC8081E00FA6ED5 /* managers */ = {
+		725DDD9B1AC8081E00FA6ED5 /* service */ = {
 			isa = PBXGroup;
 			children = (
 				72A9D4C71AA5246800A15E70 /* ConversionRateManager.swift */,
 				721CFFF61AA2FA4D00484BAA /* GPSLocationManager.swift */,
 			);
-			name = managers;
+			name = service;
 			sourceTree = "<group>";
 		};
 		7263533C1AC7DCB200F4F4A5 /* util */ = {
@@ -370,6 +374,21 @@
 			name = viewControllers;
 			sourceTree = "<group>";
 		};
+		97B545719227A5DBFD529CDA /* extentions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = extentions;
+			sourceTree = "<group>";
+		};
+		97B54984939588A91C25203C /* util */ = {
+			isa = PBXGroup;
+			children = (
+				97B5461CAEDAD4B95144C4A1 /* dateUtilTests.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
 		A2265EA50607EF73DB222C36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,19 +396,19 @@
 				724314DD1AE6D9F000A5213C /* BButton.framework */,
 				724314DB1AE6D9D800A5213C /* BrightFutures.framework */,
 				2326EA8B6F41A14BBE61FF07 /* Pods.framework */,
-				2555CA28AD9C0A5725444104 /* Pods_picnic.framework */,
-				FB248906B3726681FD720E80 /* Pods_picnicTests.framework */,
+				9ABA29C21DEFA82D692AEEE7 /* Pods_picnic.framework */,
+				61D4E4C50A75CABF8647BC54 /* Pods_picnicTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EFD1B73D0BBB3CFEF9880911 /* Pods */ = {
+		DF6646EC9A76625D8B60039E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				96356E8ACBFC581BACE7DA08 /* Pods-picnic.debug.xcconfig */,
-				36BB9453BFB4F30B1868D8A6 /* Pods-picnic.release.xcconfig */,
-				D7D9A7346477D485DD3EB53A /* Pods-picnicTests.debug.xcconfig */,
-				4E267E451B046B8A7C67E352 /* Pods-picnicTests.release.xcconfig */,
+				65F45A1C6BE41B7A9FDF992A /* Pods-picnic.debug.xcconfig */,
+				BBE6888FE1F61C2FD7452259 /* Pods-picnic.release.xcconfig */,
+				BB9E5F005A99891F7924FAD1 /* Pods-picnicTests.debug.xcconfig */,
+				8F64FDC87DFBDD685672F419 /* Pods-picnicTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -401,12 +420,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 721CFFE31AA2F6E400484BAA /* Build configuration list for PBXNativeTarget "picnic" */;
 			buildPhases = (
-				12787477F550C6A5888375A5 /* [CP] Check Pods Manifest.lock */,
+				DECC4EF91FBE503CC01BC160 /* [CP] Check Pods Manifest.lock */,
 				721CFFC01AA2F6E400484BAA /* Sources */,
 				721CFFC11AA2F6E400484BAA /* Frameworks */,
 				721CFFC21AA2F6E400484BAA /* Resources */,
-				F8C391811DE535A3549476D3 /* [CP] Embed Pods Frameworks */,
-				D892179B69DB39DDA8267E72 /* [CP] Copy Pods Resources */,
+				7F5BA29185C57F844DEB3A94 /* [CP] Embed Pods Frameworks */,
+				D376689BC4D76308DA550C48 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -421,12 +440,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 721CFFE61AA2F6E400484BAA /* Build configuration list for PBXNativeTarget "picnicTests" */;
 			buildPhases = (
-				75B9697E9DA92B02F7206C76 /* [CP] Check Pods Manifest.lock */,
+				A9B8AE4FEE030FEAB73D09F1 /* [CP] Check Pods Manifest.lock */,
 				721CFFD51AA2F6E400484BAA /* Sources */,
 				721CFFD61AA2F6E400484BAA /* Frameworks */,
 				721CFFD71AA2F6E400484BAA /* Resources */,
-				1F7A4820534D2B17DF2C8CBB /* [CP] Embed Pods Frameworks */,
-				0F368C08BA5CE9B840CA6A73 /* [CP] Copy Pods Resources */,
+				24AA368BD35CF8680D3CFD54 /* [CP] Embed Pods Frameworks */,
+				CD7774825E787D3E8B7744AF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -536,37 +555,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0F368C08BA5CE9B840CA6A73 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		12787477F550C6A5888375A5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		1F7A4820534D2B17DF2C8CBB /* [CP] Embed Pods Frameworks */ = {
+		24AA368BD35CF8680D3CFD54 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -581,7 +570,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		75B9697E9DA92B02F7206C76 /* [CP] Check Pods Manifest.lock */ = {
+		7F5BA29185C57F844DEB3A94 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnic/Pods-picnic-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A9B8AE4FEE030FEAB73D09F1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -596,7 +600,22 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D892179B69DB39DDA8267E72 /* [CP] Copy Pods Resources */ = {
+		CD7774825E787D3E8B7744AF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnicTests/Pods-picnicTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D376689BC4D76308DA550C48 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -611,19 +630,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnic/Pods-picnic-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F8C391811DE535A3549476D3 /* [CP] Embed Pods Frameworks */ = {
+		DECC4EF91FBE503CC01BC160 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-picnic/Pods-picnic-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -679,6 +698,7 @@
 				7239BB531AE960EA0097CFA2 /* UserModel.swift in Sources */,
 				723475A21AEB93BD0036E764 /* ConversionRateManagerSub.swift in Sources */,
 				72C10AF41AF93FCA00F68907 /* ConversionRateObject.swift in Sources */,
+				97B546FFC0E3270167C78AC3 /* dateUtilTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,7 +819,7 @@
 		};
 		721CFFE41AA2F6E400484BAA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96356E8ACBFC581BACE7DA08 /* Pods-picnic.debug.xcconfig */;
+			baseConfigurationReference = 65F45A1C6BE41B7A9FDF992A /* Pods-picnic.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
@@ -822,7 +842,7 @@
 		};
 		721CFFE51AA2F6E400484BAA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36BB9453BFB4F30B1868D8A6 /* Pods-picnic.release.xcconfig */;
+			baseConfigurationReference = BBE6888FE1F61C2FD7452259 /* Pods-picnic.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = picnic/picnic.entitlements;
@@ -845,7 +865,7 @@
 		};
 		721CFFE71AA2F6E400484BAA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7D9A7346477D485DD3EB53A /* Pods-picnicTests.debug.xcconfig */;
+			baseConfigurationReference = BB9E5F005A99891F7924FAD1 /* Pods-picnicTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -864,7 +884,7 @@
 		};
 		721CFFE81AA2F6E400484BAA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E267E451B046B8A7C67E352 /* Pods-picnicTests.release.xcconfig */;
+			baseConfigurationReference = 8F64FDC87DFBDD685672F419 /* Pods-picnicTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = picnicTests/Info.plist;
