@@ -8,3 +8,7 @@ Pods
 picnic.app.dSYM.zip
 report.xml
 
+
+fastlane/test_output/report.html
+
+fastlane/test_output/report.junit
